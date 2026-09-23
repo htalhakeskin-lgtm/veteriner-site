@@ -13,9 +13,10 @@
     "db:seed": "prisma db seed",
     "db:reset": "prisma migrate reset --force",
     "db:studio": "prisma studio",
-    "test": "echo \"(henuz test yok)\" && exit 0",
+    "test": "jest",
     "test:e2e": "npm run test:e2e:prepare && jest --config test/jest-e2e.js",
-    "test:e2e:prepare": "dotenv -e .env.test -- prisma migrate deploy"
+    "test:e2e:prepare": "dotenv -e .env.test -- prisma migrate deploy",
+    "test:watch": "jest --watch"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"

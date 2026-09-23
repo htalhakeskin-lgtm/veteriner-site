@@ -30,6 +30,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
+      // error alanini once durum kodundan turet. Nesne govdeli exception'larda
+      // (or. BadRequestException({message, code})) Nest bu alani doldurmuyor;
+      // varsayilanda birakilsaydi 400 yanitinda "Internal Server Error"
+      // yazar ve istemciyi yanlis yonlendirirdi.
+      error = statusText(status);
       const body = exception.getResponse();
 
       if (typeof body === 'string') {
@@ -61,4 +66,18 @@ export class HttpExceptionFilter implements ExceptionFilter {
       path: req.url,
     });
   }
+}
+
+/** HTTP durum kodunun standart metin karsiligi. */
+function statusText(status: number): string {
+  const key = Object.keys(HttpStatus).find(
+    (k) => HttpStatus[k as keyof typeof HttpStatus] === status,
+  );
+  if (!key) return 'Error';
+  // NOT_FOUND -> Not Found
+  return key
+    .toLowerCase()
+    .split('_')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
 }

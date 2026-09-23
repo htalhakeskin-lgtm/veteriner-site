@@ -89,14 +89,14 @@ model User {
   phone        String?
   role         Role      @default(CUSTOMER)
   isActive     Boolean   @default(true)
-  lastLoginAt  DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  lastLoginAt  DateTime? @db.Timestamptz(3)
+  createdAt    DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime  @updatedAt @db.Timestamptz(3)
 
   /// KVKK: hesap silme talebinde satir silinmez, isaretlenir.
   /// Dikkat: email benzersizligi silinmis kayitlari da kapsar —
   /// ayni e-posta ile yeniden kayit icin serviste ele alinacak.
-  deletedAt DateTime?
+  deletedAt DateTime? @db.Timestamptz(3)
 
   pets          Pet[]
   appointments  Appointment[]
@@ -119,11 +119,11 @@ model RefreshToken {
   tokenHash String    @unique
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  expiresAt DateTime
-  revokedAt DateTime?
+  expiresAt DateTime  @db.Timestamptz(3)
+  revokedAt DateTime? @db.Timestamptz(3)
   userAgent String?
   ipAddress String?
-  createdAt DateTime  @default(now())
+  createdAt DateTime  @default(now()) @db.Timestamptz(3)
 
   @@index([userId, revokedAt])
   @@index([expiresAt])
@@ -134,9 +134,9 @@ model PasswordResetToken {
   tokenHash String    @unique
   userId    String
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  expiresAt DateTime
-  usedAt    DateTime?
-  createdAt DateTime  @default(now())
+  expiresAt DateTime  @db.Timestamptz(3)
+  usedAt    DateTime? @db.Timestamptz(3)
+  createdAt DateTime  @default(now()) @db.Timestamptz(3)
 
   @@index([userId])
   @@index([expiresAt])
@@ -163,9 +163,9 @@ model Pet {
   microchipNo String?   @unique
   photoUrl    String?
   notes       String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
+  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime  @updatedAt @db.Timestamptz(3)
+  deletedAt   DateTime? @db.Timestamptz(3)
 
   medicalRecords MedicalRecord[]
   appointments   Appointment[]
@@ -186,13 +186,13 @@ model MedicalRecord {
   type        RecordType
   title       String
   description String?
-  performedAt DateTime
+  performedAt DateTime   @db.Timestamptz(3)
   /// Asi/kontrol tekrar tarihi — hatirlatma cron'u bu alani tarar.
-  nextDueAt   DateTime?
+  nextDueAt   DateTime?  @db.Timestamptz(3)
   attachments String[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
   @@index([petId, performedAt])
   @@index([type, nextDueAt])
@@ -218,8 +218,8 @@ model Service {
   isFeatured      Boolean  @default(false)
   isActive        Boolean  @default(true)
   sortOrder       Int      @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt       DateTime @updatedAt @db.Timestamptz(3)
 
   appointments Appointment[]
   staff        StaffMember[] @relation("StaffServices")
@@ -246,8 +246,8 @@ model StaffMember {
   isActive        Boolean @default(true)
   sortOrder       Int     @default(0)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
   services       Service[]       @relation("StaffServices")
   schedules      StaffSchedule[]
@@ -279,11 +279,11 @@ model StaffTimeOff {
   id      String      @id @default(cuid())
   staffId String
   staff   StaffMember @relation(fields: [staffId], references: [id], onDelete: Cascade)
-  startAt DateTime
-  endAt   DateTime
+  startAt DateTime    @db.Timestamptz(3)
+  endAt   DateTime    @db.Timestamptz(3)
   reason  String?
 
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
 
   @@index([staffId, startAt, endAt])
 }
@@ -324,17 +324,17 @@ model Appointment {
   staffId   String?
   staff     StaffMember? @relation(fields: [staffId], references: [id], onDelete: SetNull)
 
-  startAt DateTime
-  endAt   DateTime
+  startAt DateTime          @db.Timestamptz(3)
+  endAt   DateTime          @db.Timestamptz(3)
   status  AppointmentStatus @default(PENDING)
 
   notes          String?
   cancelReason   String?
-  cancelledAt    DateTime?
-  reminderSentAt DateTime?
+  cancelledAt    DateTime? @db.Timestamptz(3)
+  reminderSentAt DateTime? @db.Timestamptz(3)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
   medicalRecords MedicalRecord[]
 
@@ -377,15 +377,15 @@ model BlogPost {
   author        User?         @relation(fields: [authorId], references: [id], onDelete: SetNull)
 
   status      PostStatus @default(DRAFT)
-  publishedAt DateTime?
+  publishedAt DateTime?  @db.Timestamptz(3)
   readMinutes Int        @default(3)
   viewCount   Int        @default(0)
 
   metaTitle       String?
   metaDescription String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
   @@index([status, publishedAt])
   @@index([categoryId])
@@ -407,11 +407,11 @@ model Testimonial {
   sourceUrl      String?
 
   isApproved  Boolean  @default(false)
-  displayDate DateTime
+  displayDate DateTime @db.Timestamptz(3)
   sortOrder   Int      @default(0)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
   @@unique([source, externalId])
   @@index([isApproved, sortOrder])
@@ -429,9 +429,9 @@ model ContactMessage {
   subject   String
   message   String
   isRead    Boolean   @default(false)
-  repliedAt DateTime?
+  repliedAt DateTime? @db.Timestamptz(3)
   ipAddress String?
-  createdAt DateTime  @default(now())
+  createdAt DateTime  @default(now()) @db.Timestamptz(3)
 
   @@index([isRead, createdAt])
 }
@@ -441,8 +441,8 @@ model NewsletterSubscriber {
   email            String    @unique
   isActive         Boolean   @default(true)
   unsubscribeToken String    @unique @default(cuid())
-  subscribedAt     DateTime  @default(now())
-  unsubscribedAt   DateTime?
+  subscribedAt     DateTime  @default(now()) @db.Timestamptz(3)
+  unsubscribedAt   DateTime? @db.Timestamptz(3)
 }
 
 model Notification {
@@ -456,15 +456,15 @@ model Notification {
   linkUrl String?
 
   isRead Boolean   @default(false)
-  readAt DateTime?
+  readAt DateTime? @db.Timestamptz(3)
 
   /// DEMO_MODE=true iken e-posta/SMS/WhatsApp gercekten gonderilmez;
   /// hangi kanaldan gidecegi burada tutulur, sentAt bos kalir.
   /// Admin panelinde "gonderilecek mesaj" onizlemesi bundan uretilir.
   channel String?
-  sentAt  DateTime?
+  sentAt  DateTime? @db.Timestamptz(3)
 
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
 
   @@index([userId, isRead, createdAt])
   @@index([type, createdAt])
@@ -491,7 +491,7 @@ model SiteSetting {
   /// Bos ise Google yorumlari cekilmez, seed'deki manuel yorumlar gosterilir.
   googlePlaceId String?
 
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 }
 
 model MediaAsset {
@@ -505,7 +505,7 @@ model MediaAsset {
   uploadedById String?
   uploadedBy   User?   @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
 
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
 
   @@index([createdAt])
 }
@@ -520,7 +520,7 @@ model AuditLog {
   metadata Json?
 
   ipAddress String?
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
 
   @@index([entity, entityId])
   @@index([actorId, createdAt])
