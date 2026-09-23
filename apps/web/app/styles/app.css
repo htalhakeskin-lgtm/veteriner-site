@@ -1,0 +1,304 @@
+@import 'tailwindcss';
+
+/* ═══════════════════════════════════════════════════════════════
+   TASARIM SISTEMI
+   Onaylanan tasarim onizlemesinden (tasarim-onizleme.html) tasindi.
+   Kural: tek hakim renk + notrler. Gradient ve karisik renk yok.
+   ═══════════════════════════════════════════════════════════════ */
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Lora', Georgia, 'Times New Roman', serif;
+
+  /* Tum sitede TEK yumusama egrisi — hareketin tutarli hissedilmesi icin */
+  --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+
+/* ── Tema: Adacayi (varsayilan) ─────────────────────────────── */
+:root,
+:root[data-theme='adacayi'] {
+  --color-bg: #f7f6f2;
+  --color-surface: #ffffff;
+  --color-surface-2: #fcfbf8;
+  --color-ink: #222624;
+  --color-ink-muted: #6e7571;
+  --color-ink-faint: #9ca39f;
+  --color-line: #e6e3da;
+  --color-line-soft: #f0eee7;
+  --color-brand: #5a7d6a;
+  --color-brand-hover: #4a6a59;
+  --color-brand-contrast: #ffffff;
+  --color-tint: #edf1ee;
+  --color-deep: #2c3b33;
+  --color-deep-ink: #edf1ee;
+  --color-deep-muted: #a8b6ae;
+  --color-deep-line: #3d4e44;
+  --color-danger: #b4453c;
+  --color-success: #4a6a59;
+}
+
+:root[data-theme='okyanus'] {
+  --color-bg: #f5f8fa;
+  --color-surface: #ffffff;
+  --color-surface-2: #fafcfd;
+  --color-ink: #1b2733;
+  --color-ink-muted: #667685;
+  --color-ink-faint: #98a5b1;
+  --color-line: #e1e8ed;
+  --color-line-soft: #eff4f7;
+  --color-brand: #2c6e9b;
+  --color-brand-hover: #235a80;
+  --color-brand-contrast: #ffffff;
+  --color-tint: #eaf2f8;
+  --color-deep: #14344b;
+  --color-deep-ink: #e6eef4;
+  --color-deep-muted: #9ab0c1;
+  --color-deep-line: #254963;
+  --color-danger: #b4453c;
+  --color-success: #2c6e9b;
+}
+
+:root[data-theme='lavanta'] {
+  --color-bg: #f8f6fb;
+  --color-surface: #ffffff;
+  --color-surface-2: #fcfafe;
+  --color-ink: #26222e;
+  --color-ink-muted: #6e6879;
+  --color-ink-faint: #a09aab;
+  --color-line: #e7e3ef;
+  --color-line-soft: #f2eff7;
+  --color-brand: #7a6ba8;
+  --color-brand-hover: #665891;
+  --color-brand-contrast: #ffffff;
+  --color-tint: #f1eef8;
+  --color-deep: #3c3159;
+  --color-deep-ink: #eeeaf6;
+  --color-deep-muted: #afa6c6;
+  --color-deep-line: #504470;
+  --color-danger: #b4453c;
+  --color-success: #7a6ba8;
+}
+
+:root[data-theme='kurumsal'] {
+  --color-bg: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-surface-2: #fbfcfd;
+  --color-ink: #1a202b;
+  --color-ink-muted: #69717e;
+  --color-ink-faint: #9aa1ac;
+  --color-line: #e3e7ec;
+  --color-line-soft: #f0f2f5;
+  --color-brand: #1f3a5f;
+  --color-brand-hover: #162b48;
+  --color-brand-contrast: #ffffff;
+  --color-tint: #ebeff5;
+  --color-deep: #132538;
+  --color-deep-ink: #e7ecf2;
+  --color-deep-muted: #96a3b4;
+  --color-deep-line: #25384e;
+  --color-danger: #b4453c;
+  --color-success: #1f3a5f;
+}
+
+:root[data-theme='toprak'] {
+  --color-bg: #faf7f3;
+  --color-surface: #ffffff;
+  --color-surface-2: #fdfbf8;
+  --color-ink: #2b2320;
+  --color-ink-muted: #7c7069;
+  --color-ink-faint: #aba097;
+  --color-line: #ebe3da;
+  --color-line-soft: #f5efe8;
+  --color-brand: #b0765a;
+  --color-brand-hover: #98624a;
+  --color-brand-contrast: #ffffff;
+  --color-tint: #f6eee9;
+  --color-deep: #45312a;
+  --color-deep-ink: #f4eae3;
+  --color-deep-muted: #c0aba0;
+  --color-deep-line: #59433a;
+  --color-danger: #a8443b;
+  --color-success: #b0765a;
+}
+
+:root[data-theme='gece'] {
+  --color-bg: #0f1412;
+  --color-surface: #161c1a;
+  --color-surface-2: #1a211e;
+  --color-ink: #e8edea;
+  --color-ink-muted: #96a19c;
+  --color-ink-faint: #6b7772;
+  --color-line: #242d29;
+  --color-line-soft: #1e2724;
+  --color-brand: #7fb3a5;
+  --color-brand-hover: #95c4b7;
+  --color-brand-contrast: #0f1412;
+  --color-tint: #1a2421;
+  --color-deep: #0a0e0c;
+  --color-deep-ink: #e8edea;
+  --color-deep-muted: #8a958f;
+  --color-deep-line: #1e2724;
+  --color-danger: #e0766c;
+  --color-success: #7fb3a5;
+}
+
+/* Tailwind'in renk yardimcilari (bg-brand, text-ink...) bu token'lari kullansin */
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-surface-2: var(--color-surface-2);
+  --color-ink: var(--color-ink);
+  --color-ink-muted: var(--color-ink-muted);
+  --color-ink-faint: var(--color-ink-faint);
+  --color-line: var(--color-line);
+  --color-line-soft: var(--color-line-soft);
+  --color-brand: var(--color-brand);
+  --color-brand-hover: var(--color-brand-hover);
+  --color-brand-contrast: var(--color-brand-contrast);
+  --color-tint: var(--color-tint);
+  --color-deep: var(--color-deep);
+  --color-deep-ink: var(--color-deep-ink);
+  --color-deep-muted: var(--color-deep-muted);
+  --color-deep-line: var(--color-deep-line);
+  --color-danger: var(--color-danger);
+  --color-success: var(--color-success);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TEMEL
+   ═══════════════════════════════════════════════════════════════ */
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Lenis devredeyken tarayicinin kendi scroll'u kapanmali; degilse
+   native smooth scroll yedek kalsin. */
+html:not(.lenis) {
+  scroll-behavior: smooth;
+}
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  /* Tema degisimi yumusak olsun */
+  transition:
+    background-color 0.6s var(--ease-soft),
+    color 0.6s var(--ease-soft);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+/* Ikonlar icin guvenli varsayilan: boyutu verilmemis hicbir ikon
+   300px acilmasin. Gizli sprite (<svg width="0">) haric. */
+svg:not([width]) {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLL ANIMASYONLARI
+   ═══════════════════════════════════════════════════════════════ */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.9s var(--ease-soft),
+    transform 0.9s var(--ease-soft);
+  transition-delay: var(--delay, 0ms);
+  will-change: opacity, transform;
+}
+[data-reveal].in {
+  opacity: 1;
+  transform: none;
+}
+[data-reveal='fade'] {
+  transform: none;
+}
+[data-reveal='left'] {
+  transform: translateX(-28px);
+}
+[data-reveal='right'] {
+  transform: translateX(28px);
+}
+
+/* Hareket tercihi: isletim sistemi "azalt" diyorsa varsayilan kapali,
+   ama kullanici acikca actiysa (data-motion="on") tercihi ona birakiyoruz. */
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion='on']) *,
+  :root:not([data-motion='on']) *::before,
+  :root:not([data-motion='on']) *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  :root:not([data-motion='on']) [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+:root[data-motion='off'] *,
+:root[data-motion='off'] *::before,
+:root[data-motion='off'] *::after {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}
+:root[data-motion='off'] [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BILESEN SINIFLARI
+   ═══════════════════════════════════════════════════════════════ */
+
+@utility wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+@utility eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}

@@ -48,3 +48,6 @@ desktop.ini
 
 # .env.test commit edilir: gercek sir icermez, kurulumu tekrarlanabilir kilar
 !apps/api/.env.test
+
+# React Router uretilen tipler
+apps/web/.react-router/

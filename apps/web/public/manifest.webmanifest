@@ -1,0 +1,13 @@
+{
+  "name": "Klinik Adı Veteriner Kliniği",
+  "short_name": "Vet Klinik",
+  "description": "Online randevu ve evcil hayvan sağlık takibi",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F6F2",
+  "theme_color": "#5A7D6A",
+  "lang": "tr",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /hesap
+Disallow: /panel
+Disallow: /api
