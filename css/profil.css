@@ -1,0 +1,199 @@
+/* ═══════════════════════════════════════════════════
+   PROFIL — Customer Portal & Pet Health Records
+   ═══════════════════════════════════════════════════ */
+
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 36px;
+  padding-top: 120px;
+  padding-bottom: 80px;
+}
+
+/* Sidebar Navigation */
+.dashboard-sidebar {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  padding: 24px 16px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  height: fit-content;
+}
+.user-profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+.user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 20px;
+}
+.user-name {
+  font-weight: 700;
+  color: var(--color-secondary);
+  font-size: var(--font-base);
+}
+.user-email {
+  font-size: var(--font-xs);
+  color: var(--color-text-light);
+}
+
+.dashboard-menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.dashboard-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+.dashboard-menu-link:hover,
+.dashboard-menu-link.active {
+  background: rgba(76, 175, 125, 0.1);
+  color: var(--color-primary);
+}
+.dashboard-menu-link i {
+  font-size: 18px;
+}
+
+/* Dashboard Main Content Area */
+.dashboard-main {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Stats Cards Grid */
+.dashboard-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.dash-stat-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.dash-stat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  background: var(--color-background-alt);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+.dash-stat-val {
+  font-family: var(--font-accent);
+  font-size: var(--font-2xl);
+  font-weight: 800;
+  color: var(--color-secondary);
+}
+.dash-stat-lbl {
+  font-size: var(--font-xs);
+  color: var(--color-text-light);
+}
+
+/* Pets Cards Grid */
+.pets-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.pet-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  transition: transform var(--transition-bounce);
+}
+.pet-card:hover {
+  transform: translateY(-4px);
+}
+.pet-avatar-wrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-background-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  border: 3px solid var(--color-primary);
+}
+.pet-name {
+  font-family: var(--font-heading);
+  font-size: var(--font-xl);
+  font-weight: 700;
+  color: var(--color-secondary);
+}
+.pet-breed {
+  font-size: var(--font-xs);
+  color: var(--color-text-light);
+}
+
+/* Health Record Table / Timeline */
+.health-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+.timeline-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+.timeline-date {
+  font-weight: 700;
+  color: var(--color-primary);
+  min-width: 90px;
+  font-size: var(--font-sm);
+}
+.timeline-body {
+  flex: 1;
+}
+.timeline-title {
+  font-weight: 700;
+  color: var(--color-secondary);
+}
+.timeline-desc {
+  font-size: var(--font-xs);
+  color: var(--color-text-light);
+  margin-top: 4px;
+}

@@ -1,0 +1,134 @@
+/* ═══════════════════════════════════════════════════
+   BASE STYLES — Tipografi & Temel Elemanlar
+   ═══════════════════════════════════════════════════ */
+
+/* ─── Başlıklar ─── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-secondary);
+  line-height: var(--leading-tight);
+}
+
+h1 {
+  font-size: var(--font-5xl);
+  letter-spacing: var(--tracking-tight);
+}
+
+h2 {
+  font-size: var(--font-4xl);
+  letter-spacing: var(--tracking-tight);
+}
+
+h3 {
+  font-size: var(--font-3xl);
+}
+
+h4 {
+  font-size: var(--font-2xl);
+}
+
+h5 {
+  font-size: var(--font-xl);
+}
+
+h6 {
+  font-size: var(--font-lg);
+}
+
+/* ─── Paragraflar ─── */
+p {
+  font-size: var(--font-base);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-light);
+}
+
+p + p {
+  margin-top: var(--space-4);
+}
+
+/* ─── Linkler ─── */
+a {
+  transition: color var(--transition-fast), opacity var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary);
+}
+
+/* ─── Küçük metin ─── */
+small {
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+}
+
+/* ─── Vurgulama ─── */
+strong, b {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+em {
+  font-style: italic;
+}
+
+/* ─── Bölüm başlıkları ortak stili ─── */
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  background: rgba(76, 175, 125, 0.1);
+  border: 1px solid rgba(76, 175, 125, 0.2);
+  font-family: var(--font-accent);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: var(--space-4);
+}
+
+.section-badge svg {
+  width: 16px;
+  height: 16px;
+}
+
+.section-title {
+  font-size: var(--font-4xl);
+  font-weight: 800;
+  color: var(--color-secondary);
+  margin-bottom: var(--space-4);
+  line-height: var(--leading-tight);
+}
+
+.section-subtitle {
+  font-size: var(--font-lg);
+  color: var(--color-text-light);
+  max-width: 640px;
+  line-height: var(--leading-relaxed);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: var(--space-12);
+}
+
+.section-header .section-subtitle {
+  margin: 0 auto;
+}
+
+/* ─── Gradient metin ─── */
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Ayırıcı ─── */
+.divider {
+  width: 60px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  margin: var(--space-6) auto;
+}

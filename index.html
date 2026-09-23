@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Klinik Adı — Dostlarınız İçin En İyi Bakım | Veteriner Kliniği</title>
+  <meta name="description" content="Modern veteriner hizmetleri, 7/24 acil müdahale, aşı takibi ve online randevu sistemi ile evcil dostlarınıza en kaliteli sağlık bakımını sunuyoruz.">
+  <meta name="theme-color" content="#4CAF7D">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS Styles -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/randevu.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/profil.css">
+  <link rel="stylesheet" href="css/panel.css">
+  <link rel="stylesheet" href="css/utilities.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+  <!-- Header Placeholder -->
+  <div id="main-header-placeholder"></div>
+
+  <!-- BÖLÜM 1: HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-bg-shapes">
+      <div class="hero-shape hero-shape-1"></div>
+      <div class="hero-shape hero-shape-2"></div>
+    </div>
+    <div class="floating-paw paw-1">🐾</div>
+    <div class="floating-paw paw-2">🐾</div>
+    <div class="floating-paw paw-3">🐾</div>
+
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="live-dot"></span> 7/24 Acil Veteriner Ambulans & Nöbetçi Klinik
+          </div>
+          <h1 class="hero-title">
+            Dostlarınız İçin <br>
+            <span class="highlight" id="heroTypewriterTitle">En İyi Bakım</span>
+          </h1>
+          <p class="hero-subtitle">
+            Deneyimli veteriner hekimlerimiz, modern tıbbi ekipmanlarımız ve sevgi dolu yaklaşımımızla sevimli dostlarımızın yanındayız.
+          </p>
+          <div class="hero-cta-group">
+            <a href="randevu.html" class="btn btn-primary btn-lg">🗓 Online Randevu Al</a>
+            <a href="#hizmetlerimiz" class="btn btn-outline btn-lg" style="color: #fff; border-color: rgba(255,255,255,0.4);">Hizmetlerimizi Keşfet</a>
+          </div>
+          <div class="hero-stats-row">
+            <div class="hero-stat-item">
+              <span class="hero-stat-number" data-counter="27000" data-suffix="+">0</span>
+              <span class="hero-stat-label">Mutlu Hasta</span>
+            </div>
+            <div class="hero-stat-item">
+              <span class="hero-stat-number" data-counter="15" data-suffix="+ Yıl">0</span>
+              <span class="hero-stat-label">Klinik Deneyimi</span>
+            </div>
+            <div class="hero-stat-item">
+              <span class="hero-stat-number" data-counter="99" data-suffix="%">0</span>
+              <span class="hero-stat-label">Müşteri Memnuniyeti</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-media-wrapper">
+          <div class="hero-media-card">
+            <img src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=800&q=80" alt="Veteriner Hekim Hasta Muayenesi" class="hero-img">
+            <div class="hero-floating-card card-top-left">
+              <div class="floating-card-icon">🩺</div>
+              <div>
+                <div class="floating-card-title">Genel Muayene</div>
+                <div class="floating-card-sub">Erken Tanı & Tedavi</div>
+              </div>
+            </div>
+            <div class="hero-floating-card card-bottom-right">
+              <div class="floating-card-icon">💉</div>
+              <div>
+                <div class="floating-card-title">Aşı Takip Sistemi</div>
+                <div class="floating-card-sub">Otomatik Hatırlatıcı</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BÖLÜM 2: LIVE CLINIC PULSE TICKER -->
+  <section class="live-pulse-bar">
+    <div class="container">
+      <div class="pulse-items-wrapper">
+        <div class="pulse-item"><span class="live-dot"></span> <strong>CANLI KANALLAR:</strong></div>
+        <div class="pulse-item">🩺 Şu an klinikte 3 hasta muayenede</div>
+        <div class="pulse-item">👥 Bugün 14 dostumuz sağlığına kavuştu</div>
+        <div class="pulse-item">⏱ Ortalama bekleme süresi: ~12 dk</div>
+        <div class="pulse-item">🚨 Nöbetçi Hekim: Dr. Ahmet Yılmaz</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BÖLÜM 3: HİZMETLERİMİZ -->
+  <section class="section" id="hizmetlerimiz">
+    <div class="container">
+      <div class="section-header text-center" data-reveal="fade-up">
+        <span class="badge badge-primary">Uzmanlık Alanlarımız</span>
+        <h2 class="section-title">Kapsamlı Veteriner Sağlık Hizmetleri</h2>
+        <p class="section-subtitle">Teşhisten cerrahi operasyonlara, aşı takibinden ağız ve diş bakımına kadar tüm ihtiyaçlar tek çatı altında.</p>
+      </div>
+
+      <div class="services-grid" data-reveal="fade-up">
+        <div class="service-card">
+          <div class="service-icon-box">🩺</div>
+          <div>
+            <h3 class="service-title">Genel Muayene</h3>
+            <p class="service-desc">Kapsamlı fiziksel muayene, vücut kondisyon değerlendirmesi ve koruyucu sağlık kontrolleri.</p>
+          </div>
+          <a href="hizmetler.html" class="service-link">Detaylı Bilgi →</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon-box">💉</div>
+          <div>
+            <h3 class="service-title">Aşılama Programı</h3>
+            <p class="service-desc">Kedi ve köpekler için iç-dış parazit ve temel aşı takvimlerinin eksiksiz uygulanması.</p>
+          </div>
+          <a href="hizmetler.html" class="service-link">Detaylı Bilgi →</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon-box">✂️</div>
+          <div>
+            <h3 class="service-title">Cerrahi Operasyonlar</h3>
+            <p class="service-desc">Kısırlaştırma, yumuşak doku cerrahisi ve gaz anestezisi ile steril ameliye odasında müdahaleler.</p>
+          </div>
+          <a href="hizmetler.html" class="service-link">Detaylı Bilgi →</a>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon-box">😁</div>
+          <div>
+            <h3 class="service-title">Diş Bakımı</h3>
+            <p class="service-desc">Ultrasonik diş taşı temizliği, tartar tedavisi ve ağız kokusu önleyici koruyucu bakım.</p>
+          </div>
+          <a href="hizmetler.html" class="service-link">Detaylı Bilgi →</a>
+        </div>
+      </div>
+      <div class="text-center mt-5">
+        <a href="hizmetler.html" class="btn btn-secondary">Tüm Hizmetlerimizi Görüntüle →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BÖLÜM 4: ONLINE RANDEVU CTA BANNER -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="cta-banner-section" data-reveal="fade-up">
+        <div class="cta-banner-content">
+          <span class="badge badge-accent" style="align-self: flex-start;">Hızlı & Kolay</span>
+          <h2 class="font-heading" style="font-size: var(--font-4xl); color: #fff;">Online Randevunuzu 1 Dakikada Oluşturun</h2>
+          <p style="font-size: var(--font-lg); color: rgba(255,255,255,0.85);">Sırada beklemeden dilediğiniz gün ve saat için hekiminizden kolayca randevu alın.</p>
+          <div class="cta-banner-steps">
+            <div class="step-item"><span class="step-number">1</span> Hizmet Seç</div>
+            <div class="step-item"><span class="step-number">2</span> Tarih & Saat Belirle</div>
+            <div class="step-item"><span class="step-number">3</span> Onayla</div>
+          </div>
+          <a href="randevu.html" class="btn btn-accent btn-lg" style="align-self: flex-start; margin-top: 8px;">✨ Hemen Randevu Al</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BÖLÜM 5: EKİBİMİZ -->
+  <section class="section" style="background: var(--color-background-alt);">
+    <div class="container">
+      <div class="section-header text-center" data-reveal="fade-up">
+        <span class="badge badge-primary">Uzman Kadromuz</span>
+        <h2 class="section-title">Deneyimli Veteriner Hekimlerimiz</h2>
+        <p class="section-subtitle">Evcil hayvanlarınızın sağlığı için alanında uzmanlaşmış, hayvan sevgisiyle dolu ekibimiz.</p>
+      </div>
+
+      <div class="team-grid" data-reveal="fade-up">
+        <div class="team-card">
+          <div class="team-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=600&q=80" alt="Dr. Ahmet Yılmaz" class="team-img">
+            <div class="team-overlay">
+              <p class="team-bio">15 yılı aşkın süredir küçük hayvan cerrahisi ve iç hastalıkları konusunda binlerce başarılı operasyon gerçekleştirmiştir.</p>
+            </div>
+          </div>
+          <div class="team-info">
+            <div class="team-name">Dr. Ahmet Yılmaz</div>
+            <div class="team-title">Baş Veteriner Hekim</div>
+            <div class="team-speciality">Genel Cerrahi & İç Hastalıkları</div>
+          </div>
+        </div>
+
+        <div class="team-card">
+          <div class="team-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=600&q=80" alt="Dr. Elif Kaya" class="team-img">
+            <div class="team-overlay">
+              <p class="team-bio">Dermatolojik rahatsızlıklar, alerji tedavileri ve klinik beslenme alanında uzman hekimimiz.</p>
+            </div>
+          </div>
+          <div class="team-info">
+            <div class="team-name">Dr. Elif Kaya</div>
+            <div class="team-title">Veteriner Hekim</div>
+            <div class="team-speciality">Dermatoloji & Klinik Beslenme</div>
+          </div>
+        </div>
+
+        <div class="team-card">
+          <div class="team-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=600&q=80" alt="Dr. Mehmet Demir" class="team-img">
+            <div class="team-overlay">
+              <p class="team-bio">Radyoloji, dijital röntgen ve kırık ortopedi vakalarında uzman tecrübeli hekim.</p>
+            </div>
+          </div>
+          <div class="team-info">
+            <div class="team-name">Dr. Mehmet Demir</div>
+            <div class="team-title">Veteriner Hekim</div>
+            <div class="team-speciality">Ortopedi & Radyoloji</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BÖLÜM 6: MÜŞTERİ YORUMLARI CAROUSEL -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="section-header text-center" data-reveal="fade-up">
+        <span class="badge badge-primary">Hasta Yakınlarımız Ne Diyor?</span>
+        <h2 class="section-title">Mutlu Hayvan Sahiplerinin Yorumları</h2>
+      </div>
+      <div id="testimonialCarouselPlaceholder" data-reveal="fade-up"></div>
+    </div>
+  </section>
+
+  <!-- BÖLÜM 7: INSTAGRAM FEED -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header text-center" data-reveal="fade-up">
+        <span class="badge badge-primary">Sosyal Medyada Biz</span>
+        <h2 class="section-title">Instagram'da Bizi Takip Edin</h2>
+        <p class="section-subtitle">Klinik yaşantımızdan eğlenceli anlar ve tatlı misafirlerimizin fotoğrafları.</p>
+      </div>
+
+      <div class="instagram-grid" data-reveal="fade-up">
+        <a href="https://instagram.com" target="_blank" class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=400&q=80" alt="Instagram Post" class="instagram-img">
+          <div class="instagram-overlay">📷</div>
+        </a>
+        <a href="https://instagram.com" target="_blank" class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=400&q=80" alt="Instagram Post" class="instagram-img">
+          <div class="instagram-overlay">📷</div>
+        </a>
+        <a href="https://instagram.com" target="_blank" class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?auto=format&fit=crop&w=400&q=80" alt="Instagram Post" class="instagram-img">
+          <div class="instagram-overlay">📷</div>
+        </a>
+        <a href="https://instagram.com" target="_blank" class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=400&q=80" alt="Instagram Post" class="instagram-img">
+          <div class="instagram-overlay">📷</div>
+        </a>
+        <a href="https://instagram.com" target="_blank" class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=400&q=80" alt="Instagram Post" class="instagram-img">
+          <div class="instagram-overlay">📷</div>
+        </a>
+        <a href="https://instagram.com" target="_blank" class="instagram-item">
+          <img src="https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=400&q=80" alt="Instagram Post" class="instagram-img">
+          <div class="instagram-overlay">📷</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BÖLÜM 8: İLETİŞİM & HARİTA -->
+  <section class="section" style="background: var(--color-background-alt);">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info-card" data-reveal="fade-up">
+          <div>
+            <span class="badge badge-primary">İletişim & Ulaşım</span>
+            <h2 class="font-heading" style="font-size: var(--font-3xl); color: var(--color-secondary); margin-top: 12px;">Kliniğimizi Ziyaret Edin</h2>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">📍</div>
+            <div>
+              <div class="info-title">Adresimiz</div>
+              <div class="info-text">Örnek Mah. Veteriner Cad. No:1 Merkez / İstanbul</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">📞</div>
+            <div>
+              <div class="info-title">Telefon & Acil Çağrı</div>
+              <div class="info-text">0262 000 00 00 | 7/24 Acil: 0532 000 00 00</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">⏰</div>
+            <div>
+              <div class="info-title">Çalışma Saatleri</div>
+              <div class="info-text">Pazartesi - Cuma: 09:00 - 20:00<br>Cumartesi: 09:00 - 18:00 (Pazar: 7/24 Acil Nöbetçi)</div>
+            </div>
+          </div>
+          <a href="https://wa.me/905000000000" target="_blank" class="btn btn-primary w-100 mt-2">💬 WhatsApp'tan Mesaj Gönder</a>
+        </div>
+
+        <div class="map-wrapper" data-reveal="fade-up">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12038.163618451197!2d28.9784!3d41.0082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAwJzfcNS41Ik4gMjhCsDU4JzQyLjIiRQ!5e0!3m2!1str!2str!4v1620000000000!5m2!1str!2str" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Placeholder -->
+  <div id="main-footer-placeholder"></div>
+
+  <!-- JavaScript Codebase -->
+  <script src="js/config.js"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/header.js"></script>
+  <script src="js/hero.js"></script>
+  <script src="js/carousel.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

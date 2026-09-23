@@ -1,0 +1,255 @@
+/* ═══════════════════════════════════════════════════
+   HERO SECTION — Parallax, Badges & Slider
+   ═══════════════════════════════════════════════════ */
+
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 130px;
+  padding-bottom: 80px;
+  background: var(--gradient-hero);
+  overflow: hidden;
+  color: #ffffff;
+}
+
+/* Hero Parallax Background Visuals */
+.hero-bg-shapes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero-shape {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  animation: float 12s ease-in-out infinite alternate;
+}
+.hero-shape-1 {
+  width: 450px;
+  height: 450px;
+  background: var(--color-primary);
+  top: -10%;
+  right: -5%;
+}
+.hero-shape-2 {
+  width: 350px;
+  height: 350px;
+  background: var(--color-accent);
+  bottom: -10%;
+  left: -5%;
+  animation-delay: -6s;
+}
+
+/* Floating Paw Decoration Icons */
+.floating-paw {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.12);
+  font-size: 32px;
+  animation: float 8s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.paw-1 { top: 20%; left: 10%; animation-delay: 0s; }
+.paw-2 { top: 70%; left: 45%; animation-delay: -2s; }
+.paw-3 { top: 30%; right: 15%; animation-delay: -4s; }
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Hero Badge */
+.hero-badge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-full);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+}
+
+/* Hero Title & Typewriter Effect */
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: var(--font-hero);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #ffffff !important;
+}
+.hero-title .highlight {
+  color: var(--color-accent) !important;
+  position: relative;
+  display: inline-block;
+  min-height: 1.1em;
+}
+.hero-title .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  background: rgba(232, 168, 56, 0.25);
+  z-index: -1;
+  border-radius: 4px;
+}
+
+.hero-subtitle {
+  font-size: var(--font-xl);
+  color: rgba(255, 255, 255, 0.9) !important;
+  line-height: 1.6;
+  max-width: 560px;
+  font-weight: 400;
+}
+
+/* CTA Buttons Group */
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* Quick Hero Stats Row */
+.hero-stats-row {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+.hero-stat-item {
+  display: flex;
+  flex-direction: column;
+}
+.hero-stat-number {
+  font-family: var(--font-accent);
+  font-size: var(--font-3xl);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+.hero-stat-label {
+  font-size: var(--font-xs);
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* Right Side: Hero Media Card & Floating Badges */
+.hero-media-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.hero-media-card {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  height: 540px;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  border: 4px solid rgba(255, 255, 255, 0.2);
+}
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+.hero-media-card:hover .hero-img {
+  transform: scale(1.05);
+}
+
+/* Floating Card Overlay Badges */
+.hero-floating-card {
+  position: absolute;
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--color-text);
+  z-index: 5;
+  animation: float 6s ease-in-out infinite alternate;
+}
+.card-top-left {
+  top: 40px;
+  left: -20px;
+}
+.card-bottom-right {
+  bottom: 40px;
+  right: -20px;
+  animation-delay: -3s;
+}
+.floating-card-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.floating-card-title {
+  font-weight: 700;
+  font-size: var(--font-sm);
+  color: var(--color-secondary);
+}
+.floating-card-sub {
+  font-size: var(--font-xs);
+  color: var(--color-text-light);
+}
+
+/* Scroll Down Indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--font-xs);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+  z-index: 3;
+}
+.scroll-indicator:hover {
+  color: #fff;
+}
+.scroll-indicator i {
+  animation: bounce 2s infinite;
+}

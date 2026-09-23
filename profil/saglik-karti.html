@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sağlık Kartı — Klinik Adı</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/header.css">
+  <link rel="stylesheet" href="../css/footer.css">
+  <link rel="stylesheet" href="../css/profil.css">
+  <link rel="stylesheet" href="../css/utilities.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body style="background: var(--color-background-alt);">
+
+  <div id="main-header-placeholder"></div>
+
+  <div class="container dashboard-layout">
+    <div class="dashboard-sidebar">
+      <div class="user-profile-summary">
+        <div class="user-avatar">👤</div>
+        <div>
+          <div class="user-name" id="dashUserName">Ayşe Kaya</div>
+          <div class="user-email" id="dashUserEmail">musteri@demo.com</div>
+        </div>
+      </div>
+
+      <ul class="dashboard-menu">
+        <li><a href="index.html" class="dashboard-menu-link"><i>📊</i> Genel Bakış</a></li>
+        <li><a href="hayvanlarim.html" class="dashboard-menu-link"><i>🐾</i> Evcil Hayvanlarım</a></li>
+        <li><a href="randevularim.html" class="dashboard-menu-link"><i>📅</i> Randevularım</a></li>
+        <li><a href="saglik-karti.html" class="dashboard-menu-link active"><i>📋</i> Sağlık Kartları</a></li>
+        <li><a href="#" class="dashboard-menu-link" onclick="AuthManager.logout()"><i>🚪</i> Oturumu Kapat</a></li>
+      </ul>
+    </div>
+
+    <div class="dashboard-main">
+      <div class="card">
+        <div class="flex-between">
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="font-size: 40px;">🐱</div>
+            <div>
+              <h2 class="font-heading" style="font-size: var(--font-2xl); color: var(--color-secondary);">Boncuk — Dijital Sağlık Karnesi</h2>
+              <p class="text-muted">Tür: Kedi | Irk: British Shorthair | Yaş: 3 | Kilo: 4.5 kg</p>
+            </div>
+          </div>
+          <span class="badge badge-success">Çip No: TR-982000012345</span>
+        </div>
+
+        <h3 class="font-heading mt-4" style="font-size: var(--font-xl); color: var(--color-secondary);">Aşı & Tedavi Takvimi</h3>
+        <div class="health-timeline" id="healthRecordsTimeline">
+          <!-- Rendered by profil.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="main-footer-placeholder"></div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/theme.js"></script>
+  <script src="../js/animations.js"></script>
+  <script src="../js/components.js"></script>
+  <script src="../js/header.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/profil.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE — Media Queries for Mobile & Tablet
+   ═══════════════════════════════════════════════════ */
+
+/* Laptops & Tablets (<= 1024px) */
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    text-align: center;
+  }
+  .hero-content {
+    align-items: center;
+  }
+  .hero-badge {
+    align-self: center;
+  }
+  .hero-subtitle {
+    margin: 0 auto;
+  }
+  .hero-cta-group {
+    justify-content: center;
+  }
+  .hero-stats-row {
+    justify-content: center;
+  }
+  .hero-media-wrapper {
+    margin-top: 20px;
+  }
+
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+  .admin-sidebar {
+    display: none;
+  }
+}
+
+/* Mobile Devices (<= 768px) */
+@media (max-width: 768px) {
+  .nav-menu,
+  .header-phone {
+    display: none;
+  }
+  .mobile-toggle {
+    display: flex;
+  }
+
+  .hero-title {
+    font-size: var(--font-3xl);
+  }
+  .hero-subtitle {
+    font-size: var(--font-base);
+  }
+  .hero-media-card {
+    height: 380px;
+  }
+  .hero-floating-card {
+    display: none;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+  .instagram-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+  .wizard-card {
+    padding: 24px;
+  }
+  .selection-grid {
+    grid-template-columns: 1fr;
+  }
+  .date-slot-picker {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-stats-grid,
+  .pets-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Extra Small Phones (<= 480px) */
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: var(--font-2xl);
+  }
+  .instagram-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cta-banner-section {
+    padding: 36px 20px;
+  }
+  .testimonial-card {
+    padding: 28px 20px;
+  }
+}

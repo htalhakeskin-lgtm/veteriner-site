@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kayıt Ol — Klinik Adı Veteriner Kliniği</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/forms.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/utilities.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <div id="main-header-placeholder"></div>
+
+  <div class="auth-page-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo">🐾</div>
+        <h1 class="auth-title">Aramıza Katılın</h1>
+        <p class="auth-subtitle">Saniyeler içinde hesabınızı oluşturup randevu takibine başlayın.</p>
+      </div>
+
+      <form onsubmit="event.preventDefault(); const n = document.getElementById('regName').value; const e = document.getElementById('regEmail').value; const p = document.getElementById('regPhone').value; const pass = document.getElementById('regPass').value; AuthManager.register(n, e, p, pass);">
+        <div class="form-group">
+          <label class="form-label">Adınız Soyadınız</label>
+          <input type="text" id="regName" class="form-control" placeholder="Ayşe Yılmaz" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">E-posta Adresi</label>
+          <input type="email" id="regEmail" class="form-control" placeholder="ayse@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Telefon Numarası</label>
+          <input type="tel" id="regPhone" class="form-control" placeholder="0532 000 00 00" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Şifre Oluşturun</label>
+          <input type="password" id="regPass" class="form-control" placeholder="En az 6 karakter" minlength="6" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-3" style="padding: 14px;">Hesap Oluştur</button>
+      </form>
+
+      <div class="auth-footer-link">
+        Zaten hesabınız var mı? <a href="giris.html">Giriş Yapın →</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="main-footer-placeholder"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/header.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

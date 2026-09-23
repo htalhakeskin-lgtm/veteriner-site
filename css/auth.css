@@ -1,0 +1,101 @@
+/* ═══════════════════════════════════════════════════
+   AUTH — Login, Register & Reset Password Cards
+   ═══════════════════════════════════════════════════ */
+
+.auth-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 24px 60px 24px;
+  background: var(--gradient-hero);
+  position: relative;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--color-surface);
+  border-radius: var(--radius-2xl);
+  padding: 44px;
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid var(--border-color);
+  position: relative;
+  z-index: 2;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.auth-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  background: var(--gradient-primary);
+  color: #fff;
+  font-size: 28px;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 20px rgba(76, 175, 125, 0.3);
+}
+.auth-title {
+  font-family: var(--font-heading);
+  font-size: var(--font-2xl);
+  font-weight: 700;
+  color: var(--color-secondary);
+}
+.auth-subtitle {
+  font-size: var(--font-sm);
+  color: var(--color-text-light);
+  margin-top: 6px;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 24px 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-xs);
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-color);
+}
+.auth-divider span {
+  padding: 0 12px;
+}
+
+.auth-footer-link {
+  text-align: center;
+  margin-top: 24px;
+  font-size: var(--font-sm);
+  color: var(--color-text-light);
+}
+.auth-footer-link a {
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+.auth-footer-link a:hover {
+  text-decoration: underline;
+}
+
+/* Demo Credentials Hint Box */
+.demo-creds-hint {
+  background: var(--color-background-alt);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-top: 24px;
+  font-size: var(--font-xs);
+  color: var(--color-text-light);
+  border-left: 4px solid var(--color-primary);
+}
+.demo-creds-hint strong {
+  color: var(--color-secondary);
+}

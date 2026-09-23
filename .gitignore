@@ -1,0 +1,44 @@
+# Bağımlılıklar
+node_modules/
+.pnp/
+.pnp.js
+
+# Derleme çıktıları
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+
+# Ortam değişkenleri — .env ASLA commit edilmez
+.env
+.env.*
+!.env.example
+
+# Prisma
+apps/api/prisma/*.db
+apps/api/prisma/*.db-journal
+
+# Yüklenen dosyalar (kullanıcı içeriği)
+apps/api/uploads/*
+!apps/api/uploads/.gitkeep
+
+# Loglar
+*.log
+npm-debug.log*
+logs/
+
+# Test / kapsam
+coverage/
+.nyc_output/
+
+# Editör & işletim sistemi
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Geçici
+*.tmp
+.cache/
