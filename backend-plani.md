@@ -191,9 +191,6 @@ enum NotificationType  { APPOINTMENT_CREATED  APPOINTMENT_CONFIRMED  APPOINTMENT
 ### 4.3. Kritik kısıtlar ve indeksler
 
 ```prisma
-// Aynı hekime aynı anda iki randevu YASAK — çifte rezervasyonu veritabanı seviyesinde engeller
-@@unique([staffId, startAt], name: "staff_slot_unique")
-
 @@index([startAt, status])            // takvim sorguları
 @@index([userId, startAt])            // "randevularım"
 @@index([status, publishedAt])        // yayınlanmış blog listesi
@@ -201,9 +198,37 @@ enum NotificationType  { APPOINTMENT_CREATED  APPOINTMENT_CONFIRMED  APPOINTMENT
 @@index([petId, performedAt])         // sağlık kartı zaman çizelgesi
 ```
 
-> **Not:** İptal edilen randevu slot'u boşaltmalı. Bunun için iptalde `startAt` korunur ama
-> `staffId` + `startAt` benzersizliği **partial unique index** ile sadece
-> `status IN ('PENDING','CONFIRMED')` satırlarına uygulanır (Prisma migration'ına ham SQL olarak eklenir).
+> **Çifte rezervasyon koruması — Faz 1'de düzeltildi.**
+>
+> İlk tasarım `@@unique([staffId, startAt])` şeklinde bir partial unique index öngörüyordu.
+> Uygulamada bunun **yetersiz** olduğu görüldü: index yalnızca *aynı `startAt`* değerini
+> yakalıyor. 09:00–10:30 arası 90 dakikalık bir cerrahi ile 09:30'daki 30 dakikalık
+> muayenenin `startAt` değerleri farklı olduğu için index bunları geçiriyordu — ama bir
+> hekim aynı anda iki yerde olamaz. Seed verisinde 4 adet fiziksel olarak imkânsız randevu
+> çifti bu şekilde oluştu.
+>
+> Yerine PostgreSQL **exclusion constraint** kullanılıyor (`btree_gist` eklentisiyle):
+>
+> ```sql
+> ALTER TABLE "Appointment"
+>   ADD CONSTRAINT "Appointment_no_overlap"
+>   EXCLUDE USING gist (
+>     "staffId" WITH =,
+>     tsrange("startAt", "endAt", '[)') WITH &&
+>   )
+>   WHERE ("status" IN ('PENDING','CONFIRMED','COMPLETED') AND "staffId" IS NOT NULL);
+> ```
+>
+> - Aralık **`'[)'` yarı açık**: 09:00–09:30 ile 09:30–10:00 çakışmaz, yani ardışık
+>   randevular birbirini engellemez. Kapalı aralık kullanılsaydı takvim yarı yarıya dolardı.
+> - `CANCELLED` ve `NO_SHOW` kapsam dışı — iptal edilen saat yeniden satılabilir.
+> - `COMPLETED` kapsam içinde: geçmişte de olsa hekim o saatte doluydu.
+> - Bu kısıt eski partial unique index'in işini de kapsadığı için o kaldırıldı
+>   (migration `20260923010000_appointment_overlap_guard`).
+>
+> **Servis katmanı için not:** ihlal durumunda Postgres `23P01 exclusion_violation`
+> döndürür — unique ihlalindeki Prisma `P2002` değil. Randevu oluşturma servisi bu kodu
+> yakalayıp `409 SLOT_TAKEN` çevirmelidir.
 
 ### 4.4. `SiteSetting` — `config.js`'ten veritabanına geçiş
 
@@ -370,9 +395,14 @@ Sistemin **en kritik iş mantığı**. Randevu sihirbazının 3. adımını besl
 **Çifte rezervasyon koruması (iki katman):**
 
 1. `POST /appointments` içinde **Prisma transaction** + satır kilidi ile slot kilitlenir.
-2. Yarış durumu kalırsa veritabanındaki `staff_slot_unique` partial index devreye girer →
-   Prisma `P2002` hatası yakalanır → kullanıcıya `409 SLOT_TAKEN` döner
-   ("Bu saat az önce doldu, lütfen başka bir saat seçin").
+2. Yarış durumu kalırsa veritabanındaki **`Appointment_no_overlap` exclusion constraint**
+   devreye girer → Postgres `23P01` hatası yakalanır → kullanıcıya `409 SLOT_TAKEN` döner
+   ("Bu saat az önce doldu, lütfen başka bir saat seçin"). Bkz. §4.3.
+
+> **Dikkat — müsaitlik motoru ile kısıtın kapsamı farklı.** Kısıt yalnızca `staffId`
+> dolu olan randevuları korur. Müşteri "farketmez" seçtiğinde randevu kaydedilmeden
+> **önce** somut bir hekime atanmalıdır; aksi halde iki "farketmez" talebi aynı saate
+> düşebilir ve kısıt bunu yakalayamaz (`staffId IS NULL` kapsam dışı).
 
 ---
 

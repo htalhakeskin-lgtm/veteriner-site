@@ -1,5 +1,9 @@
-// Veteriner Klinik Platformu - veritabani semasi
-// Tam model listesi Faz 1'de eklenecek (bkz. backend-plani.md §4).
+// ═══════════════════════════════════════════════════════════════
+//  Veteriner Klinik Platformu — Veritabani Semasi
+//  Tek kiracili (single-tenant): her klinik = ayri kurulum + ayri veritabani.
+//  Klinik bilgileri SiteSetting tablosunda tek satirda tutulur.
+//  Detayli aciklama: backend-plani.md §4
+// ═══════════════════════════════════════════════════════════════
 
 generator client {
   provider = "prisma-client-js"
@@ -8,4 +12,516 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+//  ENUM'LAR
+// ─────────────────────────────────────────────
+
+enum Role {
+  CUSTOMER
+  STAFF
+  ADMIN
+}
+
+enum Species {
+  CAT
+  DOG
+  BIRD
+  RODENT
+  REPTILE
+  FISH
+  OTHER
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  UNKNOWN
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum RecordType {
+  EXAMINATION
+  VACCINATION
+  SURGERY
+  LAB_TEST
+  TREATMENT
+  OTHER
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum NotificationType {
+  APPOINTMENT_CREATED
+  APPOINTMENT_CONFIRMED
+  APPOINTMENT_CANCELLED
+  APPOINTMENT_REMINDER
+  VACCINATION_DUE
+  SYSTEM
+}
+
+enum TestimonialSource {
+  MANUAL
+  GOOGLE
+}
+
+// ─────────────────────────────────────────────
+//  KULLANICI & OTURUM
+// ─────────────────────────────────────────────
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  fullName     String
+  phone        String?
+  role         Role      @default(CUSTOMER)
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  /// KVKK: hesap silme talebinde satir silinmez, isaretlenir.
+  /// Dikkat: email benzersizligi silinmis kayitlari da kapsar —
+  /// ayni e-posta ile yeniden kayit icin serviste ele alinacak.
+  deletedAt DateTime?
+
+  pets          Pet[]
+  appointments  Appointment[]
+  refreshTokens RefreshToken[]
+  resetTokens   PasswordResetToken[]
+  notifications Notification[]
+  blogPosts     BlogPost[]
+  mediaAssets   MediaAsset[]
+  auditLogs     AuditLog[]
+  staffProfile  StaffMember?
+
+  @@index([role, isActive])
+  @@index([deletedAt])
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  /// Token'in kendisi degil, hash'i saklanir — veritabani sizarsa
+  /// oturumlar ele gecirilemesin.
+  tokenHash String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  revokedAt DateTime?
+  userAgent String?
+  ipAddress String?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, revokedAt])
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// ─────────────────────────────────────────────
+//  HASTALAR
+// ─────────────────────────────────────────────
+
+model Pet {
+  id          String    @id @default(cuid())
+  ownerId     String
+  owner       User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  name        String
+  species     Species
+  breed       String?
+  birthDate   DateTime? @db.Date
+  gender      Gender    @default(UNKNOWN)
+  weightKg    Decimal?  @db.Decimal(5, 2)
+  color       String?
+  isNeutered  Boolean   @default(false)
+  /// Nullable + unique: Postgres birden fazla NULL'a izin verir,
+  /// yani cipi olmayan hayvanlar sorun cikarmaz.
+  microchipNo String?   @unique
+  photoUrl    String?
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  medicalRecords MedicalRecord[]
+  appointments   Appointment[]
+
+  @@index([ownerId])
+  @@index([species])
+}
+
+model MedicalRecord {
+  id            String       @id @default(cuid())
+  petId         String
+  pet           Pet          @relation(fields: [petId], references: [id], onDelete: Cascade)
+  appointmentId String?
+  appointment   Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+  staffId       String?
+  staff         StaffMember? @relation(fields: [staffId], references: [id], onDelete: SetNull)
+
+  type        RecordType
+  title       String
+  description String?
+  performedAt DateTime
+  /// Asi/kontrol tekrar tarihi — hatirlatma cron'u bu alani tarar.
+  nextDueAt   DateTime?
+  attachments String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([petId, performedAt])
+  @@index([type, nextDueAt])
+}
+
+// ─────────────────────────────────────────────
+//  HIZMETLER & PERSONEL
+// ─────────────────────────────────────────────
+
+model Service {
+  id        String  @id @default(cuid())
+  slug      String  @unique
+  title     String
+  shortDesc String
+  longDesc  String?
+  icon      String?
+  category  String
+
+  price           Decimal? @db.Decimal(10, 2)
+  /// Musaitlik motoru slot uzunlugunu buradan hesaplar:
+  /// genel muayene 30 dk, cerrahi 90 dk gibi.
+  durationMinutes Int      @default(30)
+  isFeatured      Boolean  @default(false)
+  isActive        Boolean  @default(true)
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  appointments Appointment[]
+  staff        StaffMember[] @relation("StaffServices")
+
+  @@index([isActive, sortOrder])
+  @@index([category])
+}
+
+model StaffMember {
+  id     String  @id @default(cuid())
+  /// Personelin panele girebilmesi icin bir User hesabi olabilir;
+  /// sadece sitede tanitilan personelde bos kalir.
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  slug            String  @unique
+  fullName        String
+  title           String
+  speciality      String?
+  experienceYears Int?
+  bio             String?
+  education       String?
+  photoUrl        String?
+  isActive        Boolean @default(true)
+  sortOrder       Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  services       Service[]       @relation("StaffServices")
+  schedules      StaffSchedule[]
+  timeOff        StaffTimeOff[]
+  appointments   Appointment[]
+  medicalRecords MedicalRecord[]
+
+  @@index([isActive, sortOrder])
+}
+
+model StaffSchedule {
+  id      String      @id @default(cuid())
+  staffId String
+  staff   StaffMember @relation(fields: [staffId], references: [id], onDelete: Cascade)
+
+  /// 0 = Pazar ... 6 = Cumartesi (JavaScript getDay() ile ayni)
+  dayOfWeek Int
+  /// "HH:mm" metin olarak tutuluyor. Saat dilimi tasiyan bir DateTime
+  /// burada yanlis olurdu: bu bir zaman noktasi degil, "her salı 09:00"
+  /// gibi tekrar eden yerel bir kural.
+  startTime String
+  endTime   String
+
+  @@unique([staffId, dayOfWeek, startTime])
+  @@index([staffId, dayOfWeek])
+}
+
+model StaffTimeOff {
+  id      String      @id @default(cuid())
+  staffId String
+  staff   StaffMember @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  startAt DateTime
+  endAt   DateTime
+  reason  String?
+
+  createdAt DateTime @default(now())
+
+  @@index([staffId, startAt, endAt])
+}
+
+model ClinicHoliday {
+  id    String   @id @default(cuid())
+  date  DateTime @unique @db.Date
+  label String
+}
+
+// ─────────────────────────────────────────────
+//  RANDEVULAR
+// ─────────────────────────────────────────────
+
+model Appointment {
+  id   String @id @default(cuid())
+  /// Insan tarafindan okunabilir kod: RND-2026-0042
+  /// Misafir randevusunu telefonla sorgularken bu kullanilir.
+  code String @unique
+
+  // ── Uye randevusu ──
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  petId  String?
+  pet    Pet?    @relation(fields: [petId], references: [id], onDelete: SetNull)
+
+  // ── Misafir randevusu (uyelik olmadan) ──
+  guestName       String?
+  guestPhone      String?
+  guestEmail      String?
+  guestPetName    String?
+  guestPetSpecies Species?
+
+  serviceId String
+  /// Restrict: gecmis randevulari olan bir hizmet silinemesin,
+  /// once pasife alinsin (isActive = false).
+  service   Service      @relation(fields: [serviceId], references: [id], onDelete: Restrict)
+  staffId   String?
+  staff     StaffMember? @relation(fields: [staffId], references: [id], onDelete: SetNull)
+
+  startAt DateTime
+  endAt   DateTime
+  status  AppointmentStatus @default(PENDING)
+
+  notes          String?
+  cancelReason   String?
+  cancelledAt    DateTime?
+  reminderSentAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  medicalRecords MedicalRecord[]
+
+  // DIKKAT: (staffId, startAt) benzersizligi bilerek BURADA tanimlanmadi.
+  // Prisma'nin @@unique'i kosulsuz bir index uretir; bu da iptal edilmis
+  // bir randevunun saatinin bir daha satilamamasina yol acardi.
+  // Bunun yerine migration'a ham SQL ile PARTIAL unique index ekleniyor
+  // (yalnizca PENDING + CONFIRMED satirlari icin). Bkz. backend-plani.md §6.
+  @@index([startAt, status])
+  @@index([userId, startAt])
+  @@index([staffId, startAt])
+  @@index([status])
+}
+
+// ─────────────────────────────────────────────
+//  ICERIK
+// ─────────────────────────────────────────────
+
+model BlogCategory {
+  id        String  @id @default(cuid())
+  slug      String  @unique
+  name      String
+  icon      String?
+  sortOrder Int     @default(0)
+
+  posts BlogPost[]
+}
+
+model BlogPost {
+  id            String        @id @default(cuid())
+  slug          String        @unique
+  title         String
+  excerpt       String
+  /// sanitize-html ile temizlenmis HTML (XSS korumasi servis katmaninda).
+  contentHtml   String
+  coverImageUrl String?
+  categoryId    String?
+  category      BlogCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  authorId      String?
+  author        User?         @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  status      PostStatus @default(DRAFT)
+  publishedAt DateTime?
+  readMinutes Int        @default(3)
+  viewCount   Int        @default(0)
+
+  metaTitle       String?
+  metaDescription String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, publishedAt])
+  @@index([categoryId])
+}
+
+model Testimonial {
+  id         String            @id @default(cuid())
+  source     TestimonialSource @default(MANUAL)
+  /// Google yorum kimligi — tekrar senkronizasyonda ayni yorumun
+  /// ikinci kez eklenmesini engeller.
+  externalId String?
+
+  authorName     String
+  authorPhotoUrl String?
+  petName        String?
+  petSpecies     Species?
+  rating         Int
+  text           String
+  sourceUrl      String?
+
+  isApproved  Boolean  @default(false)
+  displayDate DateTime
+  sortOrder   Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([source, externalId])
+  @@index([isApproved, sortOrder])
+}
+
+// ─────────────────────────────────────────────
+//  ILETISIM & BILDIRIM
+// ─────────────────────────────────────────────
+
+model ContactMessage {
+  id        String    @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  isRead    Boolean   @default(false)
+  repliedAt DateTime?
+  ipAddress String?
+  createdAt DateTime  @default(now())
+
+  @@index([isRead, createdAt])
+}
+
+model NewsletterSubscriber {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  isActive         Boolean   @default(true)
+  unsubscribeToken String    @unique @default(cuid())
+  subscribedAt     DateTime  @default(now())
+  unsubscribedAt   DateTime?
+}
+
+model Notification {
+  id     String           @id @default(cuid())
+  userId String
+  user   User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type   NotificationType
+
+  title   String
+  message String
+  linkUrl String?
+
+  isRead Boolean   @default(false)
+  readAt DateTime?
+
+  /// DEMO_MODE=true iken e-posta/SMS/WhatsApp gercekten gonderilmez;
+  /// hangi kanaldan gidecegi burada tutulur, sentAt bos kalir.
+  /// Admin panelinde "gonderilecek mesaj" onizlemesi bundan uretilir.
+  channel String?
+  sentAt  DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead, createdAt])
+  @@index([type, createdAt])
+}
+
+// ─────────────────────────────────────────────
+//  AYARLAR & SISTEM
+// ─────────────────────────────────────────────
+
+/// config.js'in veritabani karsiligi. Tek satir tutulur (id = "singleton"),
+/// boylece admin panelinden degistirilen ayarlar tum ziyaretcilere yansir.
+model SiteSetting {
+  id String @id @default("singleton")
+
+  clinic           Json
+  contact          Json
+  workingHours     Json
+  theme            Json
+  features         Json
+  appointmentRules Json
+  seo              Json
+  socialLinks      Json
+
+  /// Bos ise Google yorumlari cekilmez, seed'deki manuel yorumlar gosterilir.
+  googlePlaceId String?
+
+  updatedAt DateTime @updatedAt
+}
+
+model MediaAsset {
+  id           String  @id @default(cuid())
+  filename     String
+  url          String
+  mimeType     String
+  sizeBytes    Int
+  width        Int?
+  height       Int?
+  uploadedById String?
+  uploadedBy   User?   @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id       String  @id @default(cuid())
+  actorId  String?
+  actor    User?   @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  action   String
+  entity   String
+  entityId String?
+  metadata Json?
+
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([actorId, createdAt])
 }

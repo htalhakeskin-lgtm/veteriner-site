@@ -12,6 +12,7 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "outDir": "./dist",
+    "rootDir": "./src",
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
@@ -25,6 +26,10 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", "prisma/**/*"],
+  // prisma/ bilerek disarida birakildi: include icine alinirsa TypeScript
+  // ortak kok dizini yukari tasir ve derleme ciktisi dist/main.js yerine
+  // dist/src/main.js olur. Seed'i ts-node calistirdigi icin derleme
+  // ciktisinda bulunmasi gerekmiyor.
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
