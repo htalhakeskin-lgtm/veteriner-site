@@ -302,3 +302,87 @@ svg:not([width]) {
   text-transform: uppercase;
   color: var(--color-ink-muted);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   BLOG ICERIGI
+   Admin panelinden gelen HTML icin tipografi. Tailwind'in prose
+   eklentisi yerine kendi token'larimizi kullaniyoruz ki tema
+   degisiminde icerik de birlikte degissin.
+   ═══════════════════════════════════════════════════════════════ */
+
+.prose-vet {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--color-ink);
+}
+.prose-vet > * + * {
+  margin-top: 1.25em;
+}
+.prose-vet h2 {
+  font-size: 1.5rem;
+  margin-top: 2em;
+}
+.prose-vet h3 {
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-top: 1.75em;
+}
+.prose-vet p {
+  color: var(--color-ink-muted);
+}
+.prose-vet a {
+  color: var(--color-brand);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-vet ul,
+.prose-vet ol {
+  padding-left: 1.4em;
+  color: var(--color-ink-muted);
+}
+.prose-vet ul {
+  list-style: disc;
+}
+.prose-vet ol {
+  list-style: decimal;
+}
+.prose-vet li + li {
+  margin-top: 0.5em;
+}
+.prose-vet blockquote {
+  border-left: 2px solid var(--color-brand);
+  padding-left: 1.2em;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--color-ink);
+}
+.prose-vet img {
+  border-radius: var(--radius-md);
+}
+.prose-vet hr {
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  margin-block: 2.5em;
+}
+.prose-vet code {
+  background: var(--color-tint);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.prose-vet table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.prose-vet th,
+.prose-vet td {
+  border: 1px solid var(--color-line);
+  padding: 0.6em 0.8em;
+  text-align: left;
+}
+.prose-vet th {
+  background: var(--color-surface-2);
+  font-weight: 600;
+}

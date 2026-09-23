@@ -29,6 +29,17 @@ import { TokenService, type IssuedTokens } from './token.service';
 /** Refresh token'in tasindigi cookie adi. */
 export const REFRESH_COOKIE = 'vet_rt';
 
+/**
+ * Oturum ipucu cerezi. SIR ICERMEZ, sadece "bir oturum var" bayragi.
+ *
+ * Refresh token httpOnly oldugu icin JavaScript onu goremez; bu yuzden
+ * istemci her sayfa acilisinda korlemesine /auth/refresh cagirmak
+ * zorunda kaliyordu. Misafir ziyaretcide bu her seferinde 401 uretiyor,
+ * konsolu kirletiyor ve gereksiz bir istek atiyordu.
+ * Bu cerez okunabilir oldugu icin istemci once bakip karar verebiliyor.
+ */
+export const SESSION_HINT_COOKIE = 'vet_session';
+
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
@@ -63,6 +74,25 @@ export class AuthController {
       tokens.refreshToken,
       this.cookieOptions(tokens.refreshExpiresAt),
     );
+    // Ipucu cerezi: httpOnly DEGIL (istemci okuyabilmeli) ve tum yollara
+    // gonderilir. Icinde sir yok, yalnizca "1".
+    res.cookie(SESSION_HINT_COOKIE, '1', {
+      httpOnly: false,
+      secure: this.config.get<boolean>('COOKIE_SECURE') ?? false,
+      sameSite: 'lax',
+      path: '/',
+      expires: tokens.refreshExpiresAt,
+    });
+  }
+
+  private clearSessionCookies(res: Response): void {
+    res.clearCookie(REFRESH_COOKIE, this.cookieOptions());
+    res.clearCookie(SESSION_HINT_COOKIE, {
+      httpOnly: false,
+      secure: this.config.get<boolean>('COOKIE_SECURE') ?? false,
+      sameSite: 'lax',
+      path: '/',
+    });
   }
 
   private meta(req: Request) {
@@ -121,7 +151,7 @@ export class AuthController {
     } catch (err) {
       // Gecersiz cookie'yi tarayicidan temizle, aksi halde her istekte
       // ayni hata tekrar eder ve kullanici kisir donguye girer.
-      res.clearCookie(REFRESH_COOKIE, this.cookieOptions());
+      this.clearSessionCookies(res);
       throw err;
     }
 
@@ -139,7 +169,7 @@ export class AuthController {
   ) {
     const token = req.cookies?.[REFRESH_COOKIE] as string | undefined;
     if (token) await this.tokens.revoke(token);
-    res.clearCookie(REFRESH_COOKIE, this.cookieOptions());
+    this.clearSessionCookies(res);
     return { message: 'Oturum kapatildi.' };
   }
 
@@ -168,7 +198,7 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     await this.auth.resetPassword(dto.token, dto.password);
-    res.clearCookie(REFRESH_COOKIE, this.cookieOptions());
+    this.clearSessionCookies(res);
     return { message: 'Sifreniz guncellendi. Yeniden giris yapabilirsiniz.' };
   }
 }

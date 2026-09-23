@@ -30,6 +30,18 @@ export interface RegisterInput {
 
 const AuthContext = createContext<AuthState | null>(null);
 
+/**
+ * Sunucunun giris aninda biraktigi okunabilir bayrak cerezi.
+ * Sir icermez; yalnizca "yenilemeye deger bir oturum var mi?" sorusunu
+ * yanitlar. Asil refresh token httpOnly olup JavaScript'e kapalidir.
+ */
+function hasSessionHint(): boolean {
+  if (typeof document === 'undefined') return false;
+  return document.cookie
+    .split(';')
+    .some((c) => c.trim().startsWith('vet_session='));
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
@@ -41,6 +53,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    */
   useEffect(() => {
     let cancelled = false;
+
+    // Once ipucu cerezine bak. Misafir ziyaretcide korlemesine /auth/refresh
+    // cagirmak her sayfa acilisinda 401 uretiyor, konsolu kirletiyor ve
+    // bosuna bir istek atiyordu.
+    if (!hasSessionHint()) {
+      setLoading(false);
+      return;
+    }
 
     void (async () => {
       const ok = await api.refresh();
