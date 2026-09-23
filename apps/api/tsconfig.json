@@ -15,6 +15,11 @@
     "rootDir": "./src",
     "baseUrl": "./",
     "incremental": true,
+    // Build bilgisi dist ICINDE tutulmali. Disarida kalirsa nest-cli'nin
+    // deleteOutDir'i dist'i siler, TypeScript ise eski tsbuildinfo'ya bakip
+    // "degismemis" dosyalari yeniden uretmez; sonuc yarim bir dist ve
+    // calisma aninda "Cannot find module './app.module'" hatasi olur.
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,

@@ -45,3 +45,6 @@ desktop.ini
 
 # gstack arac gurultusu
 .gstack/
+
+# .env.test commit edilir: gercek sir icermez, kurulumu tekrarlanabilir kilar
+!apps/api/.env.test

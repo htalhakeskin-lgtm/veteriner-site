@@ -283,7 +283,19 @@ Taban yol: `/api/v1`. Tüm yanıtlar JSON. Hatalar tek tip:
 
 **Güvenlik notları:** Şifre = argon2id. Login'e **rate limit** (IP başına 5 deneme / 15 dk).
 Access token bellekte tutulur (`localStorage`'da değil — XSS riski), refresh token httpOnly +
-`SameSite=Lax` cookie.
+`SameSite=Lax` cookie, `Path=/api/v1/auth` ile sınırlı.
+
+**Faz 2'de netleşen tasarım kararları:**
+
+| Karar | Gerekçe |
+|-------|---------|
+| Refresh token **JWT değil**, 32 baytlık rastgele dize | JWT kendi kendini doğrular, yani **iptal edilemez**: çıkış yapmış bir kullanıcının token'ı süresi dolana kadar geçerli kalırdı. Veritabanındaki opak token anında iptal edilebilir. |
+| Refresh token hash'i **SHA-256** (argon2 değil) | Token zaten 256 bit rastgele; sözlük saldırısı yok. Ayrıca hash üzerinden **indeksli arama** yapılabiliyor — argon2 olsaydı her doğrulamada tüm token satırlarını taramak gerekirdi. |
+| **Token rotasyonu** | Her yenilemede eski token iptal edilip yenisi verilir. Çalınmış bir token en fazla bir kez işe yarar. |
+| Login'de kullanıcı yoksa da argon2 çalıştırılır | Erken dönülseydi yanıt süresi farkı "bu e-posta kayıtlı değil" bilgisini ele verirdi (kullanıcı sayımı saldırısı). |
+| Passport kullanılmadı | Tek strateji için ek katman gereksiz; `JwtService` doğrudan yeterli ve hata mesajları kontrol altında. |
+| Şifre değişimi **tüm oturumları** kapatır | Hesap ele geçirildiyse saldırganın oturumu da biter. |
+| Rol istemciden **asla** alınmaz | İki katman: DTO'da `role` alanı yok (`forbidNonWhitelisted` → 400) ve servis rolü sabit `CUSTOMER` yazar. |
 
 ### 5.2. Herkese açık uçlar
 
@@ -644,9 +656,25 @@ DEMO_MODE=true                    # true iken e-posta/SMS gönderilmez, sadece D
 
 ## 13. Doğrulama Kriterleri
 
+**Faz 2 sonrası — tamamlandı (25 e2e testi geçiyor):**
+- [x] `register` → `login` → `me` zinciri çalışıyor
+- [x] Yanlış şifre 5 denemeden sonra `429`'a takılıyor
+- [x] Refresh token rotasyonu; kullanılmış token ikinci kez işe yaramıyor
+- [x] Çıkış ve şifre değişimi oturumları iptal ediyor
+- [x] Müşteri admin ucuna erişemiyor (`403`), admin erişiyor (`200`)
+- [x] `role` alanı istemciden gönderilse bile reddediliyor
+- [x] Kullanıcı sayımı sızıntısı yok (var olan/olmayan aynı yanıt)
+- [x] `passwordHash` hiçbir yanıtta dönmüyor
+
+> **Test altyapısı:** e2e testleri ayrı bir veritabanında çalışır
+> (`vetclinic_test`, `apps/api/.env.test`). Geliştirme verisi korunur.
+> `npm run test:e2e` migration'ları uygulayıp testleri çalıştırır.
+>
+> Hız sınırı testlerde `THROTTLE_ENABLED=false` ile kapatılır — açık kalsaydı
+> arka arkaya giriş yapan testler asıl davranış yerine `429` ölçerdi. Özelliğin
+> kendisi `throttle.e2e-spec.ts` içinde, sınır açıkken doğrulanır.
+
 **Faz 3 sonrası (backend çekirdeği):**
-- [ ] `POST /auth/register` → `POST /auth/login` → `GET /auth/me` zinciri çalışıyor
-- [ ] Yanlış şifre 5 denemeden sonra rate limit'e takılıyor
 - [ ] `GET /availability` kapalı günleri, izinleri ve dolu slotları doğru eliyor
 - [ ] **Aynı slota eşzamanlı iki istek**: biri başarılı, diğeri `409 SLOT_TAKEN`
 - [ ] Başka kullanıcının `petId`'si ile `GET /pets/:id` → `403`
