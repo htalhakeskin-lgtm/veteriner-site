@@ -2,15 +2,23 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { validateEnv } from './config/env';
 import { AuthModule } from './modules/auth/auth.module';
+import { JobsModule } from './jobs/jobs.module';
 import { AppointmentsModule } from './modules/appointments/appointments.module';
+import { BlogModule } from './modules/blog/blog.module';
+import { ContactModule } from './modules/contact/contact.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { MediaModule } from './modules/media/media.module';
+import { TestimonialsModule } from './modules/testimonials/testimonials.module';
 import { AvailabilityModule } from './modules/availability/availability.module';
 import { HealthModule } from './modules/health/health.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 import { PetsModule } from './modules/pets/pets.module';
 import { ServicesModule } from './modules/services/services.module';
 import { SettingsModule } from './modules/settings/settings.module';
@@ -54,6 +62,14 @@ import { PrismaModule } from './prisma/prisma.module';
     AvailabilityModule,
     AppointmentsModule,
     PetsModule,
+    NotificationsModule,
+    BlogModule,
+    TestimonialsModule,
+    ContactModule,
+    MediaModule,
+    DashboardModule,
+    ScheduleModule.forRoot(),
+    JobsModule,
   ],
   providers: [
     // SIRA ONEMLI — guard'lar yazildiklari sirayla calisir:

@@ -5,12 +5,18 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 
+import { join } from 'node:path';
+
+import { NestExpressApplication } from '@nestjs/platform-express';
+
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import type { Env } from './config/env';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bufferLogs: true,
+  });
   const logger = new Logger('Bootstrap');
 
   // ConfigService yerine dogrudan process.env: validateEnv zaten
@@ -33,7 +39,19 @@ async function bootstrap(): Promise<void> {
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   });
 
-  app.setGlobalPrefix('api/v1');
+  // Yuklenen gorseller. Bu dizin yalnizca sharp ile yeniden kodlanmis
+  // WebP dosyalari icerir (bkz. media.service.ts), yani calistirilabilir
+  // icerik barindirmaz.
+  app.useStaticAssets(join(process.cwd(), env.UPLOAD_DIR ?? './uploads'), {
+    prefix: '/uploads/',
+    maxAge: '7d',
+    index: false,
+  });
+
+  app.setGlobalPrefix('api/v1', {
+    // Statik dosyalar ve saglik kontrolu prefix disinda kalsin.
+    exclude: [],
+  });
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({

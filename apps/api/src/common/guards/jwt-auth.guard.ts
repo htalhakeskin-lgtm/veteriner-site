@@ -32,32 +32,46 @@ export class JwtAuthGuard implements CanActivate {
       ctx.getHandler(),
       ctx.getClass(),
     ]);
-    if (isPublic) return true;
 
     const req = ctx.switchToHttp().getRequest<Request>();
     const token = extractBearer(req);
+
+    if (isPublic) {
+      // Acik uclarda token ZORUNLU degil ama varsa yine de cozumlenmeli.
+      //
+      // Aksi halde "hem misafir hem uye kullanabilir" tipindeki uclar
+      // (ornegin randevu olusturma) giris yapmis kullaniciyi goremez:
+      // randevu misafir randevusu olarak kaydedilir, "Randevularim"da
+      // gorunmez ve uyeden bosuna telefon istenir.
+      if (token) {
+        try {
+          req.user = await this.resolve(token);
+        } catch {
+          // Gecersiz token acik ucu engellemez; misafir olarak devam eder.
+        }
+      }
+      return true;
+    }
+
     if (!token) {
       throw new UnauthorizedException('Oturum acmaniz gerekiyor.');
     }
 
-    let payload: JwtPayload;
     try {
-      payload = await this.jwt.verifyAsync<JwtPayload>(token, {
-        secret: this.config.get<string>('JWT_ACCESS_SECRET'),
-      });
+      req.user = await this.resolve(token);
     } catch {
       // Suresi dolmus ve gecersiz imza ayni mesaji alir:
       // saldirgana hangi durumda oldugunu soylemiyoruz.
       throw new UnauthorizedException('Oturum gecersiz veya suresi dolmus.');
     }
-
-    const user: AuthUser = {
-      id: payload.sub,
-      email: payload.email,
-      role: payload.role,
-    };
-    req.user = user;
     return true;
+  }
+
+  private async resolve(token: string): Promise<AuthUser> {
+    const payload = await this.jwt.verifyAsync<JwtPayload>(token, {
+      secret: this.config.get<string>('JWT_ACCESS_SECRET'),
+    });
+    return { id: payload.sub, email: payload.email, role: payload.role };
   }
 }
 

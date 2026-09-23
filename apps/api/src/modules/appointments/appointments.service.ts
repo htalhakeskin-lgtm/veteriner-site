@@ -9,6 +9,7 @@ import { AppointmentStatus, Prisma, type Role } from '@prisma/client';
 
 import { PrismaService } from '../../prisma/prisma.service';
 import { AvailabilityService } from '../availability/availability.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { SettingsService } from '../settings/settings.service';
 import type { CreateAppointmentDto } from './dto/appointments.dto';
 
@@ -27,6 +28,7 @@ export class AppointmentsService {
     private readonly prisma: PrismaService,
     private readonly availability: AvailabilityService,
     private readonly settings: SettingsService,
+    private readonly notifications: NotificationsService,
   ) {}
 
   // ─────────────────────────────────────────
@@ -76,7 +78,7 @@ export class AppointmentsService {
     const code = await this.nextCode(startAt);
 
     try {
-      return await this.prisma.appointment.create({
+      const created = await this.prisma.appointment.create({
         data: {
           code,
           userId: userId ?? null,
@@ -97,6 +99,14 @@ export class AppointmentsService {
         },
         include: DETAIL_INCLUDE,
       });
+
+      // Bildirim gonderimi randevunun olusmasini engellememeli:
+      // dispatch kendi icinde hata yutuyor.
+      await this.notifications.appointmentCreated(created);
+      if (created.status === AppointmentStatus.CONFIRMED) {
+        await this.notifications.appointmentConfirmed(created);
+      }
+      return created;
     } catch (err) {
       // Yaris durumu: motor "musait" dedi ama aradaki milisaniyelerde
       // baska biri ayni slotu aldi. Veritabani son savunma hatti.
@@ -207,7 +217,7 @@ export class AppointmentsService {
       }
     }
 
-    return this.prisma.appointment.update({
+    const cancelled = await this.prisma.appointment.update({
       where: { id },
       data: {
         status: AppointmentStatus.CANCELLED,
@@ -216,6 +226,8 @@ export class AppointmentsService {
       },
       include: DETAIL_INCLUDE,
     });
+    await this.notifications.appointmentCancelled(cancelled);
+    return cancelled;
   }
 
   async reschedule(
@@ -327,7 +339,7 @@ export class AppointmentsService {
     if (!appointment) throw new NotFoundException('Randevu bulunamadi.');
 
     try {
-      return await this.prisma.appointment.update({
+      const updated = await this.prisma.appointment.update({
         where: { id },
         data: {
           status,
@@ -337,6 +349,14 @@ export class AppointmentsService {
         },
         include: DETAIL_INCLUDE,
       });
+
+      // Durum degisimi musteriyi ilgilendiriyorsa haber ver.
+      if (status === AppointmentStatus.CONFIRMED) {
+        await this.notifications.appointmentConfirmed(updated);
+      } else if (status === AppointmentStatus.CANCELLED) {
+        await this.notifications.appointmentCancelled(updated);
+      }
+      return updated;
     } catch (err) {
       // Iptal edilmis bir randevuyu geri acarken slot baskasina verilmis olabilir.
       if (isExclusionViolation(err)) {

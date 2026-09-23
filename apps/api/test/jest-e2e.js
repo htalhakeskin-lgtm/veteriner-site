@@ -12,6 +12,12 @@ module.exports = {
   transform: {
     '^.+\\.(t|j)s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.json' }],
   },
+  // Bazi bagimliliklar yalnizca ESM yayinliyor (sanitize-html -> htmlparser2).
+  // Node 24 uretimde bunlari require edebiliyor ama Jest'in CommonJS
+  // calisma zamani edemiyor; bu paketleri donusturmesini soyluyoruz.
+  transformIgnorePatterns: [
+    '/node_modules/(?!(htmlparser2|domhandler|domutils|dom-serializer|domelementtype|entities|parse-srcset|postcss|nanoid)/)',
+  ],
   // Uygulama modulleri yuklenmeden once .env.test'i devreye alir.
   setupFiles: ['<rootDir>/test/load-env.ts'],
   testTimeout: 30000,
