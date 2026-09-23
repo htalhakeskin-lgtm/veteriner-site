@@ -1,0 +1,11 @@
+// Veteriner Klinik Platformu - veritabani semasi
+// Tam model listesi Faz 1'de eklenecek (bkz. backend-plani.md §4).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}

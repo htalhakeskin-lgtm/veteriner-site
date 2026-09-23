@@ -1,0 +1,46 @@
+# Yerel gelistirme veritabani.
+#   npm run db:up    -> ayaga kaldirir
+#   npm run db:down  -> durdurur (veri korunur, volume silinmez)
+#
+# Adminer http://localhost:8080 adresinde tarayici tabanli veritabani arayuzu verir.
+# Sunucu: db / Kullanici: vet / Sifre: vet / Veritabani: vetclinic
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: vet-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: vet
+      POSTGRES_PASSWORD: vet
+      POSTGRES_DB: vetclinic
+      # Turkce siralama ve buyuk/kucuk harf davranisi icin
+      POSTGRES_INITDB_ARGS: "--locale-provider=icu --icu-locale=tr-TR --encoding=UTF8"
+      TZ: Europe/Istanbul
+    ports:
+      - "5432:5432"
+    volumes:
+      - vet-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # Migration'lar, veritabani gercekten sorgu kabul etmeden baslamasin
+      test: ["CMD-SHELL", "pg_isready -U vet -d vetclinic"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  adminer:
+    image: adminer:5
+    container_name: vet-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+      ADMINER_DESIGN: dracula
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  vet-pgdata:

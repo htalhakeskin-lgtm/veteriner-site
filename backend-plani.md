@@ -384,7 +384,7 @@ Sistemin **en kritik iş mantığı**. Randevu sihirbazının 3. adımını besl
 | Token | Access JWT 15 dk (bellekte) + refresh httpOnly cookie 7 gün + rotation |
 | Yetki | `JwtAuthGuard` global, `@Public()` ile istisna; `RolesGuard` + `@Roles(Role.ADMIN)` |
 | Sahiplik | Her `/pets/:id`, `/appointments/:id` çağrısında `ownerId === currentUser.id` kontrolü |
-| Doğrulama | `zod` şemaları global `ValidationPipe` ile — DTO dışı alan reddedilir (whitelist) |
+| Doğrulama | **DTO'lar:** `class-validator` + global `ValidationPipe` (`whitelist` + `forbidNonWhitelisted` → DTO dışı alan reddedilir). **Ortam değişkenleri:** `zod`. *(Faz 0'da düzeltildi: zod, NestJS'in `ValidationPipe`'ı ile çalışmıyor; ayrıca `@nestjs/swagger` istek şemalarını `class-validator` dekoratörlerinden otomatik üretiyor.)* |
 | Rate limit | `@nestjs/throttler`: genel 100 istek/dk; `/auth/login` 5/15 dk; `/contact` 3/saat |
 | HTTP header | `helmet` + katı CSP |
 | CORS | Sadece `WEB_ORIGIN` env değişkenindeki origin |

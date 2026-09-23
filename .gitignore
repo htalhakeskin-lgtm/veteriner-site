@@ -42,3 +42,6 @@ desktop.ini
 # Geçici
 *.tmp
 .cache/
+
+# gstack arac gurultusu
+.gstack/

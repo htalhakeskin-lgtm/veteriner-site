@@ -1,0 +1,31 @@
+{
+  "name": "veteriner-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Veteriner klinikleri icin white-label randevu ve klinik yonetim platformu",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "npm run dev -w @vet/api",
+    "dev:web": "npm run dev -w @vet/web",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:e2e": "npm run test:e2e -w @vet/api",
+    "lint": "npm run lint --workspaces --if-present",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:migrate": "npm run db:migrate -w @vet/api",
+    "db:seed": "npm run db:seed -w @vet/api",
+    "db:reset": "npm run db:reset -w @vet/api",
+    "db:studio": "npm run db:studio -w @vet/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
