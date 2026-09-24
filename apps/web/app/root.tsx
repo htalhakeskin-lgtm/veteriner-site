@@ -52,7 +52,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const dbTheme = root?.settings?.theme?.activePreset ?? 'adacayi';
 
   return (
-    <html lang="tr" data-theme={dbTheme}>
+    // suppressHydrationWarning ZORUNLU, kozmetik değil.
+    //
+    // Aşağıdaki flash önleyici betik React'ten ÖNCE çalışır ve <html>
+    // üzerindeki data-theme / data-motion niteliklerini değiştirir.
+    // Sunucudan gelen HTML'de data-motion hiç yoktur; ziyaretçinin
+    // localStorage tercihi varsa betik onu ekler. React hydration
+    // sırasında beklemediği bu niteliği görüp uyarı basar.
+    //
+    // Bu, "React devreye girmeden temayı uygula" desenine içkin bir
+    // durumdur: DOM'u bilerek React'in haberi olmadan değiştiriyoruz.
+    // Betiği kaldırmak uyarıyı susturur ama koyu tema seçen ziyaretçiye
+    // ilk karede açık temayı gösterir. Uyarıyı yalnızca BU etiket için
+    // kapatıyoruz; suppressHydrationWarning tek seviye derinliğe etki
+    // eder, alt ağaçtaki gerçek uyuşmazlıklar görünmeye devam eder.
+    <html lang="tr" data-theme={dbTheme} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
