@@ -19,7 +19,7 @@ export class UpdateProfileDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
-  @Matches(PHONE_REGEX, { message: 'Gecerli bir cep telefonu girin.' })
+  @Matches(PHONE_REGEX, { message: 'Geçerli bir cep telefonu girin.' })
   phone?: string;
 }
 
@@ -31,7 +31,7 @@ export class ChangePasswordDto {
 
   @ApiProperty({ minLength: 8 })
   @IsString()
-  @MinLength(8, { message: 'Yeni sifre en az 8 karakter olmali.' })
+  @MinLength(8, { message: 'Yeni şifre en az 8 karakter olmalı.' })
   @MaxLength(128)
   newPassword!: string;
 }

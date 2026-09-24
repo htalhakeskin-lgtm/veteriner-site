@@ -54,7 +54,7 @@ export default function AdminMessages() {
   }, [load]);
 
   async function markRead(id: string) {
-    // Iyimser guncelleme: liste anlik tepki versin.
+    // Iyimser güncelleme: liste anlık tepki versin.
     setItems(
       (prev) => prev?.map((m) => (m.id === id ? { ...m, isRead: true } : m)) ?? null,
     );

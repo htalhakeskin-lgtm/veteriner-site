@@ -26,17 +26,17 @@ import {
 } from './dto/auth.dto';
 import { TokenService, type IssuedTokens } from './token.service';
 
-/** Refresh token'in tasindigi cookie adi. */
+/** Refresh token'in taşındığı cookie adı. */
 export const REFRESH_COOKIE = 'vet_rt';
 
 /**
- * Oturum ipucu cerezi. SIR ICERMEZ, sadece "bir oturum var" bayragi.
+ * Oturum ipucu çerezi. SIR İÇERMEZ, sadece "bir oturum var" bayrağı.
  *
- * Refresh token httpOnly oldugu icin JavaScript onu goremez; bu yuzden
- * istemci her sayfa acilisinda korlemesine /auth/refresh cagirmak
- * zorunda kaliyordu. Misafir ziyaretcide bu her seferinde 401 uretiyor,
- * konsolu kirletiyor ve gereksiz bir istek atiyordu.
- * Bu cerez okunabilir oldugu icin istemci once bakip karar verebiliyor.
+ * Refresh token httpOnly olduğu için JavaScript onu göremez; bu yüzden
+ * istemci her sayfa açılışında körlemesine /auth/refresh çağırmak
+ * zorunda kalıyordu. Misafir ziyaretçide bu her seferinde 401 üretiyor,
+ * konsolu kirletiyor ve gereksiz bir istek atıyordu.
+ * Bu çerez okunabilir olduğu için istemci önce bakıp karar verebiliyor.
  */
 export const SESSION_HINT_COOKIE = 'vet_session';
 
@@ -50,19 +50,19 @@ export class AuthController {
   ) {}
 
   /**
-   * Refresh token httpOnly cookie ile tasinir.
+   * Refresh token httpOnly cookie ile taşınır.
    *
-   * Neden localStorage degil: localStorage'daki bir token, sayfada calisan
-   * herhangi bir XSS ile okunabilir. httpOnly cookie'ye JavaScript erisemez.
-   * Access token ise kisa omurlu ve bellekte tutuluyor.
+   * Neden localStorage değil: localStorage'daki bir token, sayfada çalışan
+   * herhangi bir XSS ile okunabilir. httpOnly cookie'ye JavaScript erişemez.
+   * Access token ise kısa ömürlü ve bellekte tutuluyor.
    *
-   * path kisitli: cookie yalnizca /auth uclarina gonderilir, her isteğe degil.
+   * path kısıtlı: cookie yalnızca /auth uçlarına gönderilir, her isteğe değil.
    */
   private cookieOptions(expiresAt?: Date): CookieOptions {
     return {
       httpOnly: true,
       secure: this.config.get<boolean>('COOKIE_SECURE') ?? false,
-      sameSite: 'lax', // CSRF'e karsi; frontend ayni siteden cagiriyor
+      sameSite: 'lax', // CSRF'e karşı; frontend aynı siteden çağırıyor
       path: '/api/v1/auth',
       ...(expiresAt ? { expires: expiresAt } : {}),
     };
@@ -74,8 +74,8 @@ export class AuthController {
       tokens.refreshToken,
       this.cookieOptions(tokens.refreshExpiresAt),
     );
-    // Ipucu cerezi: httpOnly DEGIL (istemci okuyabilmeli) ve tum yollara
-    // gonderilir. Icinde sir yok, yalnizca "1".
+    // Ipucu çerezi: httpOnly DEĞİL (istemci okuyabilmeli) ve tüm yollara
+    // gönderilir. İçinde sır yok, yalnızca "1".
     res.cookie(SESSION_HINT_COOKIE, '1', {
       httpOnly: false,
       secure: this.config.get<boolean>('COOKIE_SECURE') ?? false,
@@ -104,8 +104,8 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  @Throttle({ default: { limit: 5, ttl: 3_600_000 } }) // saatte 5 kayit / IP
-  @ApiOperation({ summary: 'Yeni musteri hesabi olustur' })
+  @Throttle({ default: { limit: 5, ttl: 3_600_000 } }) // saatte 5 kayıt / IP
+  @ApiOperation({ summary: 'Yeni müşteri hesabı oluştur' })
   async register(
     @Body() dto: RegisterDto,
     @Req() req: Request,
@@ -119,9 +119,9 @@ export class AuthController {
   @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  // Kaba kuvvet denemesine karsi: IP basina 15 dakikada 5 deneme.
+  // Kaba kuvvet denemesine karşı: IP başına 15 dakikada 5 deneme.
   @Throttle({ default: { limit: 5, ttl: 900_000 } })
-  @ApiOperation({ summary: 'Giris yap' })
+  @ApiOperation({ summary: 'Giriş yap' })
   async login(
     @Body() dto: LoginDto,
     @Req() req: Request,
@@ -142,15 +142,15 @@ export class AuthController {
   ) {
     const token = req.cookies?.[REFRESH_COOKIE] as string | undefined;
     if (!token) {
-      throw new UnauthorizedException('Oturum bulunamadi. Giris yapin.');
+      throw new UnauthorizedException('Oturum bulunamadı. Giriş yapın.');
     }
 
     let tokens: IssuedTokens;
     try {
       tokens = await this.tokens.rotate(token, this.meta(req));
     } catch (err) {
-      // Gecersiz cookie'yi tarayicidan temizle, aksi halde her istekte
-      // ayni hata tekrar eder ve kullanici kisir donguye girer.
+      // Geçersiz cookie'yi tarayıcıdan temizle, aksi halde her istekte
+      // aynı hata tekrar eder ve kullanıcı kısır döngüye girer.
       this.clearSessionCookies(res);
       throw err;
     }
@@ -162,7 +162,7 @@ export class AuthController {
   @Public()
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Cikis yap' })
+  @ApiOperation({ summary: 'Çıkış yap' })
   async logout(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
@@ -170,11 +170,11 @@ export class AuthController {
     const token = req.cookies?.[REFRESH_COOKIE] as string | undefined;
     if (token) await this.tokens.revoke(token);
     this.clearSessionCookies(res);
-    return { message: 'Oturum kapatildi.' };
+    return { message: 'Oturum kapatıldı.' };
   }
 
   @Get('me')
-  @ApiOperation({ summary: 'Aktif kullanici bilgisi' })
+  @ApiOperation({ summary: 'Aktif kullanıcı bilgisi' })
   async me(@CurrentUser() user: AuthUser) {
     return this.auth.me(user.id);
   }
@@ -183,7 +183,7 @@ export class AuthController {
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
   @Throttle({ default: { limit: 3, ttl: 3_600_000 } })
-  @ApiOperation({ summary: 'Sifre sifirlama baglantisi iste' })
+  @ApiOperation({ summary: 'Şifre sıfırlama bağlantısı iste' })
   forgotPassword(@Body() dto: ForgotPasswordDto) {
     return this.auth.forgotPassword(dto);
   }
@@ -192,13 +192,13 @@ export class AuthController {
   @Post('reset-password')
   @HttpCode(HttpStatus.OK)
   @Throttle({ default: { limit: 5, ttl: 3_600_000 } })
-  @ApiOperation({ summary: 'Yeni sifre belirle' })
+  @ApiOperation({ summary: 'Yeni şifre belirle' })
   async resetPassword(
     @Body() dto: ResetPasswordDto,
     @Res({ passthrough: true }) res: Response,
   ) {
     await this.auth.resetPassword(dto.token, dto.password);
     this.clearSessionCookies(res);
-    return { message: 'Sifreniz guncellendi. Yeniden giris yapabilirsiniz.' };
+    return { message: 'Şifreniz güncellendi. Yeniden giriş yapabilirsiniz.' };
   }
 }

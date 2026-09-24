@@ -66,7 +66,7 @@ export class DashboardService {
     };
   }
 
-  /** Bugunun randevu listesi — dashboard'un ana tablosu. */
+  /** Bugünün randevu listesi — dashboard'un ana tablosu. */
   todaySchedule() {
     const now = new Date();
     return this.prisma.appointment.findMany({
@@ -82,15 +82,15 @@ export class DashboardService {
   }
 
   /**
-   * Son 30 gunun gunluk randevu sayisi — grafik icin.
-   * Gruplama SQL tarafinda yapiliyor; 30 gunluk satirlari uygulamaya
-   * cekip saymak gereksiz veri transferi olurdu.
+   * Son 30 günün günlük randevu sayısı — grafik için.
+   * Gruplama SQL tarafında yapılıyor; 30 günlük satırları uygulamaya
+   * çekip saymak gereksiz veri transferi olurdu.
    */
   async appointmentTrend(days = 30) {
     const since = startOfDay(new Date());
     since.setDate(since.getDate() - days + 1);
-    // Ust sinir sart: olmadan gelecekteki randevular da sayilir ve
-    // "gecmis egilim" grafigi bugunden sonrasini gosterir.
+    // Üst sınır şart: olmadan gelecekteki randevular da sayılır ve
+    // "geçmiş eğilim" grafiği bugünden sonrasını gösterir.
     const until = endOfDay(new Date());
 
     const rows = await this.prisma.$queryRaw<
@@ -105,7 +105,7 @@ export class DashboardService {
       ORDER BY 1
     `;
 
-    // BigInt JSON'a serilestirilmiyor; Number'a ceviriyoruz.
+    // BigInt JSON'a serileştirilmiyor; Number'a çeviriyoruz.
     return rows.map((r) => ({
       date: r.gun.toISOString().slice(0, 10),
       total: Number(r.toplam),
@@ -113,7 +113,7 @@ export class DashboardService {
     }));
   }
 
-  /** En cok tercih edilen hizmetler. */
+  /** En çok tercih edilen hizmetler. */
   async topServices(limit = 5) {
     const rows = await this.prisma.appointment.groupBy({
       by: ['serviceId'],

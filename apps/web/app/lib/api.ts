@@ -1,15 +1,15 @@
 /**
- * Tip guvenli API istemcisi.
+ * Tip güvenli API istemcisi.
  *
- * Access token BELLEKTE tutulur, localStorage'da degil: localStorage'daki
- * bir token sayfada calisan herhangi bir XSS ile okunabilirdi. Sayfa
- * yenilendiginde httpOnly refresh cookie uzerinden sessizce yeniden alinir.
+ * Access token BELLEKTE tutulur, localStorage'da değil: localStorage'daki
+ * bir token sayfada çalışan herhangi bir XSS ile okunabilirdi. Sayfa
+ * yenilendiginde httpOnly refresh cookie üzerinden sessizce yeniden alınır.
  */
 
 const BASE = '/api/v1';
 
 let accessToken: string | null = null;
-/** Ayni anda gelen birden fazla 401'de tek bir yenileme istegi yapilsin. */
+/** Aynı anda gelen birden fazla 401'de tek bir yenileme isteği yapilsin. */
 let refreshPromise: Promise<boolean> | null = null;
 
 export function setAccessToken(token: string | null): void {
@@ -33,9 +33,9 @@ export class ApiError extends Error {
 
 interface RequestOptions extends Omit<RequestInit, 'body'> {
   body?: unknown;
-  /** Sunucu tarafi render sirasinda cerezleri iletmek icin */
+  /** Sunucu tarafı render sırasında çerezleri iletmek için */
   headers?: Record<string, string>;
-  /** 401 alindiginda token yenilemeyi dene (ic kullanim) */
+  /** 401 alındığında token yenilemeyi dene (iç kullanım) */
   _retried?: boolean;
 }
 
@@ -44,7 +44,7 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
 
   const res = await fetch(`${BASE}${path}`, {
     ...rest,
-    credentials: 'include', // refresh cookie tasinsin
+    credentials: 'include', // refresh cookie taşınsın
     headers: {
       ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
       ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
@@ -53,8 +53,8 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
     ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
   });
 
-  // Access token suresi dolduysa sessizce yenile ve bir kez daha dene.
-  // Kullanici bunu hic fark etmemeli.
+  // Access token süresi dolduysa sessizce yenile ve bir kez daha dene.
+  // Kullanıcı bunu hiç fark etmemeli.
   if (res.status === 401 && !_retried && path !== '/auth/refresh') {
     const ok = await refreshOnce();
     if (ok) return request<T>(path, { ...options, _retried: true });
@@ -69,7 +69,7 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
     const err = data as { message?: string; code?: string } | null;
     throw new ApiError(
       res.status,
-      err?.message ?? 'Beklenmeyen bir hata olustu.',
+      err?.message ?? 'Beklenmeyen bir hata oluştu.',
       err?.code,
     );
   }
@@ -120,8 +120,8 @@ export const api = {
 };
 
 /**
- * Sunucu tarafi (loader) icin: tarayici proxy'si yok, API'ye dogrudan
- * gidilir ve istegin kendi cerezleri iletilir.
+ * Sunucu tarafı (loader) için: tarayıcı proxy'si yok, API'ye doğrudan
+ * gidilir ve isteğin kendi çerezleri iletilir.
  */
 export async function serverFetch<T>(
   path: string,
@@ -136,11 +136,11 @@ export async function serverFetch<T>(
 
   if (!res.ok) {
     const text = await res.text();
-    let message = 'Veri alinamadi.';
+    let message = 'Veri alınamadı.';
     try {
       message = (JSON.parse(text) as { message?: string }).message ?? message;
     } catch {
-      /* metin JSON degilse varsayilan mesaj kalir */
+      /* metin JSON değilse varsayılan mesaj kalır */
     }
     throw new ApiError(res.status, message);
   }

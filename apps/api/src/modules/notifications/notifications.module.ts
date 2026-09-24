@@ -4,7 +4,7 @@ import { DatabaseChannel, SimulatedChannel } from './channels/notification-chann
 import { NotificationsController } from './notifications.controller';
 import { NotificationsService } from './notifications.service';
 
-/** Global: randevu modulu ve cron gorevleri de kullaniyor. */
+/** Global: randevu modülü ve cron görevleri de kullanıyor. */
 @Global()
 @Module({
   controllers: [NotificationsController],

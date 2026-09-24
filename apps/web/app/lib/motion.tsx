@@ -2,18 +2,18 @@ import { useEffect, useRef } from 'react';
 
 /**
  * ═══════════════════════════════════════════════════════════════
- *  YUMUSAK KAYDIRMA VE GIRIS ANIMASYONLARI
+ *  YUMUŞAK KAYDIRMA VE GİRİŞ ANİMASYONLARI
  * ═══════════════════════════════════════════════════════════════
  *
- * Tasarim onizlemesinde (tasarim-onizleme.html) belirlenen ayarlar
- * buraya tasindi. Kademe 4 = "Sakin".
+ * Tasarım önizlemesinde (tasarim-onizleme.html) belirlenen ayarlar
+ * buraya taşındı. Kademe 4 = "Sakin".
  *
- * Onemli: Lenis window.load'u BEKLEMEZ. Beklerse yumusak kaydirma
- * sayfadaki son gorsel inene kadar devreye girmez ve yavas baglantida
+ * Önemli: Lenis window.load'u BEKLEMEZ. Beklerse yumuşak kaydırma
+ * sayfadaki son görsel inene kadar devreye girmez ve yavaş bağlantıda
  * ilk saniyeler sert kayar.
  */
 
-/** Kademeler geometrik ilerliyor: goz hizi orantisal algiliyor. */
+/** Kademeler geometrik ilerliyor: göz hızı orantisal algılıyor. */
 const geo = (min: number, max: number, v: number) =>
   min * Math.pow(max / min, (v - 1) / 9);
 
@@ -26,11 +26,11 @@ export function scrollSettings(step = 4) {
   };
 }
 
-/** Menu tiklamalarinda kullanilan egri (CSS'teki --ease-soft ile ayni his). */
+/** Menü tıklamalarında kullanılan eğri (CSS'teki --ease-soft ile aynı his). */
 export const easeInOutCubic = (t: number) =>
   t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-/** Yapiskan basligin hedefi ortmemesi icin birakilan pay. */
+/** Yapışkan başlığın hedefi ortmemesi için bırakılan pay. */
 export const HEADER_OFFSET = -84;
 
 export function useSmoothScroll(step = 4): void {
@@ -74,8 +74,8 @@ export function useSmoothScroll(step = 4): void {
 }
 
 /**
- * Scroll ile giris animasyonlari.
- * Gruplanmis ogelere sirali gecikme verir (stagger).
+ * Scroll ile giriş animasyonları.
+ * Gruplanmış öğelere sıralı gecikme verir (stagger).
  */
 export function useScrollReveal(deps: unknown[] = []): void {
   useEffect(() => {
@@ -111,7 +111,7 @@ export function useScrollReveal(deps: unknown[] = []): void {
   }, deps);
 }
 
-/** Sayfa gecislerinde ust kisma yumusakca don. */
+/** Sayfa geçişlerinde üst kisma yumuşakça dön. */
 export function scrollToTop(): void {
   if (typeof window === 'undefined') return;
   window.scrollTo({ top: 0, behavior: 'smooth' });

@@ -1,4 +1,4 @@
-/** SiteSetting JSON kolonlarinin uygulama tarafindaki sekli. */
+/** SiteSetting JSON kolonlarının uygulama tarafındaki sekli. */
 
 export interface AppointmentRules {
   slotDurationMinutes: number;

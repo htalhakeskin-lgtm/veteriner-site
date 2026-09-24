@@ -72,7 +72,7 @@ export default function AdminDashboard() {
         })}
       />
 
-      {/* ── Ozet ── */}
+      {/* ── Özet ── */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Stat
           icon="calendar"
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.4fr_0.6fr]">
-        {/* ── Bugunun takvimi ── */}
+        {/* ── Bugünün takvimi ── */}
         <section>
           <div className="flex items-center justify-between gap-4">
             <h2 className="font-sans text-lg font-semibold">Bugünün randevuları</h2>
@@ -156,10 +156,10 @@ export default function AdminDashboard() {
           </div>
         </section>
 
-        {/* ── Yan sutun ── */}
+        {/* ── Yan sütun ── */}
         <div className="grid content-start gap-6">
           {/* Basit cubuk grafik: harici kutuphane yerine CSS.
-              Veri az ve bicim sabit; bagimlilik eklemeye degmez. */}
+              Veri az ve bicim sabit; bağımlılık eklemeye degmez. */}
           <Card className="p-5">
             <h2 className="font-sans text-base font-semibold">Son 14 gün</h2>
             {trend.length === 0 ? (

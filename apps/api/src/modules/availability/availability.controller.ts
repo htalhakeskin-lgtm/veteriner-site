@@ -11,10 +11,10 @@ export class AvailabilityController {
 
   @Public()
   @Get()
-  @ApiOperation({ summary: 'Musait randevu saatleri' })
+  @ApiOperation({ summary: 'Müsait randevu saatleri' })
   @ApiQuery({ name: 'serviceId', required: false })
   @ApiQuery({ name: 'serviceSlug', required: false })
-  @ApiQuery({ name: 'staffId', required: false, description: 'Bos ise tum uygun hekimler' })
+  @ApiQuery({ name: 'staffId', required: false, description: 'Boş ise tüm uygun hekimler' })
   @ApiQuery({ name: 'from', required: false, example: '2026-10-05' })
   @ApiQuery({ name: 'to', required: false, example: '2026-10-12' })
   get(

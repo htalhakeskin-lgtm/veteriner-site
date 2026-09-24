@@ -10,7 +10,7 @@ import {
   type StaffAvailabilityInput,
 } from './availability.engine';
 
-/** Slotu fiilen isgal eden randevu durumlari. */
+/** Slotu fiilen işgal eden randevu durumlari. */
 const BLOCKING_STATUSES = ['PENDING', 'CONFIRMED', 'COMPLETED'] as const;
 
 export interface AvailabilityQuery {
@@ -45,10 +45,10 @@ export class AvailabilityService {
       },
     });
     if (!service) {
-      throw new NotFoundException('Hizmet bulunamadi veya pasif.');
+      throw new NotFoundException('Hizmet bulunamadı veya pasif.');
     }
 
-    // ── Tarih araligi ──
+    // ── Tarih aralığı ──
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -59,22 +59,22 @@ export class AvailabilityService {
     let to = q.to ? startOfDay(q.to) : maxTo;
 
     if (from < today) {
-      throw new BadRequestException('Gecmis tarihler icin musaitlik sorgulanamaz.');
+      throw new BadRequestException('Geçmiş tarihler için müsaitlik sorgulanamaz.');
     }
     if (to < from) {
-      throw new BadRequestException('Bitis tarihi baslangictan once olamaz.');
+      throw new BadRequestException('Bitiş tarihi başlangıçtan önce olamaz.');
     }
-    // Baslangicin kendisi randevu penceresinin disindaysa aciklama ile
-    // reddet. Sessizce bos liste donmek "sistem bozuk mu, klinik dolu mu?"
-    // belirsizligi yaratiyordu.
+    // Başlangıcın kendisi randevu penceresinin dışındaysa açıklama ile
+    // reddet. Sessizce boş liste dönmek "sistem bozuk mu, klinik dolu mu?"
+    // belirsizliği yaratıyordu.
     if (from > maxTo) {
       throw new BadRequestException(
-        `En fazla ${rules.daysInAdvance} gun sonrasi icin randevu alinabilir ` +
+        `En fazla ${rules.daysInAdvance} gün sonrası için randevu alınabilir ` +
           `(son tarih: ${dateKey(maxTo)}).`,
       );
     }
-    // Bitis tarihi pencereyi asiyorsa sessizce kirpilir: kullanici
-    // "onumuzdeki 3 ay" sorsa bile kliniğin kurali uygulanir.
+    // Bitiş tarihi pencereyi aşıyorsa sessizce kırpılır: kullanıcı
+    // "önümüzdeki 3 ay" sorsa bile kliniğin kuralı uygulanır.
     if (to > maxTo) to = maxTo;
 
     const days = buildDayRange(from, to);
@@ -88,8 +88,8 @@ export class AvailabilityService {
     }
 
     // ── Hekimler ──
-    // Yalnizca BU hizmeti verebilen aktif hekimler. Hizmet baglantisi
-    // olmayan hekim, o hizmet icin slot uretmemeli.
+    // Yalnızca BU hizmeti verebilen aktif hekimler. Hizmet bağlantısı
+    // olmayan hekim, o hizmet için slot üretmemeli.
     const staffMembers = await this.prisma.staffMember.findMany({
       where: {
         isActive: true,
@@ -100,8 +100,8 @@ export class AvailabilityService {
     });
 
     if (staffMembers.length === 0) {
-      // Hekim yoksa gunler "personel yok" olarak isaretlensin;
-      // bos dizi donmek arayuzde "hata mi, dolu mu?" belirsizligi yaratir.
+      // Hekim yoksa günler "personel yok" olarak işaretlensin;
+      // boş dizi dönmek arayüzde "hata mi, dolu mu?" belirsizliği yaratır.
       return {
         serviceId: service.id,
         serviceTitle: service.title,
@@ -118,8 +118,8 @@ export class AvailabilityService {
     const staffIds = staffMembers.map((s) => s.id);
 
     // ── Mevcut randevular ve izinler ──
-    // Aralik ucu: son gunun SONUNU kapsamali, yoksa o gunun randevulari
-    // hesaba katilmaz ve dolu saatler musait gorunur.
+    // Aralık ucu: son günün SONUNU kapsamalı, yoksa o günün randevuları
+    // hesaba katılmaz ve dolu saatler müsait görünür.
     const rangeStart = days[0]!;
     const rangeEnd = new Date(days.at(-1)!);
     rangeEnd.setHours(23, 59, 59, 999);
@@ -129,8 +129,8 @@ export class AvailabilityService {
         where: {
           staffId: { in: staffIds },
           status: { in: [...BLOCKING_STATUSES] },
-          // Aralikla KESISEN randevular: tamamen icinde olmasi gerekmiyor,
-          // araligin basina sarkan uzun bir operasyon da slot kapatir.
+          // Aralıkla KESİŞEN randevular: tamamen içinde olması gerekmiyor,
+          // aralığın başına sarkan uzun bir operasyon da slot kapatır.
           startAt: { lte: rangeEnd },
           endAt: { gte: rangeStart },
         },
@@ -187,8 +187,8 @@ export class AvailabilityService {
   }
 
   /**
-   * Randevu servisi icin: verilen an gercekten musait mi?
-   * Musteri "farketmez" dediginde atanacak hekimi de dondurur.
+   * Randevu servisi için: verilen an gerçekten müsait mi?
+   * Müşteri "farketmez" dediğinde atanacak hekimi de döndürür.
    */
   async resolveSlot(params: {
     serviceId: string;
@@ -209,7 +209,7 @@ export class AvailabilityService {
 
     if (!slot) {
       throw new BadRequestException({
-        message: 'Secilen saat musait degil. Lutfen baska bir saat secin.',
+        message: 'Seçilen saat müsait değil. Lütfen başka bir saat seçin.',
         code: 'SLOT_UNAVAILABLE',
       });
     }
@@ -218,13 +218,13 @@ export class AvailabilityService {
   }
 }
 
-/** "YYYY-MM-DD" veya ISO metnini yerel gun baslangicina cevirir. */
+/** "YYYY-MM-DD" veya ISO metnini yerel gün başlangıcına çevirir. */
 function startOfDay(value: string): Date {
   const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
   if (!m) {
-    throw new BadRequestException('Tarih "YYYY-MM-DD" biciminde olmali.');
+    throw new BadRequestException('Tarih "YYYY-MM-DD" biçiminde olmalı.');
   }
-  // new Date("2026-10-05") UTC olarak yorumlanir ve saat dilimine gore
-  // bir onceki gune kayabilir; parcalardan kurmak bunu onler.
+  // new Date("2026-10-05") UTC olarak yorumlanır ve saat dilimine göre
+  // bir önceki güne kayabilir; parçalardan kurmak bunu önler.
   return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 0, 0, 0, 0);
 }

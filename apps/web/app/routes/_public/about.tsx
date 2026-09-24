@@ -145,7 +145,7 @@ export default function About({ loaderData }: Route.ComponentProps) {
         </div>
       </section>
 
-      {/* ── Degerler ── */}
+      {/* ── Değerler ── */}
       <section className="pb-18 md:pb-32">
         <div className="wrap">
           <div className="mb-12 max-w-[50ch]">

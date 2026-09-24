@@ -11,7 +11,7 @@ export function meta() {
     title: 'Giriş Yap',
     description: 'Hesabınıza giriş yapın.',
     path: '/giris',
-    noindex: true, // kisiye ozel sayfa
+    noindex: true, // kişiye özel sayfa
   });
 }
 
@@ -32,7 +32,7 @@ export default function Login() {
     setLoading(true);
     try {
       const user = await login(email, password);
-      // Korumali bir sayfadan yonlendirildiyse oraya geri don.
+      // Korumalı bir sayfadan yonlendirildiyse oraya geri dön.
       const next = params.get('devam');
       if (next?.startsWith('/')) navigate(next, { replace: true });
       else navigate(user.role === 'CUSTOMER' ? '/hesap' : '/panel', { replace: true });
@@ -109,8 +109,8 @@ export default function Login() {
         </Link>
       </p>
 
-      {/* Demo hesaplari: kliniklere sunum yaparken hizli giris icin.
-          Gercek kurulumda bu blok kaldirilmali. */}
+      {/* Demo hesapları: kliniklere sunum yaparken hızlı giriş için.
+          Gerçek kurulumda bu blok kaldırılmalı. */}
       <div className="mt-8 rounded-md border border-dashed border-line bg-surface-2 p-4">
         <p className="text-xs font-medium tracking-wider text-ink-faint uppercase">
           Demo hesapları

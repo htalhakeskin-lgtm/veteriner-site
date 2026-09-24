@@ -7,7 +7,7 @@ interface MetaInput {
   description: string;
   path?: string;
   image?: string | null;
-  /** Uygulama sayfalari (panel, hesap) arama motorlarina kapatilir. */
+  /** Uygulama sayfaları (panel, hesap) arama motorlarina kapatılır. */
   noindex?: boolean;
   type?: 'website' | 'article';
   publishedAt?: string | null;
@@ -17,8 +17,8 @@ interface MetaInput {
 type MetaDescriptor = Record<string, string> | { title: string };
 
 /**
- * Sayfa meta etiketleri. Her sayfa kendi baslik ve aciklamasini vermeli:
- * hepsinde ayni metin olursa Google sayfalari birbirinin kopyasi sayar.
+ * Sayfa meta etiketleri. Her sayfa kendi başlık ve açıklamasını vermeli:
+ * hepsinde aynı metin olursa Google sayfaları birbirinin kopyasi sayar.
  */
 export function buildMeta(input: MetaInput): MetaDescriptor[] {
   const url = `${SITE_URL}${input.path ?? ''}`;
@@ -58,8 +58,8 @@ export function buildMeta(input: MetaInput): MetaDescriptor[] {
 }
 
 /**
- * Klinik icin yapisal veri. Google bunu okuyup arama sonuclarinda
- * adres, telefon, calisma saati ve yildiz puani gosterebilir.
+ * Klinik için yapisal veri. Google bunu okuyup arama sonuçlarında
+ * adres, telefon, çalışma saati ve yıldız puanı gösterebilir.
  */
 export function clinicJsonLd(
   settings: SiteSettings | null,

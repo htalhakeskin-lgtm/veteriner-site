@@ -119,8 +119,8 @@ export default function ServiceDetail({ loaderData }: Route.ComponentProps) {
               )}
             </article>
 
-            {/* Yan panel: kullanici sayfayi okurken randevu butonu
-                ekranda kalsin diye yapiskan. */}
+            {/* Yan panel: kullanıcı sayfayi okurken randevu butonu
+                ekranda kalsın diye yapışkan. */}
             <aside className="lg:sticky lg:top-28 lg:self-start" data-reveal="right">
               <Card className="p-7">
                 <dl className="grid gap-4">

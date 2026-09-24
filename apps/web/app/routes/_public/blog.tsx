@@ -48,8 +48,8 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
   const [featured, ...rest] = items;
 
   function selectCategory(slug: string) {
-    // Kategori degisince sayfa 1'e don: 5. sayfadayken filtre
-    // degistirmek bos liste gosterirdi.
+    // Kategori değişince sayfa 1'e dön: 5. sayfadayken filtre
+    // değiştirmek boş liste gösterirdi.
     setSearchParams(slug ? { kategori: slug } : {});
   }
 
@@ -102,7 +102,7 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
             />
           ) : (
             <>
-              {/* One cikan yazi: ilk yazi buyuk gosterilir */}
+              {/* Öne çıkan yazı: ilk yazı büyük gösterilir */}
               {featured && (
                 <Link to={`/blog/${featured.slug}`} className="group block" data-reveal>
                   <Card hover className="grid overflow-hidden lg:grid-cols-2">

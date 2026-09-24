@@ -10,16 +10,16 @@ export interface OutboundMessage {
   title: string;
   message: string;
   linkUrl?: string;
-  /** Uye olmayan alicilar icin */
+  /** Üye olmayan alicilar için */
   phone?: string | null;
   email?: string | null;
 }
 
 /**
- * Bildirim kanali arayuzu.
+ * Bildirim kanalı arayüzü.
  *
- * Randevu ve cron kodu yalnizca bu arayuzu bilir; saglayici degisse bile
- * (Resend -> Postmark, Twilio -> NetGSM) is mantigi degismez.
+ * Randevu ve cron kodu yalnızca bu arayüzü bilir; sağlayıcı değişse bile
+ * (Resend -> Postmark, Twilio -> NetGSM) is mantığı değişmez.
  */
 export interface NotificationChannel {
   readonly name: string;
@@ -28,9 +28,9 @@ export interface NotificationChannel {
 }
 
 /**
- * Her zaman acik kanal: bildirimi veritabanina yazar.
- * Musteri panelindeki bildirim listesi ve admin panelindeki
- * "gonderilecek mesaj" onizlemesi bunu okur.
+ * Her zaman açık kanal: bildirimi veritabanına yazar.
+ * Müşteri panelindeki bildirim listesi ve admin panelindeki
+ * "gönderilecek mesaj" önizlemesi bunu okur.
  */
 @Injectable()
 export class DatabaseChannel implements NotificationChannel {
@@ -43,8 +43,8 @@ export class DatabaseChannel implements NotificationChannel {
   }
 
   async send(msg: OutboundMessage): Promise<void> {
-    // Misafir randevularinda userId yok; veritabani bildirimi
-    // bir kullaniciya bagli oldugu icin atlanir.
+    // Misafir randevularında userId yok; veritabanı bildirimi
+    // bir kullanıcıya bağlı olduğu için atlanır.
     if (!msg.userId) return;
 
     await this.prisma.notification.create({
@@ -62,12 +62,12 @@ export class DatabaseChannel implements NotificationChannel {
 }
 
 /**
- * DEMO_MODE=true iken e-posta / SMS / WhatsApp yerine gecen kanal.
+ * DEMO_MODE=true iken e-posta / SMS / WhatsApp yerine geçen kanal.
  *
- * Gercekten mesaj GONDERMEZ: ne yazacagini loga dusurur ve veritabanina
- * "gonderilmemis" olarak isler. Klinik sunumunda yanlislikla gercek
- * mesaj gitmesini ve maliyet olusmasini engeller; buna ragmen akisin
- * uctan uca denenebilmesini saglar.
+ * Gerçekten mesaj GÖNDERMEZ: ne yazacağını loga düşürür ve veritabanına
+ * "gönderilmemiş" olarak işler. Klinik sunumunda yanlışlıkla gerçek
+ * mesaj gitmesini ve maliyet oluşmasını engeller; buna rağmen akışın
+ * uçtan uca denenebilmesini sağlar.
  */
 @Injectable()
 export class SimulatedChannel implements NotificationChannel {
@@ -85,7 +85,7 @@ export class SimulatedChannel implements NotificationChannel {
 
   async send(msg: OutboundMessage): Promise<void> {
     const hedef = msg.phone ?? msg.email ?? msg.userId ?? 'bilinmeyen';
-    this.logger.log(`[SIMULASYON] -> ${hedef}: ${msg.title} | ${msg.message}`);
+    this.logger.log(`[SİMÜLASYON] -> ${hedef}: ${msg.title} | ${msg.message}`);
 
     if (!msg.userId) return;
     await this.prisma.notification.create({
@@ -96,8 +96,8 @@ export class SimulatedChannel implements NotificationChannel {
         message: msg.message,
         linkUrl: msg.linkUrl ?? null,
         channel: 'WHATSAPP_SIMULATED',
-        // sentAt bilerek BOS: gercekten gonderilmedi. Admin paneli
-        // bunlari "gonderilecek" olarak gosterebilir.
+        // sentAt bilerek BOŞ: gerçekten gönderilmedi. Admin paneli
+        // bunları "gönderilecek" olarak gösterebilir.
         sentAt: null,
       },
     });
@@ -105,13 +105,13 @@ export class SimulatedChannel implements NotificationChannel {
 }
 
 /**
- * WhatsApp derin baglantisi uretici.
- * Saglayici (Meta Cloud API / Twilio) gerekmez; sitedeki WhatsApp
- * butonlari ve admin panelindeki "WhatsApp'tan yaz" baglantisi bunu kullanir.
+ * WhatsApp derin bağlantısı üretici.
+ * Sağlayıcı (Meta Cloud API / Twilio) gerekmez; sitedeki WhatsApp
+ * butonları ve admin panelindeki "WhatsApp'tan yaz" bağlantısı bunu kullanır.
  */
 export function buildWhatsappLink(phone: string, text: string): string {
   const digits = phone.replace(/\D/g, '');
-  // Turkiye numaralari: 0532... -> 90532...
+  // Türkiye numaraları: 0532... -> 90532...
   const intl = digits.startsWith('90')
     ? digits
     : digits.startsWith('0')

@@ -5,10 +5,10 @@ import sanitizeHtml from 'sanitize-html';
 import { PrismaService } from '../../prisma/prisma.service';
 
 /**
- * Blog icerigi admin panelinden zengin metin olarak giriliyor.
- * Temizlenmeden saklanirsa panele erisimi olan biri siteye script
- * gomebilir; ziyaretcilerin tarayicisinda calisir (saklanan XSS).
- * Kaydetme aninda temizliyoruz ki veritabaninda hep guvenli hali dursun.
+ * Blog içeriği admin panelinden zengin metin olarak giriliyor.
+ * Temizlenmeden saklanırsa panele erişimi olan biri siteye script
+ * gömebilir; ziyaretçilerin tarayıcısında çalışır (saklanan XSS).
+ * Kaydetme anında temizliyoruz ki veritabanında hep güvenli hali dursun.
  */
 const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
   allowedTags: [
@@ -22,7 +22,7 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
   },
   allowedSchemes: ['http', 'https', 'mailto'],
   transformTags: {
-    // Disa acilan baglantilar sekme calma (tabnabbing) saldirisina acik olmasin.
+    // Dışa açılan bağlantılar sekme çalma (tabnabbing) saldırısına açık olmasın.
     a: sanitizeHtml.simpleTransform('a', { rel: 'noopener noreferrer' }),
   },
 };
@@ -46,7 +46,7 @@ export class BlogService {
 
     const where: Prisma.BlogPostWhereInput = {
       status: PostStatus.PUBLISHED,
-      publishedAt: { lte: new Date() }, // ileri tarihli yayinlar gorunmesin
+      publishedAt: { lte: new Date() }, // ileri tarihli yayınlar görünmesin
       ...(params.category ? { category: { slug: params.category } } : {}),
       ...(params.q
         ? {
@@ -84,9 +84,9 @@ export class BlogService {
         author: { select: { fullName: true } },
       },
     });
-    if (!post) throw new NotFoundException('Yazi bulunamadi.');
+    if (!post) throw new NotFoundException('Yazı bulunamadı.');
 
-    // Goruntulenme sayaci: yaziyi dondurmeyi bekletmesin.
+    // Görüntülenme sayacı: yazıyı döndürmeyi bekletmesin.
     void this.prisma.blogPost
       .update({ where: { id: post.id }, data: { viewCount: { increment: 1 } } })
       .catch(() => undefined);
@@ -114,7 +114,7 @@ export class BlogService {
         },
       },
     });
-    // Icerigi olmayan kategori sitede gosterilmesin: bos sayfaya goturur.
+    // İçeriği olmayan kategori sitede gösterilmesin: boş sayfaya götürür.
     return rows.filter((c) => c._count.posts > 0);
   }
 
@@ -138,7 +138,7 @@ export class BlogService {
 
   async findOneAdmin(id: string) {
     const post = await this.prisma.blogPost.findUnique({ where: { id } });
-    if (!post) throw new NotFoundException('Yazi bulunamadi.');
+    if (!post) throw new NotFoundException('Yazı bulunamadı.');
     return post;
   }
 
@@ -148,7 +148,7 @@ export class BlogService {
       data: {
         ...clean,
         authorId,
-        // Yayina alinirken tarih verilmediyse simdiyi kullan.
+        // Yayına alınırken tarih verilmediyse şimdiyi kullan.
         publishedAt:
           clean.status === PostStatus.PUBLISHED
             ? ((clean.publishedAt as Date | undefined) ?? new Date())
@@ -161,7 +161,7 @@ export class BlogService {
     const existing = await this.findOneAdmin(id);
     const clean = this.prepare(data);
 
-    // Taslaktan yayina gecerken yayin tarihi bir kez yazilir.
+    // Taslaktan yayına geçerken yayın tarihi bir kez yazılır.
     const publishedAt =
       clean.status === PostStatus.PUBLISHED && !existing.publishedAt
         ? new Date()
@@ -198,16 +198,16 @@ export class BlogService {
   async removeCategory(id: string) {
     const count = await this.prisma.blogPost.count({ where: { categoryId: id } });
     if (count > 0) {
-      // Silmek yazilari kategorisiz birakirdi; once tasinmalari gerekiyor.
+      // Silmek yazıları kategorisiz bırakırdı; önce taşınmaları gerekiyor.
       throw new NotFoundException(
-        `Bu kategoride ${count} yazi var. Once yazilari baska kategoriye tasiyin.`,
+        `Bu kategoride ${count} yazı var. Önce yazıları başka kategoriye taşıyın.`,
       );
     }
     await this.prisma.blogCategory.delete({ where: { id } });
     return { deleted: true };
   }
 
-  /** Yazilabilir alanlari suzer, HTML'i temizler, okuma suresini hesaplar. */
+  /** Yazılabilir alanları suzer, HTML'i temizler, okuma süresini hesaplar. */
   private prepare(data: Record<string, unknown>): Record<string, unknown> {
     const out: Record<string, unknown> = {};
     for (const key of [
@@ -220,8 +220,8 @@ export class BlogService {
     if (data.contentHtml !== undefined) {
       const clean = sanitizeHtml(String(data.contentHtml), SANITIZE_OPTIONS);
       out.contentHtml = clean;
-      // Okuma suresi metinden hesaplaniyor; elle girilmesi gereksiz
-      // ve genellikle yanlis oluyor. ~200 kelime/dakika.
+      // Okuma süresi metinden hesaplanıyor; elle girilmesi gereksiz
+      // ve genellikle yanlış oluyor. ~200 kelime/dakika.
       const words = clean.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).length;
       out.readMinutes = Math.max(1, Math.round(words / 200));
     }

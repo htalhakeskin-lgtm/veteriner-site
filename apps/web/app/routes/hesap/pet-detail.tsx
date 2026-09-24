@@ -121,7 +121,7 @@ export default function PetDetail() {
         }
       />
 
-      {/* ── Kunye ── */}
+      {/* ── Künye ── */}
       <Card className="p-6">
         <h2 className="font-sans text-base font-semibold">Künye</h2>
         <dl className="mt-5 grid gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -144,7 +144,7 @@ export default function PetDetail() {
         )}
       </Card>
 
-      {/* ── Asi takvimi ── */}
+      {/* ── Aşı takvimi ── */}
       {schedule.length > 0 && (
         <section className="mt-8">
           <h2 className="font-sans text-lg font-semibold">Aşı takvimi</h2>
@@ -185,7 +185,7 @@ export default function PetDetail() {
         </section>
       )}
 
-      {/* ── Saglik gecmisi ── */}
+      {/* ── Sağlık geçmişi ── */}
       <section className="mt-8">
         <h2 className="font-sans text-lg font-semibold">Sağlık geçmişi</h2>
         <div className="mt-4">
@@ -198,7 +198,7 @@ export default function PetDetail() {
               description="Muayene ve aşı kayıtları klinik tarafından girildikçe burada görünecek."
             />
           ) : (
-            /* Zaman cizelgesi: sol tarafta dikey cizgi, her kayit bir nokta */
+            /* Zaman çizelgesi: sol tarafta dikey cizgi, her kayıt bir nokta */
             <ol className="relative grid gap-5 border-l border-line pl-6">
               {records.map((r) => (
                 <li key={r.id} className="relative">

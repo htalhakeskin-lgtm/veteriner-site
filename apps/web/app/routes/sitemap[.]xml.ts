@@ -4,8 +4,8 @@ import type { BlogPost, Paginated, Service } from '~/lib/types';
 
 /**
  * Dinamik site haritasi.
- * Blog yazisi ve hizmet eklendikce elle guncelleme gerekmesin diye
- * icerik API'den cekiliyor.
+ * Blog yazısı ve hizmet eklendikce elle güncelleme gerekmesin diye
+ * içerik API'den çekiliyor.
  */
 export async function loader() {
   const [services, posts] = await Promise.all([

@@ -11,7 +11,7 @@ export class CreateAppointmentDto {
   @IsString()
   serviceId!: string;
 
-  @ApiProperty({ required: false, description: 'Bos ise ilk musait hekim atanir' })
+  @ApiProperty({ required: false, description: 'Boş ise ilk müsait hekim atanır' })
   @IsOptional()
   @IsString()
   staffId?: string;
@@ -20,7 +20,7 @@ export class CreateAppointmentDto {
   @IsISO8601()
   startAt!: string;
 
-  // ── Uye randevusu ──
+  // ── Üye randevusu ──
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
@@ -35,12 +35,12 @@ export class CreateAppointmentDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
-  @Matches(PHONE_REGEX, { message: 'Gecerli bir cep telefonu girin.' })
+  @Matches(PHONE_REGEX, { message: 'Geçerli bir cep telefonu girin.' })
   guestPhone?: string;
 
   @ApiProperty({ required: false })
   @IsOptional()
-  @IsEmail({}, { message: 'Gecerli bir e-posta adresi girin.' })
+  @IsEmail({}, { message: 'Geçerli bir e-posta adresi girin.' })
   guestEmail?: string;
 
   @ApiProperty({ required: false })

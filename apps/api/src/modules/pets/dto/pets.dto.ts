@@ -69,7 +69,7 @@ export class CreatePetDto {
   notes?: string;
 }
 
-/** Guncellemede her alan istege bagli. */
+/** Güncellemede her alan isteğe bağlı. */
 export class UpdatePetDto {
   @ApiProperty({ required: false })
   @IsOptional()
@@ -153,7 +153,7 @@ export class CreateMedicalRecordDto {
   @IsISO8601()
   performedAt!: string;
 
-  @ApiProperty({ required: false, description: 'Asi/kontrol tekrar tarihi' })
+  @ApiProperty({ required: false, description: 'Aşı/kontrol tekrar tarihi' })
   @IsOptional()
   @IsISO8601()
   nextDueAt?: string;

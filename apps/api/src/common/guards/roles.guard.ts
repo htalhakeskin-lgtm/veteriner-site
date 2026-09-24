@@ -11,8 +11,8 @@ import type { Request } from 'express';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 
 /**
- * @Roles(...) tasiyan uclarda rol kontrolu yapar.
- * JwtAuthGuard'dan SONRA calismali (app.module'deki sira onemli):
+ * @Roles(...) taşıyan uçlarda rol kontrolü yapar.
+ * JwtAuthGuard'dan SONRA çalışmalı (app.module'deki sıra önemli):
  * req.user'i o dolduruyor.
  */
 @Injectable()
@@ -28,7 +28,7 @@ export class RolesGuard implements CanActivate {
 
     const user = ctx.switchToHttp().getRequest<Request>().user;
     if (!user || !required.includes(user.role)) {
-      throw new ForbiddenException('Bu islem icin yetkiniz yok.');
+      throw new ForbiddenException('Bu işlem için yetkiniz yok.');
     }
     return true;
   }

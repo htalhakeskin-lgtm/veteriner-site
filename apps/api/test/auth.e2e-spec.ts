@@ -11,7 +11,7 @@ import { PrismaService } from '../src/prisma/prisma.service';
 
 const ARGON = { algorithm: 2 as const };
 
-/** Refresh cookie'yi Set-Cookie basligindan cikarir. */
+/** Refresh cookie'yi Set-Cookie başlığından çıkarır. */
 function refreshCookie(res: request.Response): string | undefined {
   const raw = res.headers['set-cookie'];
   const list = Array.isArray(raw) ? raw : raw ? [raw] : [];
@@ -23,22 +23,22 @@ describe('Auth (e2e)', () => {
   let prisma: PrismaService;
   let http: App;
 
-  // Her calistirmada benzersiz: testler birbirinin verisine carpmasin.
+  // Her çalıştırmada benzersiz: testler birbirinin verisine çarpmasın.
   const stamp = Date.now();
-  const customerEmail = `e2e-musteri-${stamp}@ornek.com`;
+  const customerEmail = `e2e-müşteri-${stamp}@ornek.com`;
   const adminEmail = `e2e-admin-${stamp}@ornek.com`;
   const PASSWORD = 'e2e-guclu-sifre';
 
   beforeAll(async () => {
-    // Hiz siniri .env.test icinde THROTTLE_ENABLED=false ile kapali.
+    // Hız sınırı .env.test içinde THROTTLE_ENABLED=false ile kapalı.
     // overrideGuard(ThrottlerGuard) BURADA ISE YARAMAZ: guard APP_GUARD
-    // token'i altinda kayitli, ThrottlerGuard token'i altinda degil.
+    // token'i altında kayıtlı, ThrottlerGuard token'i altında değil.
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
     app = moduleRef.createNestApplication();
-    // main.ts ile ayni kurulum — testler uretimdeki davranisi olcmeli.
+    // main.ts ile aynı kurulum — testler üretimdeki davranışı olcmeli.
     app.use(cookieParser());
     app.setGlobalPrefix('api/v1');
     app.useGlobalFilters(new HttpExceptionFilter());
@@ -54,7 +54,7 @@ describe('Auth (e2e)', () => {
     prisma = app.get(PrismaService);
     http = app.getHttpServer();
 
-    // Rol testleri icin hazir bir admin.
+    // Rol testleri için hazır bir admin.
     await prisma.user.create({
       data: {
         email: adminEmail,
@@ -73,13 +73,13 @@ describe('Auth (e2e)', () => {
   });
 
   // ─────────────────────────────────────────
-  describe('Kayit', () => {
-    it('gecerli bilgilerle kayit olur ve token doner', async () => {
+  describe('Kayıt', () => {
+    it('geçerli bilgilerle kayıt olur ve token döner', async () => {
       const res = await request(http)
         .post('/api/v1/auth/register')
         .send({
           email: customerEmail,
-          fullName: 'E2E Musteri',
+          fullName: 'E2E Müşteri',
           phone: '0532 111 22 33',
           password: PASSWORD,
         })
@@ -90,7 +90,7 @@ describe('Auth (e2e)', () => {
       expect(refreshCookie(res)).toBeDefined();
     });
 
-    it('rolu istemciden ALMAZ - gonderilse bile reddeder', async () => {
+    it('rolü istemciden ALMAZ - gönderilse bile reddeder', async () => {
       const res = await request(http)
         .post('/api/v1/auth/register')
         .send({
@@ -104,17 +104,17 @@ describe('Auth (e2e)', () => {
       expect(res.body.message).toContain('role');
     });
 
-    it('ayni e-posta ile ikinci kez kayit olmaz', () =>
+    it('aynı e-posta ile ikinci kez kayıt olmaz', () =>
       request(http)
         .post('/api/v1/auth/register')
         .send({
           email: customerEmail,
-          fullName: 'Kopya Kullanici',
+          fullName: 'Kopya Kullanıcı',
           password: PASSWORD,
         })
         .expect(409));
 
-    it('gecersiz alanlari reddeder', async () => {
+    it('geçersiz alanları reddeder', async () => {
       const res = await request(http)
         .post('/api/v1/auth/register')
         .send({ email: 'bozuk', fullName: 'A', password: 'kisa' })
@@ -125,8 +125,8 @@ describe('Auth (e2e)', () => {
   });
 
   // ─────────────────────────────────────────
-  describe('Giris', () => {
-    it('dogru bilgilerle giris yapar', async () => {
+  describe('Giriş', () => {
+    it('doğru bilgilerle giriş yapar', async () => {
       const res = await request(http)
         .post('/api/v1/auth/login')
         .send({ email: customerEmail, password: PASSWORD })
@@ -146,13 +146,13 @@ describe('Auth (e2e)', () => {
       expect(cookie).toContain('Path=/api/v1/auth');
     });
 
-    it('yanlis sifreyi reddeder', () =>
+    it('yanlış şifreyi reddeder', () =>
       request(http)
         .post('/api/v1/auth/login')
         .send({ email: customerEmail, password: 'yanlis-sifre' })
         .expect(401));
 
-    it('olmayan kullanici ile var olan kullanici AYNI mesaji alir', async () => {
+    it('olmayan kullanıcı ile var olan kullanıcı AYNI mesajı alır', async () => {
       const yok = await request(http)
         .post('/api/v1/auth/login')
         .send({ email: `yok-${stamp}@ornek.com`, password: 'herhangi' })
@@ -163,13 +163,13 @@ describe('Auth (e2e)', () => {
         .send({ email: customerEmail, password: 'yanlis-sifre' })
         .expect(401);
 
-      // Mesaj farkli olsaydi hangi e-postalarin kayitli oldugu ogrenilebilirdi.
+      // Mesaj farklı olsaydı hangi e-postaların kayıtlı olduğu ogrenilebilirdi.
       expect(yok.body.message).toBe(varAma.body.message);
     });
   });
 
   // ─────────────────────────────────────────
-  describe('Korumali uclar', () => {
+  describe('Korumalı uçlar', () => {
     let accessToken: string;
 
     beforeAll(async () => {
@@ -179,27 +179,27 @@ describe('Auth (e2e)', () => {
       accessToken = res.body.accessToken;
     });
 
-    it('token olmadan 401 doner', () =>
+    it('token olmadan 401 döner', () =>
       request(http).get('/api/v1/users/me').expect(401));
 
-    it('bozuk token ile 401 doner', () =>
+    it('bozuk token ile 401 döner', () =>
       request(http)
         .get('/api/v1/users/me')
         .set('Authorization', 'Bearer bozuk.token.degeri')
         .expect(401));
 
-    it('gecerli token ile profil doner', async () => {
+    it('geçerli token ile profil döner', async () => {
       const res = await request(http)
         .get('/api/v1/users/me')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
       expect(res.body.email).toBe(customerEmail);
-      // Sifre hash'i ASLA disari sizmamali.
+      // Şifre hash'i ASLA dışarı sizmamali.
       expect(res.body).not.toHaveProperty('passwordHash');
     });
 
-    it('musteri admin ucuna erisemez', () =>
+    it('müşteri admin ucuna erişemez', () =>
       request(http)
         .get('/api/v1/users')
         .set('Authorization', `Bearer ${accessToken}`)
@@ -222,7 +222,7 @@ describe('Auth (e2e)', () => {
 
   // ─────────────────────────────────────────
   describe('Token yenileme', () => {
-    it('cookie olmadan 401 doner', () =>
+    it('cookie olmadan 401 döner', () =>
       request(http).post('/api/v1/auth/refresh').expect(401));
 
     it('yeniler ve token ROTASYONU yapar', async () => {
@@ -240,7 +240,7 @@ describe('Auth (e2e)', () => {
       expect(refreshCookie(res)).not.toBe(first);
     });
 
-    it('kullanilmis refresh token ikinci kez ise yaramaz', async () => {
+    it('kullanılmış refresh token ikinci kez ise yaramaz', async () => {
       const login = await request(http)
         .post('/api/v1/auth/login')
         .send({ email: customerEmail, password: PASSWORD });
@@ -251,14 +251,14 @@ describe('Auth (e2e)', () => {
         .set('Cookie', cookie)
         .expect(200);
 
-      // Calinmis bir token en fazla BIR kez kullanilabilsin.
+      // Çalınmış bir token en fazla BIR kez kullanilabilsin.
       await request(http)
         .post('/api/v1/auth/refresh')
         .set('Cookie', cookie)
         .expect(401);
     });
 
-    it('cikistan sonra refresh calismaz', async () => {
+    it('çıkıştan sonra refresh çalışmaz', async () => {
       const login = await request(http)
         .post('/api/v1/auth/login')
         .send({ email: customerEmail, password: PASSWORD });
@@ -277,8 +277,8 @@ describe('Auth (e2e)', () => {
   });
 
   // ─────────────────────────────────────────
-  describe('Sifre islemleri', () => {
-    it('sifre degisimi TUM oturumlari kapatir', async () => {
+  describe('Şifre işlemleri', () => {
+    it('şifre değişimi TÜM oturumları kapatır', async () => {
       const yeniSifre = 'degistirilmis-sifre-99';
 
       const login = await request(http)
@@ -292,19 +292,19 @@ describe('Auth (e2e)', () => {
         .send({ currentPassword: PASSWORD, newPassword: yeniSifre })
         .expect(200);
 
-      // Eski oturum artik yenilenememeli.
+      // Eski oturum artık yenilenememeli.
       await request(http)
         .post('/api/v1/auth/refresh')
         .set('Cookie', cookie)
         .expect(401);
 
-      // Yeni sifre calismali.
+      // Yeni şifre çalışmalı.
       await request(http)
         .post('/api/v1/auth/login')
         .send({ email: customerEmail, password: yeniSifre })
         .expect(200);
 
-      // Sonraki testler icin geri al.
+      // Sonraki testler için geri al.
       await request(http)
         .post('/api/v1/auth/login')
         .send({ email: customerEmail, password: yeniSifre })
@@ -317,7 +317,7 @@ describe('Auth (e2e)', () => {
         );
     });
 
-    it('yanlis mevcut sifre ile degistirmeyi reddeder', async () => {
+    it('yanlış mevcut şifre ile değiştirmeyi reddeder', async () => {
       const login = await request(http)
         .post('/api/v1/auth/login')
         .send({ email: customerEmail, password: PASSWORD });
@@ -329,7 +329,7 @@ describe('Auth (e2e)', () => {
         .expect(401);
     });
 
-    it('sifirlama talebi kullanicinin varligini SIZDIRMAZ', async () => {
+    it('sıfırlama talebi kullanıcının varligini SIZDIRMAZ', async () => {
       const varOlan = await request(http)
         .post('/api/v1/auth/forgot-password')
         .send({ email: customerEmail })
@@ -343,7 +343,7 @@ describe('Auth (e2e)', () => {
       expect(varOlan.body.message).toBe(olmayan.body.message);
     });
 
-    it('gecersiz sifirlama token\'ini reddeder', () =>
+    it('geçersiz sıfırlama token\'ini reddeder', () =>
       request(http)
         .post('/api/v1/auth/reset-password')
         .send({ token: 'uydurma-token', password: 'yeni-sifre-123' })
@@ -361,17 +361,17 @@ describe('Auth (e2e)', () => {
       accessToken = res.body.accessToken;
     });
 
-    it('ad ve telefon guncellenir', async () => {
+    it('ad ve telefon güncellenir', async () => {
       const res = await request(http)
         .patch('/api/v1/users/me')
         .set('Authorization', `Bearer ${accessToken}`)
-        .send({ fullName: 'Guncel Ad', phone: '0533 222 33 44' })
+        .send({ fullName: 'Güncel Ad', phone: '0533 222 33 44' })
         .expect(200);
 
-      expect(res.body.fullName).toBe('Guncel Ad');
+      expect(res.body.fullName).toBe('Güncel Ad');
     });
 
-    it('e-posta ve rol profilden DEGISTIRILEMEZ', () =>
+    it('e-posta ve rol profilden DEĞİŞTİRİLEMEZ', () =>
       request(http)
         .patch('/api/v1/users/me')
         .set('Authorization', `Bearer ${accessToken}`)

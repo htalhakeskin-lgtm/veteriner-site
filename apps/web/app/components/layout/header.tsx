@@ -19,8 +19,8 @@ export function Header({ settings }: { settings: SiteSettings | null }) {
   const { user } = useAuth();
   const location = useLocation();
 
-  // Sayfa degisince mobil menu kapanmali; acik kalirsa kullanici
-  // yeni sayfayi goremez.
+  // Sayfa değişince mobil menü kapanmalı; açık kalırsa kullanıcı
+  // yeni sayfayi göremez.
   useEffect(() => setOpen(false), [location.pathname]);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export function Header({ settings }: { settings: SiteSettings | null }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Menu acikken arka plan kaymasin.
+  // Menü açıkken arka plan kaymasin.
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => {
@@ -159,7 +159,7 @@ export function Header({ settings }: { settings: SiteSettings | null }) {
         </div>
       </header>
 
-      {/* Mobil menu */}
+      {/* Mobil menü */}
       <div
         className={cx(
           'fixed inset-0 z-40 flex flex-col justify-center gap-2 bg-bg px-6 py-16 transition-all duration-500 ease-soft lg:hidden',

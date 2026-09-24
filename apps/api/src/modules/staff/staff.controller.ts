@@ -19,7 +19,7 @@ export class StaffController {
 
   @Public()
   @Get('staff/:slug')
-  @ApiOperation({ summary: 'Personel detayi' })
+  @ApiOperation({ summary: 'Personel detayı' })
   findOne(@Param('slug') slug: string) {
     return this.staff.findBySlug(slug);
   }
@@ -51,7 +51,7 @@ export class StaffController {
 
   @Put('admin/staff/:id/schedule')
   @Roles('ADMIN')
-  @ApiOperation({ summary: 'Haftalik calisma takvimini degistir' })
+  @ApiOperation({ summary: 'Haftalık çalışma takvimini değiştir' })
   setSchedule(
     @Param('id') id: string,
     @Body() body: { windows: Array<{ dayOfWeek: number; startTime: string; endTime: string }> },

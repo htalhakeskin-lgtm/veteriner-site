@@ -1,4 +1,4 @@
-/** API'nin dondurdugu veri sekilleri. Backend DTO'lariyla elle hizali tutuluyor. */
+/** API'nın döndürdüğü veri sekilleri. Backend DTO'larıyla elle hizali tutuluyor. */
 
 export type Role = 'CUSTOMER' | 'STAFF' | 'ADMIN';
 export type Species = 'CAT' | 'DOG' | 'BIRD' | 'RODENT' | 'REPTILE' | 'FISH' | 'OTHER';

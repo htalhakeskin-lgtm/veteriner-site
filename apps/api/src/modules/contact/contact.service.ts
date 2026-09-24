@@ -9,14 +9,14 @@ export class ContactService {
   constructor(private readonly prisma: PrismaService) {}
 
   // ─────────────────────────────────────────
-  //  Iletisim formu
+  //  İletişim formu
   // ─────────────────────────────────────────
 
   async submit(dto: ContactMessageDto, ipAddress?: string) {
-    // Honeypot: gercek kullanicinin gormedigi, botlarin doldurdugu alan.
-    // Doluysa basarili gibi yanit veriyoruz ki bot yeniden denemesin.
+    // Honeypot: gerçek kullanıcının görmediği, botların doldurduğu alan.
+    // Doluysa başarılı gibi yanıt veriyoruz ki bot yeniden denemesin.
     if (dto.website) {
-      return { message: 'Mesajiniz alindi. En kisa surede donus yapacagiz.' };
+      return { message: 'Mesajınız alındı. En kısa sürede dönüş yapacağız.' };
     }
 
     await this.prisma.contactMessage.create({
@@ -30,7 +30,7 @@ export class ContactService {
       },
     });
 
-    return { message: 'Mesajiniz alindi. En kisa surede donus yapacagiz.' };
+    return { message: 'Mesajınız alındı. En kısa sürede dönüş yapacağız.' };
   }
 
   findAllAdmin(params: { isRead?: boolean }) {
@@ -48,7 +48,7 @@ export class ContactService {
 
   async markRead(id: string) {
     const found = await this.prisma.contactMessage.findUnique({ where: { id } });
-    if (!found) throw new NotFoundException('Mesaj bulunamadi.');
+    if (!found) throw new NotFoundException('Mesaj bulunamadı.');
     return this.prisma.contactMessage.update({
       where: { id },
       data: { isRead: true },
@@ -57,7 +57,7 @@ export class ContactService {
 
   async markReplied(id: string) {
     const found = await this.prisma.contactMessage.findUnique({ where: { id } });
-    if (!found) throw new NotFoundException('Mesaj bulunamadi.');
+    if (!found) throw new NotFoundException('Mesaj bulunamadı.');
     return this.prisma.contactMessage.update({
       where: { id },
       data: { isRead: true, repliedAt: new Date() },
@@ -66,13 +66,13 @@ export class ContactService {
 
   async removeMessage(id: string) {
     const found = await this.prisma.contactMessage.findUnique({ where: { id } });
-    if (!found) throw new NotFoundException('Mesaj bulunamadi.');
+    if (!found) throw new NotFoundException('Mesaj bulunamadı.');
     await this.prisma.contactMessage.delete({ where: { id } });
     return { deleted: true };
   }
 
   // ─────────────────────────────────────────
-  //  E-bulten
+  //  E-bülten
   // ─────────────────────────────────────────
 
   async subscribe(dto: SubscribeDto) {
@@ -83,22 +83,22 @@ export class ContactService {
 
     if (existing) {
       if (existing.isActive) {
-        // "Zaten kayitlisiniz" demek, hangi e-postalarin abone oldugunu
-        // ele verir. Ayni yaniti donuyoruz.
-        return { message: 'Aboneliginiz olusturuldu.' };
+        // "Zaten kayıtlısınız" demek, hangi e-postaların abone olduğunu
+        // ele verir. Aynı yanıtı dönüyoruz.
+        return { message: 'Aboneliğiniz oluşturuldu.' };
       }
-      // Daha once cikmis biri yeniden abone olabilmeli.
+      // Daha önce çıkmış biri yeniden abone olabilmeli.
       await this.prisma.newsletterSubscriber.update({
         where: { email },
         data: { isActive: true, unsubscribedAt: null, subscribedAt: new Date() },
       });
-      return { message: 'Aboneliginiz olusturuldu.' };
+      return { message: 'Aboneliğiniz oluşturuldu.' };
     }
 
     await this.prisma.newsletterSubscriber.create({
       data: { email, unsubscribeToken: randomBytes(24).toString('base64url') },
     });
-    return { message: 'Aboneliginiz olusturuldu.' };
+    return { message: 'Aboneliğiniz oluşturuldu.' };
   }
 
   async unsubscribe(token: string) {
@@ -106,7 +106,7 @@ export class ContactService {
       where: { unsubscribeToken: token },
     });
     if (!sub) {
-      throw new BadRequestException('Abonelik baglantisi gecersiz.');
+      throw new BadRequestException('Abonelik bağlantısı geçersiz.');
     }
     if (sub.isActive) {
       await this.prisma.newsletterSubscriber.update({
@@ -114,7 +114,7 @@ export class ContactService {
         data: { isActive: false, unsubscribedAt: new Date() },
       });
     }
-    return { message: 'Abonelikten cikarildiniz.' };
+    return { message: 'Abonelikten çıkarıldınız.' };
   }
 
   listSubscribers() {
@@ -125,7 +125,7 @@ export class ContactService {
     });
   }
 
-  /** CSV disa aktarma — admin panelindeki "listeyi indir" icin. */
+  /** CSV dışa aktarma — admin panelindeki "listeyi indir" için. */
   async exportSubscribersCsv(): Promise<string> {
     const rows = await this.listSubscribers();
     const header = 'email,abonelik_tarihi';
@@ -137,8 +137,8 @@ export class ContactService {
 }
 
 /**
- * CSV enjeksiyonu korumasi: "=" ile baslayan bir hucre Excel'de
- * formul olarak calisir. Basina tirnak koyarak metne zorluyoruz.
+ * CSV enjeksiyonu koruması: "=" ile başlayan bir hücre Excel'de
+ * formül olarak çalışır. Başına tırnak koyarak metne zorluyoruz.
  */
 function csvEscape(value: string): string {
   const risky = /^[=+\-@]/.test(value);

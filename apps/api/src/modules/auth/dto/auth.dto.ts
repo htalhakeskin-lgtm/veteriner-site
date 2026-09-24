@@ -8,36 +8,36 @@ import {
   MinLength,
 } from 'class-validator';
 
-/** Turkiye telefon formatlari: 05xx xxx xx xx / +905xxxxxxxxx / bosluklu */
+/** Türkiye telefon formatlari: 05xx xxx xx xx / +905xxxxxxxxx / boşluklu */
 const PHONE_REGEX = /^(\+90|0)?\s?5\d{2}[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
 
 export class RegisterDto {
   @ApiProperty({ example: 'ayse@ornek.com' })
-  @IsEmail({}, { message: 'Gecerli bir e-posta adresi girin.' })
+  @IsEmail({}, { message: 'Geçerli bir e-posta adresi girin.' })
   @MaxLength(255)
   email!: string;
 
-  @ApiProperty({ example: 'Ayse Kara' })
+  @ApiProperty({ example: 'Ayşe Kara' })
   @IsString()
-  @MinLength(2, { message: 'Ad soyad en az 2 karakter olmali.' })
+  @MinLength(2, { message: 'Ad soyad en az 2 karakter olmalı.' })
   @MaxLength(120)
   fullName!: string;
 
   @ApiProperty({ example: '0532 111 22 33', required: false })
   @IsOptional()
-  @Matches(PHONE_REGEX, { message: 'Gecerli bir cep telefonu girin.' })
+  @Matches(PHONE_REGEX, { message: 'Geçerli bir cep telefonu girin.' })
   phone?: string;
 
   @ApiProperty({ example: 'en-az-8-karakter', minLength: 8 })
   @IsString()
-  @MinLength(8, { message: 'Sifre en az 8 karakter olmali.' })
+  @MinLength(8, { message: 'Şifre en az 8 karakter olmalı.' })
   @MaxLength(128)
   password!: string;
 }
 
 export class LoginDto {
   @ApiProperty({ example: 'musteri@demo.com' })
-  @IsEmail({}, { message: 'Gecerli bir e-posta adresi girin.' })
+  @IsEmail({}, { message: 'Geçerli bir e-posta adresi girin.' })
   email!: string;
 
   @ApiProperty({ example: '123456' })
@@ -48,7 +48,7 @@ export class LoginDto {
 
 export class ForgotPasswordDto {
   @ApiProperty({ example: 'musteri@demo.com' })
-  @IsEmail({}, { message: 'Gecerli bir e-posta adresi girin.' })
+  @IsEmail({}, { message: 'Geçerli bir e-posta adresi girin.' })
   email!: string;
 }
 
@@ -60,7 +60,7 @@ export class ResetPasswordDto {
 
   @ApiProperty({ minLength: 8 })
   @IsString()
-  @MinLength(8, { message: 'Sifre en az 8 karakter olmali.' })
+  @MinLength(8, { message: 'Şifre en az 8 karakter olmalı.' })
   @MaxLength(128)
   password!: string;
 }

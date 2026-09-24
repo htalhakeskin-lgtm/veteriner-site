@@ -21,9 +21,9 @@ export class AppointmentsController {
 
   @Public()
   @Post('appointments')
-  // Misafir de randevu alabiliyor; sahte kayit yagmurunu sinirla.
+  // Misafir de randevu alabiliyor; sahte kayıt yağmurunu sınırla.
   @Throttle({ default: { limit: 10, ttl: 3_600_000 } })
-  @ApiOperation({ summary: 'Randevu olustur (misafir de alabilir)' })
+  @ApiOperation({ summary: 'Randevu oluştur (misafir de alabilir)' })
   create(@Body() dto: CreateAppointmentDto, @CurrentUser() user?: AuthUser) {
     return this.appointments.create(dto, user?.id);
   }
@@ -37,7 +37,7 @@ export class AppointmentsController {
   }
 
   @Get('appointments/me')
-  @ApiOperation({ summary: 'Randevularim' })
+  @ApiOperation({ summary: 'Randevularım' })
   findMine(
     @CurrentUser() user: AuthUser,
     @Query('status') status?: string,
@@ -93,7 +93,7 @@ export class AppointmentsController {
 
   @Patch('admin/appointments/:id/status')
   @Roles('ADMIN', 'STAFF')
-  @ApiOperation({ summary: 'Randevu durumunu degistir' })
+  @ApiOperation({ summary: 'Randevu durumunu değiştir' })
   setStatus(
     @Param('id') id: string,
     @Body() body: { status: AppointmentStatus; reason?: string },

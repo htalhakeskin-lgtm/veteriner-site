@@ -12,21 +12,21 @@ export class SettingsController {
 
   @Public()
   @Get('settings')
-  @ApiOperation({ summary: 'Site ayarlari (herkese acik alt kume)' })
+  @ApiOperation({ summary: 'Site ayarları (herkese açık alt küme)' })
   getPublic() {
     return this.settings.getPublic();
   }
 
   @Get('admin/settings')
   @Roles('ADMIN')
-  @ApiOperation({ summary: 'Tum site ayarlari' })
+  @ApiOperation({ summary: 'Tüm site ayarları' })
   getAll() {
     return this.settings.getAll();
   }
 
   @Patch('admin/settings')
   @Roles('ADMIN')
-  @ApiOperation({ summary: 'Site ayarlarini guncelle' })
+  @ApiOperation({ summary: 'Site ayarlarını güncelle' })
   update(@Body() body: Record<string, unknown>) {
     return this.settings.update(body);
   }

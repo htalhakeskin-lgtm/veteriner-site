@@ -30,7 +30,7 @@ export function meta({ data }: Route.MetaArgs) {
 }
 
 export async function loader() {
-  // Paralel cekiyoruz: sirayla beklemek ilk boyamayi gereksiz geciktirir.
+  // Paralel çekiyoruz: sırayla beklemek ilk boyamayi gereksiz geciktirir.
   const [settings, services, staff, testimonials, rating] = await Promise.all([
     serverFetch<SiteSettings>('/settings').catch(() => null),
     serverFetch<Service[]>('/services?featured=true').catch(() => []),
@@ -170,7 +170,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </div>
       </section>
 
-      {/* ── GÜVEN ŞERİDİ ── */}
+      {/* ── GİVEN ŞERİDİ ── */}
       <div className="border-y border-line bg-surface-2 py-8">
         <div
           className="wrap flex flex-wrap items-center justify-center gap-x-12 gap-y-6 text-[0.8125rem] tracking-[0.08em] text-ink-faint uppercase"

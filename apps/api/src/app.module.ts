@@ -34,13 +34,13 @@ import { PrismaModule } from './prisma/prisma.module';
       validate: validateEnv,
     }),
 
-    // Genel hiz siniri. Giris, kayit ve sifre sifirlama gibi uclar
-    // kendi daha siki limitlerini @Throttle ile ayrica belirtir.
+    // Genel hız sınırı. Giriş, kayıt ve şifre sıfırlama gibi uçlar
+    // kendi daha sıkı limitlerini @Throttle ile ayrıca belirtir.
     //
-    // skipIf: e2e testlerinde kapatilabilsin diye. Test suiti arka arkaya
-    // onlarca giris yapiyor; limit acik kalsaydi olculen sey asil davranis
-    // degil 429 olurdu. Hiz sinirinin kendisi ayri bir testte, acik haliyle
-    // dogrulanir (throttle.e2e-spec.ts).
+    // skipIf: e2e testlerinde kapatılabilsin diye. Test suiti arka arkaya
+    // onlarca giriş yapıyor; limit açık kalsaydı ölçülen şey asıl davranış
+    // değil 429 olurdu. Hız sınırının kendisi ayrı bir testte, açık haliyle
+    // doğrulanır (throttle.e2e-spec.ts).
     ThrottlerModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
@@ -49,7 +49,7 @@ import { PrismaModule } from './prisma/prisma.module';
       }),
     }),
 
-    // Guard'in token dogrulayabilmesi icin global JwtModule.
+    // Guard'in token doğrulayabilmesi için global JwtModule.
     JwtModule.register({ global: true }),
 
     PrismaModule,
@@ -72,12 +72,12 @@ import { PrismaModule } from './prisma/prisma.module';
     JobsModule,
   ],
   providers: [
-    // SIRA ONEMLI — guard'lar yazildiklari sirayla calisir:
-    //  1) ThrottlerGuard : pahali islerden once hiz sinirini uygula
+    // SIRA ÖNEMLİ — guard'lar yazıldıkları sırayla çalışır:
+    //  1) ThrottlerGuard : pahalı işlerden önce hız sınırını uygula
     //  2) JwtAuthGuard   : req.user'i doldur
-    //  3) RolesGuard     : req.user'a bakarak rol kontrolu yap
-    // RolesGuard once gelseydi req.user hep bos olur ve tum rol
-    // kontrolleri sessizce 403 dondururdu.
+    //  3) RolesGuard     : req.user'a bakarak rol kontrolü yap
+    // RolesGuard önce gelseydi req.user hep boş olur ve tüm rol
+    // kontrolleri sessizce 403 döndürürdü.
     { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },

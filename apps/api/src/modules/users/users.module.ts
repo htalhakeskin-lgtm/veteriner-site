@@ -5,7 +5,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
 @Module({
-  imports: [AuthModule], // TokenService: sifre degisiminde oturumlari iptal icin
+  imports: [AuthModule], // TokenService: şifre değişiminde oturumları iptal için
   controllers: [UsersController],
   providers: [UsersService],
 })

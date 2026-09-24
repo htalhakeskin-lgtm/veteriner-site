@@ -4,7 +4,7 @@ import { speciesLabel } from '~/lib/format';
 import type { Testimonial } from '~/lib/types';
 import { Icon, cx } from '~/components/ui';
 
-/** Musteri yorumlari karuseli. 6 saniyede bir yumusakca gecer. */
+/** Müşteri yorumları karuseli. 6 saniyede bir yumuşakça geçer. */
 export function Quotes({ items }: { items: Testimonial[] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -36,7 +36,7 @@ export function Quotes({ items }: { items: Testimonial[] }) {
       </h2>
 
       {/*
-        aria-live: karusel kendiliginden degistigi icin ekran okuyucu
+        aria-live: karusel kendiliginden değiştiği için ekran okuyucu
         yeni yorumu duyurabilsin.
       */}
       <div

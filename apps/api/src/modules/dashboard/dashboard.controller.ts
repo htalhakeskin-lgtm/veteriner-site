@@ -12,25 +12,25 @@ export class DashboardController {
   constructor(private readonly dashboard: DashboardService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Ozet sayilar' })
+  @ApiOperation({ summary: 'Özet sayılar' })
   overview() {
     return this.dashboard.overview();
   }
 
   @Get('today')
-  @ApiOperation({ summary: 'Bugunun randevu listesi' })
+  @ApiOperation({ summary: 'Bugünün randevu listesi' })
   today() {
     return this.dashboard.todaySchedule();
   }
 
   @Get('trend')
-  @ApiOperation({ summary: 'Gunluk randevu grafigi' })
+  @ApiOperation({ summary: 'Günlük randevu grafiği' })
   trend(@Query('days') days?: string) {
     return this.dashboard.appointmentTrend(days ? Number(days) : undefined);
   }
 
   @Get('top-services')
-  @ApiOperation({ summary: 'En cok tercih edilen hizmetler' })
+  @ApiOperation({ summary: 'En çok tercih edilen hizmetler' })
   topServices(@Query('limit') limit?: string) {
     return this.dashboard.topServices(limit ? Number(limit) : undefined);
   }

@@ -91,7 +91,7 @@ export default function AdminBlog() {
     setError(null);
     setSuccess(null);
     try {
-      // Liste yaniti contentHtml icermiyor; duzenlemek icin tam kaydi cekiyoruz.
+      // Liste yanıtı contentHtml içermiyor; düzenlemek için tam kaydı çekiyoruz.
       const full = await api.get<AdminPost>(`/admin/blog/posts/${post.id}`);
       setEditing(full);
       setForm({
@@ -240,8 +240,8 @@ export default function AdminBlog() {
                   setForm((f) => ({
                     ...f,
                     title,
-                    // Yayindaki bir yazinin adresi degisirse eski baglantilar
-                    // kirilir; slug yalnizca yeni yazida otomatik uretilir.
+                    // Yayındaki bir yazının adresi değişirse eski bağlantılar
+                    // kırılır; slug yalnızca yeni yazıda otomatik üretilir.
                     slug: editing ? f.slug : slugify(title),
                   }));
                 }}

@@ -9,8 +9,8 @@ import {
 import type { Request, Response } from 'express';
 
 /**
- * Tum hatalari tek bir govde sekline indirger; boylece frontend'de
- * her uc icin ayri hata ayiklama mantigi yazmak gerekmez.
+ * Tüm hataları tek bir gövde şekline indirger; böylece frontend'de
+ * her uç için ayrı hata ayıklama mantığı yazmak gerekmez.
  *
  *   { statusCode, error, message, code, timestamp, path }
  */
@@ -24,16 +24,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const req = ctx.getRequest<Request>();
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    let message = 'Beklenmeyen bir hata olustu.';
+    let message = 'Beklenmeyen bir hata oluştu.';
     let error = 'Internal Server Error';
     let code: string | undefined;
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
-      // error alanini once durum kodundan turet. Nesne govdeli exception'larda
-      // (or. BadRequestException({message, code})) Nest bu alani doldurmuyor;
-      // varsayilanda birakilsaydi 400 yanitinda "Internal Server Error"
-      // yazar ve istemciyi yanlis yonlendirirdi.
+      // error alanını önce durum kodundan türet. Nesne gövdeli exception'larda
+      // (or. BadRequestException({message, code})) Nest bu alanı doldurmuyor;
+      // varsayılanda bırakılsaydı 400 yanıtında "Internal Server Error"
+      // yazar ve istemciyi yanlış yönlendirirdi.
       error = statusText(status);
       const body = exception.getResponse();
 
@@ -41,7 +41,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         message = body;
       } else if (body && typeof body === 'object') {
         const b = body as Record<string, unknown>;
-        // Validation hatalarinda message bir dizi olabilir
+        // Validation hatalarında message bir dizi olabilir
         message = Array.isArray(b.message)
           ? (b.message as string[]).join(', ')
           : ((b.message as string) ?? message);
@@ -49,7 +49,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         code = b.code as string | undefined;
       }
     } else if (exception instanceof Error) {
-      // Beklenmeyen hata: istemciye ic detay sizdirmiyoruz, loga tam hali gidiyor.
+      // Beklenmeyen hata: istemciye iç detay sızdırmıyoruz, loga tam hali gidiyor.
       this.logger.error(exception.message, exception.stack);
     }
 
@@ -68,7 +68,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
   }
 }
 
-/** HTTP durum kodunun standart metin karsiligi. */
+/** HTTP durum kodunun standart metin karşılığı. */
 function statusText(status: number): string {
   const key = Object.keys(HttpStatus).find(
     (k) => HttpStatus[k as keyof typeof HttpStatus] === status,

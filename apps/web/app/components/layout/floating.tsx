@@ -13,7 +13,7 @@ const THEMES = [
   { id: 'gece', label: 'Gece', color: '#7FB3A5' },
 ];
 
-/** Hizli iletisim butonlari — her sayfada sag altta. */
+/** Hızlı iletişim butonları — her sayfada sağ altta. */
 export function FloatingActions({ settings }: { settings: SiteSettings | null }) {
   const [open, setOpen] = useState(false);
   const contact = settings?.contact;
@@ -90,11 +90,11 @@ function FabChild({
 }
 
 /**
- * Demo tema degistirici.
+ * Demo tema değiştirici.
  *
- * Gercek sitede bu panel GORUNMEZ: tema admin panelinden secilir ve
- * veritabanina kaydedilir. Burasi yalnizca kliniklere sunum yaparken
- * "renginizi degistirebiliriz" demek icin.
+ * Gerçek sitede bu panel GÖRÜNMEZ: tema admin panelinden seçilir ve
+ * veritabanına kaydedilir. Burası yalnızca kliniklere sunum yaparken
+ * "renginizi degistirebiliriz" demek için.
  */
 export function ThemeSwitcher({ enabled = true }: { enabled?: boolean }) {
   const [open, setOpen] = useState(false);
@@ -115,7 +115,7 @@ export function ThemeSwitcher({ enabled = true }: { enabled?: boolean }) {
     try {
       localStorage.setItem('vet_theme', id);
     } catch {
-      /* gizli sekmede localStorage yazilamaz; tema yine de uygulanir */
+      /* gizli sekmede localStorage yazılamaz; tema yine de uygulanır */
     }
   }
 

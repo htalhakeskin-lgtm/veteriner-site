@@ -134,7 +134,7 @@ export default function AdminServices() {
   }
 
   async function deactivate(s: AdminService) {
-    // Silme degil pasife alma: gecmis randevular bu hizmete bagli.
+    // Silme değil pasife alma: geçmiş randevular bu hizmete bağlı.
     if (!confirm(`"${s.title}" hizmetini pasife almak istediğinize emin misiniz?`))
       return;
     try {
@@ -250,8 +250,8 @@ export default function AdminServices() {
                     setForm((f) => ({
                       ...f,
                       title,
-                      // Yeni kayitta slug'i basliktan turet; duzenlemede
-                      // dokunma, degistirmek eski baglantilari kirar.
+                      // Yeni kayıtta slug'i başlıktan türet; düzenlemede
+                      // dokunma, değiştirmek eski bağlantıları kırar.
                       slug: editing ? f.slug : slugify(title),
                     }));
                   }}
@@ -378,7 +378,7 @@ export default function AdminServices() {
   );
 }
 
-/** Turkce karakterleri URL'e uygun hale getirir. */
+/** Türkçe karakterleri URL'e uygun hale getirir. */
 function slugify(s: string): string {
   return s
     .toLowerCase()

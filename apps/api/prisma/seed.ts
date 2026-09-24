@@ -1,14 +1,14 @@
 /**
- * Demo verisi yukleyici.
+ * Demo verisi yükleyici.
  *
  *   npm run db:seed    -> mevcut veriyi silip yeniden doldurur
- *   npm run db:reset   -> migration'lari sifirlayip seed calistirir
+ *   npm run db:reset   -> migration'ları sıfırlayıp seed çalıştırır
  *
- * Amac: klinige demo yapilirken sistem BOS gorunmesin. Admin paneli
- * dolu bir takvim, gercekci bir musteri listesi ve gecmis kayitlar gostersin.
+ * Amaç: kliniğe demo yapılırken sistem BOŞ görünmesin. Admin paneli
+ * dolu bir takvim, gerçekçi bir müşteri listesi ve geçmiş kayıtlar göstersin.
  *
- * Veri deterministik uretilir (sabit tohumlu PRNG): her calistirmada ayni
- * sonuc cikar, boylece "gecen sefer baska turluydu" sorunu yasanmaz.
+ * Veri deterministik üretilir (sabit tohumlu PRNG): her çalıştırmada aynı
+ * sonuç çıkar, böylece "geçen sefer başka türlüydü" sorunu yaşanmaz.
  */
 
 import { hash } from '@node-rs/argon2';
@@ -23,7 +23,7 @@ import {
   type User,
 } from '@prisma/client';
 
-/** Programi ve verdigi hizmetleri birlikte tasiyan personel kaydi. */
+/** Programı ve verdiği hizmetleri birlikte taşıyan personel kaydı. */
 type StaffWithRelations = Prisma.StaffMemberGetPayload<{
   include: { schedules: true; services: true };
 }>;
@@ -45,10 +45,10 @@ import {
 const prisma = new PrismaClient();
 
 // ─────────────────────────────────────────────
-//  Yardimcilar
+//  Yardımcılar
 // ─────────────────────────────────────────────
 
-/** Sabit tohumlu PRNG (mulberry32) — tekrarlanabilir demo verisi icin. */
+/** Sabit tohumlu PRNG (mulberry32) — tekrarlanabilir demo verisi için. */
 function makeRandom(seed: number) {
   let t = seed;
   return () => {
@@ -64,7 +64,7 @@ const pick = <T>(arr: readonly T[]): T => arr[Math.floor(rnd() * arr.length)]!;
 const int = (min: number, max: number): number =>
   Math.floor(rnd() * (max - min + 1)) + min;
 
-/** Bugunun yerel gece yarisi — tum goreli tarihler buna gore uretilir. */
+/** Bugünün yerel gece yarısı — tüm göreli tarihler buna göre üretilir. */
 function today(): Date {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
@@ -119,16 +119,16 @@ function paragraphsToHtml(paras: readonly string[]): string {
 }
 
 // ─────────────────────────────────────────────
-//  Varsayilan site ayarlari (config.js'in karsiligi)
+//  Varsayılan site ayarları (config.js'in karşılığı)
 // ─────────────────────────────────────────────
 
 const SITE_SETTING: Prisma.SiteSettingCreateInput = {
   id: 'singleton',
   clinic: {
-    name: 'Klinik Adi',
-    slogan: 'Dostlariniz Icin En Iyi Bakim',
+    name: 'Klinik Adı',
+    slogan: 'Dostlarınız İçin En İyi Bakım',
     description:
-      'Modern veteriner hizmetleri ile evcil dostlariniza en iyi bakimi sunuyoruz.',
+      'Modern veteriner hizmetleri ile evcil dostlarınıza en iyi bakımı sunuyoruz.',
     foundedYear: 2010,
     totalPatients: 27000,
     experienceYears: 15,
@@ -142,9 +142,9 @@ const SITE_SETTING: Prisma.SiteSettingCreateInput = {
     whatsappMessage: 'Merhaba, randevu almak istiyorum.',
     email: 'info@klinikadi.com',
     address: {
-      full: 'Ornek Mah. Veteriner Cad. No:1 Merkez/Istanbul',
+      full: 'Örnek Mah. Veteriner Cad. No:1 Merkez/İstanbul',
       district: 'Merkez',
-      city: 'Istanbul',
+      city: 'İstanbul',
       lat: 41.0082,
       lng: 28.9784,
     },
@@ -173,12 +173,12 @@ const SITE_SETTING: Prisma.SiteSettingCreateInput = {
     cancelBeforeHours: 24,
     autoConfirm: false,
     maxDailySlots: 20,
-    blockedWeekdays: [0], // Pazar kapali
+    blockedWeekdays: [0], // Pazar kapalı
   },
   seo: {
-    metaTitle: 'Klinik Adi Veteriner Klinigi',
+    metaTitle: 'Klinik Adı Veteriner Kliniği',
     metaDescription:
-      'Modern veteriner hizmetleri, online randevu ve 7/24 acil mudahale.',
+      'Modern veteriner hizmetleri, online randevu ve 7/24 acil müdahale.',
     ogImageUrl: null,
     googleMapsEmbedUrl: null,
   },
@@ -192,11 +192,11 @@ const SITE_SETTING: Prisma.SiteSettingCreateInput = {
 };
 
 // ─────────────────────────────────────────────
-//  Ana akis
+//  Ana akış
 // ─────────────────────────────────────────────
 
 async function clearAll(): Promise<void> {
-  // FK sirasina dikkat: bagimli tablolar once.
+  // FK sırasına dikkat: bağımlı tablolar önce.
   await prisma.$transaction([
     prisma.auditLog.deleteMany(),
     prisma.notification.deleteMany(),
@@ -223,11 +223,11 @@ async function clearAll(): Promise<void> {
 
 async function main(): Promise<void> {
   const t0 = Date.now();
-  console.log('Demo verisi yukleniyor...\n');
+  console.log('Demo verisi yükleniyor...\n');
 
   await clearAll();
 
-  // ── Site ayarlari ──
+  // ── Site ayarları ──
   await prisma.siteSetting.create({ data: SITE_SETTING });
 
   // ── Hizmetler ──
@@ -252,18 +252,18 @@ async function main(): Promise<void> {
   const serviceBySlug = new Map(services.map((s) => [s.slug, s]));
   console.log(`  hizmet            : ${services.length}`);
 
-  // ── Sifreler ──
-  // argon2id: plan geregi bcrypt degil. Seed'de 4 hash uretiliyor,
-  // hepsi ayni parametrelerle.
+  // ── Şifreler ──
+  // argon2id: plan gereği bcrypt değil. Seed'de 4 hash üretiliyor,
+  // hepsi aynı parametrelerle.
   const argonOpts = { algorithm: 2 as const }; // 2 = argon2id
   const adminPass = await hash('admin123', argonOpts);
   const customerPass = await hash('123456', argonOpts);
 
-  // ── Personel + kullanici hesaplari ──
+  // ── Personel + kullanıcı hesapları ──
   const staffMembers: StaffWithRelations[] = [];
   for (let i = 0; i < STAFF.length; i++) {
     const s = STAFF[i]!;
-    // Bas hekim ayni zamanda admin; digerleri STAFF rolunde.
+    // Baş hekim aynı zamanda admin; diğerleri STAFF rolünde.
     const isAdmin = i === 0;
     const user = await prisma.user.create({
       data: {
@@ -301,11 +301,11 @@ async function main(): Promise<void> {
   }
   console.log(`  personel          : ${staffMembers.length}`);
 
-  // ── Musteriler + hayvanlar ──
+  // ── Müşteriler + hayvanlar ──
   const customers: User[] = [];
   for (let i = 0; i < CUSTOMER_NAMES.length; i++) {
     const name = CUSTOMER_NAMES[i]!;
-    // Ilk musteri sabit demo hesabi
+    // İlk müşteri sabit demo hesabı
     const email = i === 0 ? 'musteri@demo.com' : `${slugify(name)}@ornek.com`;
     const user = await prisma.user.create({
       data: {
@@ -319,7 +319,7 @@ async function main(): Promise<void> {
     });
     customers.push(user);
   }
-  console.log(`  musteri           : ${customers.length}`);
+  console.log(`  müşteri           : ${customers.length}`);
 
   const pets: Pet[] = [];
   for (const owner of customers) {
@@ -349,7 +349,7 @@ async function main(): Promise<void> {
   }
   console.log(`  hasta (hayvan)    : ${pets.length}`);
 
-  // ── Saglik kayitlari ──
+  // ── Sağlık kayıtları ──
   let recordCount = 0;
   for (const pet of pets) {
     const n = int(2, 5);
@@ -376,19 +376,19 @@ async function main(): Promise<void> {
       recordCount++;
     }
   }
-  console.log(`  saglik kaydi      : ${recordCount}`);
+  console.log(`  sağlık kaydı      : ${recordCount}`);
 
   // ── Randevular ──
-  // Cifte rezervasyon kisitini seed'in kendisi de ihlal edemez:
-  // dolu slotlari takip edip atliyoruz.
-  // Hekim basina dolu zaman araliklari. Tek bir "slot anahtari" yetmez:
-  // 90 dakikalik bir cerrahi ardindan gelen 09:30 muayenesini de engellemeli.
+  // Çifte rezervasyon kısıtını seed'in kendisi de ihlal edemez:
+  // dolu slotları takip edip atlıyoruz.
+  // Hekim başına dolu zaman aralıkları. Tek bir "slot anahtarı" yetmez:
+  // 90 dakikalık bir cerrahi ardından gelen 09:30 muayenesini de engellemeli.
   const busy = new Map<string, Array<[number, number]>>();
 
   function isBusy(staffId: string, start: number, end: number): boolean {
     const list = busy.get(staffId);
     if (!list) return false;
-    // Yari acik aralik: 09:00-09:30 ile 09:30-10:00 cakismaz.
+    // Yarı açık aralık: 09:00-09:30 ile 09:30-10:00 çakışmaz.
     return list.some(([bs, be]) => start < be && bs < end);
   }
   const appointments: Prisma.AppointmentCreateManyInput[] = [];
@@ -417,10 +417,10 @@ async function main(): Promise<void> {
     const startAt = at(day, fromMinutes(startMin));
     const endAt = new Date(startAt.getTime() + service.durationMinutes * 60_000);
 
-    // Slotu isgal eden durumlar. COMPLETED de sayilir: gecmiste de olsa
-    // hekim o saatte doluydu — aksi halde seed "ayni anda iki yerde olan
-    // hekim" uretir ve takvim demoda ilk bakista sahte gorunur.
-    // CANCELLED ve NO_SHOW slotu serbest birakir.
+    // Slotu işgal eden durumlar. COMPLETED de sayılır: geçmişte de olsa
+    // hekim o saatte doluydu — aksi halde seed "aynı anda iki yerde olan
+    // hekim" üretir ve takvim demoda ilk bakışta sahte görünür.
+    // CANCELLED ve NO_SHOW slotu serbest bırakır.
     const blocking =
       status === AppointmentStatus.PENDING ||
       status === AppointmentStatus.CONFIRMED ||
@@ -448,23 +448,23 @@ async function main(): Promise<void> {
       startAt,
       endAt,
       status,
-      notes: rnd() < 0.3 ? 'Yillik rutin kontrol' : null,
+      notes: rnd() < 0.3 ? 'Yıllık rutin kontrol' : null,
       cancelledAt:
         status === AppointmentStatus.CANCELLED
           ? addDays(startAt, -2)
           : null,
       cancelReason:
-        status === AppointmentStatus.CANCELLED ? 'Musteri iptal etti' : null,
+        status === AppointmentStatus.CANCELLED ? 'Müşteri iptal etti' : null,
       createdAt: addDays(startAt, -int(1, 20)),
     });
     return true;
   }
 
   /**
-   * tryBook cogu zaman bosa doner: secilen hekim o hizmeti vermiyor olabilir,
-   * o gun calismiyor olabilir veya slot dolu olabilir. Tek denemede biraksaydik
-   * takvim seyrek kalir, demo sirasinda klinik "bos" gorunurdu.
-   * Bu yuzden her randevu icin farkli hekim/slot ile birkac kez deniyoruz.
+   * tryBook çoğu zaman boşa döner: seçilen hekim o hizmeti vermiyor olabilir,
+   * o gün çalışmıyor olabilir veya slot dolu olabilir. Tek denemede bıraksaydık
+   * takvim seyrek kalır, demo sırasında klinik "boş" görünürdü.
+   * Bu yüzden her randevu için farklı hekim/slot ile birkaç kez deniyoruz.
    */
   function book(day: Date, status: AppointmentStatus, tries = 14): boolean {
     for (let t = 0; t < tries; t++) {
@@ -475,10 +475,10 @@ async function main(): Promise<void> {
 
   const base = today();
 
-  // Gecmis 90 gun: cogu tamamlanmis, bir kismi iptal/gelmedi
+  // Geçmiş 90 gün: çoğu tamamlanmış, bir kısmı iptal/gelmedi
   for (let d = 90; d >= 1; d--) {
     const day = addDays(base, -d);
-    if (day.getDay() === 0) continue; // Pazar kapali
+    if (day.getDay() === 0) continue; // Pazar kapalı
     for (let k = 0, n = int(1, 4); k < n; k++) {
       const roll = rnd();
       const status =
@@ -491,7 +491,7 @@ async function main(): Promise<void> {
     }
   }
 
-  // Bugun: karisik durum — dashboard canli gorunsun
+  // Bugün: karışık durum — dashboard canlı görünsün
   if (base.getDay() !== 0) {
     for (let k = 0; k < 9; k++) {
       const roll = rnd();
@@ -505,8 +505,8 @@ async function main(): Promise<void> {
     }
   }
 
-  // Gelecek 30 gun: onayli + onay bekleyen.
-  // Yakin gunler daha dolu, uzak gunler daha seyrek — gercek bir klinik boyle gorunur.
+  // Gelecek 30 gün: onaylı + onay bekleyen.
+  // Yakın günler daha dolu, uzak günler daha seyrek — gerçek bir klinik böyle görünür.
   for (let d = 1; d <= 30; d++) {
     const day = addDays(base, d);
     if (day.getDay() === 0) continue;
@@ -552,7 +552,7 @@ async function main(): Promise<void> {
       },
     });
   }
-  console.log(`  blog yazisi       : ${BLOG_POSTS.length}`);
+  console.log(`  blog yazısı       : ${BLOG_POSTS.length}`);
 
   // ── Yorumlar ──
   for (let i = 0; i < TESTIMONIALS.length; i++) {
@@ -570,14 +570,14 @@ async function main(): Promise<void> {
       },
     });
   }
-  console.log(`  musteri yorumu    : ${TESTIMONIALS.length}`);
+  console.log(`  müşteri yorumu    : ${TESTIMONIALS.length}`);
 
-  // ── E-bulten ──
+  // ── E-bülten ──
   await prisma.newsletterSubscriber.createMany({
     data: customers.slice(0, 12).map((c) => ({ email: c.email })),
   });
 
-  // ── Bildirimler (demo hesabi icin) ──
+  // ── Bildirimler (demo hesabı için) ──
   const demoUser = customers[0]!;
   const upcoming = await prisma.appointment.findFirst({
     where: { userId: demoUser.id, startAt: { gt: new Date() } },
@@ -589,35 +589,35 @@ async function main(): Promise<void> {
       data: {
         userId: demoUser.id,
         type: 'APPOINTMENT_REMINDER',
-        title: 'Randevu hatirlatmasi',
-        message: `${upcoming.pet?.name ?? 'Dostunuz'} icin randevunuz yaklasiyor.`,
+        title: 'Randevu hatırlatması',
+        message: `${upcoming.pet?.name ?? 'Dostunuz'} için randevunuz yaklaşıyor.`,
         channel: 'DATABASE',
       },
     });
   }
 
-  // ── Resmi tatiller ──
+  // ── Resmî tatiller ──
   const year = base.getFullYear();
   await prisma.clinicHoliday.createMany({
     data: [
-      { date: new Date(`${year}-01-01`), label: 'Yilbasi' },
-      { date: new Date(`${year}-04-23`), label: 'Ulusal Egemenlik Bayrami' },
-      { date: new Date(`${year}-05-19`), label: 'Genclik ve Spor Bayrami' },
-      { date: new Date(`${year}-08-30`), label: 'Zafer Bayrami' },
-      { date: new Date(`${year}-10-29`), label: 'Cumhuriyet Bayrami' },
+      { date: new Date(`${year}-01-01`), label: 'Yılbaşı' },
+      { date: new Date(`${year}-04-23`), label: 'Ulusal Egemenlik Bayramı' },
+      { date: new Date(`${year}-05-19`), label: 'Gençlik ve Spor Bayramı' },
+      { date: new Date(`${year}-08-30`), label: 'Zafer Bayramı' },
+      { date: new Date(`${year}-10-29`), label: 'Cumhuriyet Bayramı' },
     ],
     skipDuplicates: true,
   });
 
-  console.log(`\nTamamlandi (${((Date.now() - t0) / 1000).toFixed(1)} sn)`);
-  console.log('\nDemo girisleri:');
+  console.log(`\nTamamlandı (${((Date.now() - t0) / 1000).toFixed(1)} sn)`);
+  console.log('\nDemo girişleri:');
   console.log('  admin    : admin@demo.com    / admin123');
-  console.log('  musteri  : musteri@demo.com  / 123456');
+  console.log('  müşteri  : musteri@demo.com  / 123456');
 }
 
 main()
   .catch((e) => {
-    console.error('\nSeed basarisiz:', e);
+    console.error('\nSeed başarısız:', e);
     process.exit(1);
   })
   .finally(() => void prisma.$disconnect());

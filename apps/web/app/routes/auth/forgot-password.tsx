@@ -38,9 +38,9 @@ export default function ForgotPassword() {
         <IconFrame name="mail" size={56} className="mx-auto" />
         <h1 className="mt-6 text-2xl">Bağlantı gönderildi</h1>
         {/*
-          Kullanicinin var olup olmadigi bilerek sizdirilmiyor:
-          "boyle bir hesap yok" demek, hangi e-postalarin kayitli
-          oldugunu ogrenmeye yarardi.
+          Kullanıcının var olup olmadığı bilerek sızdırılmıyor:
+          "böyle bir hesap yok" demek, hangi e-postaların kayıtlı
+          olduğunu öğrenmeye yarardi.
         */}
         <p className="mt-3 text-sm leading-relaxed text-ink-muted">
           Eğer bu e-posta adresiyle bir hesap varsa, şifre sıfırlama bağlantısı

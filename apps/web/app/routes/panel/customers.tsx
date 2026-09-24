@@ -47,7 +47,7 @@ export default function AdminCustomers() {
   }, [q, page]);
 
   useEffect(() => {
-    // Arama yazarken her tusa basista istek atmamak icin kisa bekleme.
+    // Arama yazarken her tusa basista istek atmamak için kısa bekleme.
     const timer = setTimeout(() => void load(), 300);
     return () => clearTimeout(timer);
   }, [load]);
@@ -65,7 +65,7 @@ export default function AdminCustomers() {
           value={q}
           onChange={(e) => {
             setQ(e.target.value);
-            setPage(1); // Yeni aramada 1. sayfaya don
+            setPage(1); // Yeni aramada 1. sayfaya dön
           }}
         />
       </div>
@@ -84,7 +84,7 @@ export default function AdminCustomers() {
       ) : (
         <>
           {/* Masaustunde tablo, mobilde kart: dar ekranda tablo yatay
-              kaydirma gerektirir ve okunmaz hale gelir. */}
+              kaydırma gerektirir ve okunmaz hale gelir. */}
           <div className="hidden overflow-hidden rounded-lg border border-line md:block">
             <table className="w-full text-sm">
               <thead className="bg-surface-2 text-left">

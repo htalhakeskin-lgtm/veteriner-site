@@ -11,7 +11,7 @@ import { PrismaService } from '../src/prisma/prisma.service';
 
 const ARGON = { algorithm: 2 as const };
 
-/** Yerel gun anahtari — toISOString() UTC'ye cevirip gunu kaydirir. */
+/** Yerel gün anahtarı — toISOString() UTC'ye çevirip günü kaydırır. */
 const dayKey = (d: Date) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
@@ -55,7 +55,7 @@ describe('Randevular (e2e)', () => {
     const user = await prisma.user.create({
       data: {
         email,
-        fullName: 'E2E Randevu Musterisi',
+        fullName: 'E2E Randevu Müşterisi',
         phone: '0532 777 88 99',
         passwordHash: await hash(PASSWORD, ARGON),
         role: 'CUSTOMER',
@@ -68,7 +68,7 @@ describe('Randevular (e2e)', () => {
       .send({ email, password: PASSWORD });
     token = login.body.accessToken;
 
-    // Test veritabani bos olabilir; gerekli kayitlari kendimiz kuruyoruz.
+    // Test veritabanı boş olabilir; gerekli kayıtları kendimiz kuruyoruz.
     const service = await prisma.service.upsert({
       where: { slug: `e2e-muayene-${stamp}` },
       create: {
@@ -82,7 +82,7 @@ describe('Randevular (e2e)', () => {
     });
     serviceId = service.id;
 
-    // Pazartesi-Cumartesi calisan tek hekim.
+    // Pazartesi-Cumartesi çalışan tek hekim.
     const staff = await prisma.staffMember.create({
       data: {
         slug: `e2e-hekim-${stamp}`,
@@ -99,7 +99,7 @@ describe('Randevular (e2e)', () => {
       },
     });
 
-    // Ayarlar satiri yoksa olustur (musaitlik motoru buna bagimli).
+    // Ayarlar satırı yoksa oluştur (müsaitlik motoru buna bağımlı).
     await prisma.siteSetting.upsert({
       where: { id: 'singleton' },
       create: {
@@ -145,19 +145,19 @@ describe('Randevular (e2e)', () => {
     return slots[0];
   }
 
-  describe('Musaitlik', () => {
-    it('hizmet suresine gore slot uretir', async () => {
+  describe('Müsaitlik', () => {
+    it('hizmet süresine göre slot üretir', async () => {
       const res = await request(http)
         .get(`/api/v1/availability?serviceId=${serviceId}&from=${day}&to=${day}`)
         .expect(200);
 
       expect(res.body.durationMinutes).toBe(30);
       expect(res.body.days[0].isOpen).toBe(true);
-      // 09:00-17:00, 30 dakikalik adim -> 16 slot
+      // 09:00-17:00, 30 dakikalık adım -> 16 slot
       expect(res.body.days[0].slots).toHaveLength(16);
     });
 
-    it('Pazar gunu kapali doner', async () => {
+    it('Pazar günü kapalı döner', async () => {
       const sunday = new Date();
       sunday.setDate(sunday.getDate() + ((7 - sunday.getDay()) % 7 || 7));
       const res = await request(http)
@@ -170,7 +170,7 @@ describe('Randevular (e2e)', () => {
       expect(res.body.days[0].reason).toBe('WEEKLY_CLOSED');
     });
 
-    it('randevu penceresi disini aciklamayla reddeder', async () => {
+    it('randevu penceresi disini açıklamayla reddeder', async () => {
       const far = new Date();
       far.setDate(far.getDate() + 200);
       const res = await request(http)
@@ -179,16 +179,16 @@ describe('Randevular (e2e)', () => {
         )
         .expect(400);
 
-      // Sessizce bos liste donmek "bozuk mu, dolu mu?" belirsizligi yaratiyordu.
-      expect(res.body.message).toMatch(/gun sonrasi icin randevu/i);
+      // Sessizce boş liste dönmek "bozuk mu, dolu mu?" belirsizliği yaratıyordu.
+      expect(res.body.message).toMatch(/gün sonrası için randevu/i);
     });
   });
 
-  describe('Randevu olusturma', () => {
-    it('GIRIS YAPMIS kullaniciyi misafir saymaz', async () => {
-      // Regresyon: /appointments @Public() oldugu icin guard token'a hic
-      // bakmiyordu. Uye randevusu misafir randevusu olarak kaydediliyor,
-      // "Randevularim"da gorunmuyor ve bosuna telefon isteniyordu.
+  describe('Randevu oluşturma', () => {
+    it('GİRİŞ YAPMIŞ kullanıcıyı misafir saymaz', async () => {
+      // Regresyon: /appointments @Public() olduğu için guard token'a hiç
+      // bakmiyordu. Üye randevusu misafir randevusu olarak kaydediliyor,
+      // "Randevularım"da görünmüyor ve boşuna telefon isteniyordu.
       const slot = await firstSlot();
       const res = await request(http)
         .post('/api/v1/appointments')
@@ -202,7 +202,7 @@ describe('Randevular (e2e)', () => {
       expect(res.body.status).toBe('PENDING');
     });
 
-    it('uye randevusu "Randevularim" listesinde cikar', async () => {
+    it('üye randevusu "Randevularım" listesinde çıkar', async () => {
       const res = await request(http)
         .get('/api/v1/appointments/me?upcoming=true')
         .set('Authorization', `Bearer ${token}`)
@@ -211,7 +211,7 @@ describe('Randevular (e2e)', () => {
       expect(res.body.map((a: { id: string }) => a.id)).toContain(created[0]);
     });
 
-    it('bildirim uretir', async () => {
+    it('bildirim üretir', async () => {
       const notifications = await prisma.notification.findMany({
         where: { userId, type: 'APPOINTMENT_CREATED' },
       });
@@ -227,7 +227,7 @@ describe('Randevular (e2e)', () => {
     });
 
     it('dolu slota ikinci randevuyu reddeder', async () => {
-      // Tek hekim var; ilk test o saati aldi.
+      // Tek hekim var; ilk test o saati aldı.
       const taken = created[0]!;
       const appointment = await prisma.appointment.findUnique({
         where: { id: taken },
@@ -238,13 +238,13 @@ describe('Randevular (e2e)', () => {
         .send({
           serviceId,
           startAt: appointment!.startAt.toISOString(),
-          guestName: 'Ikinci Kisi',
+          guestName: 'Ikinci Kişi',
           guestPhone: '0533 111 22 33',
         })
         .expect(400); // SLOT_UNAVAILABLE
     });
 
-    it('alinan slot musaitlik listesinden duser', async () => {
+    it('alınan slot müsaitlik listesinden düşer', async () => {
       const appointment = await prisma.appointment.findUnique({
         where: { id: created[0]! },
       });
@@ -258,7 +258,7 @@ describe('Randevular (e2e)', () => {
   });
 
   describe('Randevu sorgulama', () => {
-    it('kod + dogru telefon ile bulunur', async () => {
+    it('kod + doğru telefon ile bulunur', async () => {
       const appointment = await prisma.appointment.findUnique({
         where: { id: created[0]! },
       });
@@ -270,11 +270,11 @@ describe('Randevular (e2e)', () => {
       expect(res.body.code).toBe(appointment!.code);
     });
 
-    it('yanlis telefonla bulunamaz', async () => {
+    it('yanlış telefonla bulunamaz', async () => {
       const appointment = await prisma.appointment.findUnique({
         where: { id: created[0]! },
       });
-      // Rastgele kod deneyerek baskasinin randevusu ogrenilememeli.
+      // Rastgele kod deneyerek başkasının randevusu ogrenilememeli.
       await request(http)
         .get(
           `/api/v1/appointments/lookup?code=${appointment!.code}&phone=0500 000 00 00`,
@@ -284,7 +284,7 @@ describe('Randevular (e2e)', () => {
   });
 
   describe('Iptal', () => {
-    it('musteri kendi randevusunu iptal eder', async () => {
+    it('müşteri kendi randevusunu iptal eder', async () => {
       const res = await request(http)
         .patch(`/api/v1/appointments/${created[0]}/cancel`)
         .set('Authorization', `Bearer ${token}`)
@@ -294,7 +294,7 @@ describe('Randevular (e2e)', () => {
       expect(res.body.status).toBe('CANCELLED');
     });
 
-    it('iptal edilen saat yeniden satilabilir', async () => {
+    it('iptal edilen saat yeniden satılabilir', async () => {
       const appointment = await prisma.appointment.findUnique({
         where: { id: created[0]! },
       });
@@ -306,7 +306,7 @@ describe('Randevular (e2e)', () => {
       expect(times).toContain(appointment!.startAt.toISOString());
     });
 
-    it('kapanmis randevu tekrar iptal edilemez', async () => {
+    it('kapanmış randevu tekrar iptal edilemez', async () => {
       await request(http)
         .patch(`/api/v1/appointments/${created[0]}/cancel`)
         .set('Authorization', `Bearer ${token}`)

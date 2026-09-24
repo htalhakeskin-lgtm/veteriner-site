@@ -13,7 +13,7 @@ import type { AuthUser } from './types';
 
 interface AuthState {
   user: AuthUser | null;
-  /** Ilk oturum kontrolu devam ediyor mu? Korumali sayfalar bunu bekler. */
+  /** Ilk oturum kontrolü devam ediyor mu? Korumalı sayfalar bunu bekler. */
   loading: boolean;
   login: (email: string, password: string) => Promise<AuthUser>;
   register: (input: RegisterInput) => Promise<AuthUser>;
@@ -31,9 +31,9 @@ export interface RegisterInput {
 const AuthContext = createContext<AuthState | null>(null);
 
 /**
- * Sunucunun giris aninda biraktigi okunabilir bayrak cerezi.
- * Sir icermez; yalnizca "yenilemeye deger bir oturum var mi?" sorusunu
- * yanitlar. Asil refresh token httpOnly olup JavaScript'e kapalidir.
+ * Sunucunun giriş anında bıraktığı okunabilir bayrak çerezi.
+ * Sır içermez; yalnızca "yenilemeye değer bir oturum var mi?" sorusunu
+ * yanıtlar. Asıl refresh token httpOnly olup JavaScript'e kapalıdır.
  */
 function hasSessionHint(): boolean {
   if (typeof document === 'undefined') return false;
@@ -49,14 +49,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   /**
    * Sayfa yenilendiginde access token kaybolur (bellekte tutuluyor).
    * httpOnly refresh cookie hala duruyorsa oturumu sessizce geri aliyoruz —
-   * kullanici her yenilemede yeniden giris yapmak zorunda kalmasin.
+   * kullanıcı her yenilemede yeniden giriş yapmak zorunda kalmasın.
    */
   useEffect(() => {
     let cancelled = false;
 
-    // Once ipucu cerezine bak. Misafir ziyaretcide korlemesine /auth/refresh
-    // cagirmak her sayfa acilisinda 401 uretiyor, konsolu kirletiyor ve
-    // bosuna bir istek atiyordu.
+    // Önce ipucu çerezine bak. Misafir ziyaretçide körlemesine /auth/refresh
+    // çağırmak her sayfa açılışında 401 üretiyor, konsolu kirletiyor ve
+    // boşuna bir istek atıyordu.
     if (!hasSessionHint()) {
       setLoading(false);
       return;
@@ -106,8 +106,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await api.post('/auth/logout');
     } finally {
-      // Sunucu hata verse bile istemci tarafinda oturumu kapat:
-      // kullanici "cikis yaptim" dedi, ekranda oyle gorunmeli.
+      // Sunucu hata verse bile istemci tarafında oturumu kapat:
+      // kullanıcı "çıkış yaptim" dedi, ekranda oyle görünmeli.
       setAccessToken(null);
       setUser(null);
     }
@@ -131,6 +131,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth(): AuthState {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth, AuthProvider icinde kullanilmali.');
+  if (!ctx) throw new Error('useAuth, AuthProvider içinde kullanilmali.');
   return ctx;
 }

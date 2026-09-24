@@ -174,7 +174,7 @@ export default function AdminPets() {
           )}
         </div>
 
-        {/* ── Secili hasta ── */}
+        {/* ── Seçili hasta ── */}
         <div>
           {!selected ? (
             <EmptyState
@@ -207,7 +207,7 @@ export default function AdminPets() {
                 )}
               </Card>
 
-              {/* Yeni kayit */}
+              {/* Yeni kayıt */}
               <Card className="mt-4 p-6">
                 <h3 className="font-sans text-base font-semibold">
                   Sağlık kaydı ekle
@@ -302,7 +302,7 @@ export default function AdminPets() {
                 </form>
               </Card>
 
-              {/* Gecmis */}
+              {/* Geçmiş */}
               <div className="mt-4">
                 <h3 className="mb-3 font-sans text-base font-semibold">
                   Sağlık geçmişi ({records.length})

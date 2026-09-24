@@ -18,7 +18,7 @@ export class NotificationsController {
   }
 
   @Get('unread-count')
-  @ApiOperation({ summary: 'Okunmamis bildirim sayisi' })
+  @ApiOperation({ summary: 'Okunmamış bildirim sayısı' })
   unreadCount(@CurrentUser() user: AuthUser) {
     return this.notifications.unreadCount(user.id);
   }

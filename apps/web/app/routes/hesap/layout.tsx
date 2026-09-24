@@ -12,10 +12,10 @@ const NAV: NavItem[] = [
 ];
 
 /**
- * Modul sabiti olmali: JSX icinde dizi literali yazilirsa her render'da
- * YENI bir referans uretilir, PanelShell'in useEffect bagimliligi surekli
- * degisir ve sonsuz render dongusune girer.
- * STAFF ve ADMIN de kendi hesap sayfasini gorebilsin.
+ * Modül sabiti olmalı: JSX içinde dizi literali yazılırsa her render'da
+ * YENI bir referans üretilir, PanelShell'in useEffect bağımlılığı sürekli
+ * değişir ve sonsuz render döngüsüne girer.
+ * STAFF ve ADMIN de kendi hesap sayfasını görebilsin.
  */
 const ALLOW: Role[] = ['CUSTOMER', 'STAFF', 'ADMIN'];
 

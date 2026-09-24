@@ -46,7 +46,7 @@ export default function AccountDashboard() {
       setPets(p);
       setAppointments(a);
 
-      // Yaklasan asilari her hayvan icin toplayip tek listede gosteriyoruz.
+      // Yaklaşan aşıları her hayvan için toplayip tek listede gösteriyoruz.
       const schedules = await Promise.all(
         p.map((pet) =>
           api
@@ -62,7 +62,7 @@ export default function AccountDashboard() {
         .filter((r) => {
           if (!r.nextDueAt) return false;
           const diff = new Date(r.nextDueAt).getTime() - Date.now();
-          // Gecikmis olanlar ve onumuzdeki 60 gun icindekiler
+          // Gecikmiş olanlar ve önümüzdeki 60 gün içindekiler
           return diff < 60 * 86_400_000;
         })
         .sort(
@@ -89,7 +89,7 @@ export default function AccountDashboard() {
         }
       />
 
-      {/* ── Ozet sayilar ── */}
+      {/* ── Özet sayılar ── */}
       <div className="grid gap-4 sm:grid-cols-3">
         <StatCard
           icon="calendar"
@@ -148,7 +148,7 @@ export default function AccountDashboard() {
         </div>
       </section>
 
-      {/* ── Yaklasan asilar ── */}
+      {/* ── Yaklaşan aşılar ── */}
       {due.length > 0 && (
         <section className="mt-10">
           <h2 className="font-sans text-lg font-semibold">Yaklaşan aşı ve kontroller</h2>
@@ -178,7 +178,7 @@ export default function AccountDashboard() {
         </section>
       )}
 
-      {/* ── Hayvanlarim ── */}
+      {/* ── Hayvanlarım ── */}
       <section className="mt-10">
         <div className="flex items-center justify-between gap-4">
           <h2 className="font-sans text-lg font-semibold">Dostlarınız</h2>

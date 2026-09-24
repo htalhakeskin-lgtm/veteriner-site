@@ -15,13 +15,13 @@ import type { AuthUser } from '../../common/types/auth.types';
 import type { ForgotPasswordDto, LoginDto, RegisterDto } from './dto/auth.dto';
 import { TokenService, type IssuedTokens } from './token.service';
 
-/** argon2id — plan geregi bcrypt degil. algorithm: 2 = Argon2id. */
+/** argon2id — plan gereği bcrypt değil. algorithm: 2 = Argon2id. */
 const ARGON_OPTS = { algorithm: 2 as const };
 
 /**
- * Var olmayan bir kullanici icin de argon2 dogrulamasi yapilabilsin diye
- * hazir tutulan sahte hash. Amac: "e-posta kayitli mi?" sorusunun cevabini
- * yanit suresinden sizdirmamak (kullanici sayimi saldirisi).
+ * Var olmayan bir kullanıcı için de argon2 doğrulaması yapılabilsin diye
+ * hazır tutulan sahte hash. Amaç: "e-posta kayıtlı mi?" sorusunun cevabını
+ * yanıt süresinden sızdırmamak (kullanıcı sayımı saldırısı).
  */
 const DUMMY_HASH_PROMISE = hash('nonexistent-user-placeholder', ARGON_OPTS);
 
@@ -58,7 +58,7 @@ export class AuthService {
     const existing = await this.prisma.user.findUnique({ where: { email } });
     if (existing) {
       throw new ConflictException(
-        'Bu e-posta adresiyle zaten bir hesap var. Giris yapmayi deneyin.',
+        'Bu e-posta adresiyle zaten bir hesap var. Giriş yapmayı deneyin.',
       );
     }
 
@@ -68,7 +68,7 @@ export class AuthService {
         fullName: dto.fullName.trim(),
         phone: dto.phone?.trim() || null,
         passwordHash: await hash(dto.password, ARGON_OPTS),
-        role: 'CUSTOMER', // Rol istemciden ASLA alinmaz
+        role: 'CUSTOMER', // Rol istemciden ASLA alınmaz
       },
     });
 
@@ -85,8 +85,8 @@ export class AuthService {
     const email = dto.email.toLowerCase().trim();
     const user = await this.prisma.user.findUnique({ where: { email } });
 
-    // Kullanici yoksa da argon2 calistiriyoruz: erken donseydik yanit
-    // suresi farki "bu e-posta kayitli degil" bilgisini ele verirdi.
+    // Kullanıcı yoksa da argon2 çalıştırıyoruz: erken dönseydik yanıt
+    // süresi farkı "bu e-posta kayıtlı değil" bilgisini ele verirdi.
     const passwordOk = user
       ? await verify(user.passwordHash, dto.password)
       : (await verify(await DUMMY_HASH_PROMISE, dto.password), false);
@@ -95,8 +95,8 @@ export class AuthService {
       user !== null && user.isActive && user.deletedAt === null && passwordOk;
 
     if (!usable) {
-      // Tek ve ayni mesaj: hangi sartin tutmadigi sizdirilmiyor.
-      throw new UnauthorizedException('E-posta veya sifre hatali.');
+      // Tek ve aynı mesaj: hangi şartın tutmadığı sızdırılmıyor.
+      throw new UnauthorizedException('E-posta veya şifre hatalı.');
     }
 
     await this.prisma.user.update({
@@ -124,15 +124,15 @@ export class AuthService {
       },
     });
     if (!user) {
-      // Token gecerli ama kullanici silinmis/pasife alinmis olabilir.
-      throw new UnauthorizedException('Hesap bulunamadi.');
+      // Token geçerli ama kullanıcı silinmiş/pasife alınmış olabilir.
+      throw new UnauthorizedException('Hesap bulunamadı.');
     }
     return user;
   }
 
   /**
-   * Sifirlama talebi. Kullanicinin var olup olmadigi ASLA sizdirilmaz:
-   * her durumda ayni yanit doner.
+   * Sıfırlama talebi. Kullanıcının var olup olmadığı ASLA sızdırılmaz:
+   * her durumda aynı yanıt döner.
    */
   async forgotPassword(dto: ForgotPasswordDto): Promise<{ message: string }> {
     const email = dto.email.toLowerCase().trim();
@@ -151,19 +151,19 @@ export class AuthService {
       });
 
       if (this.config.get<boolean>('DEMO_MODE')) {
-        // Demo modunda e-posta gonderilmez; baglanti loga yazilir ki
-        // akis uctan uca denenebilsin.
+        // Demo modunda e-posta gönderilmez; bağlantı loga yazılır ki
+        // akış uçtan uca denenebilsin.
         this.logger.warn(
-          `[DEMO] Sifre sifirlama baglantisi: ` +
+          `[DEMO] Şifre sıfırlama bağlantısı: ` +
             `${this.config.get('WEB_ORIGIN')}/sifre-sifirla?token=${raw}`,
         );
       }
-      // TODO(Faz 4): DEMO_MODE kapaliyken EmailChannel ile gonder.
+      // TODO(Faz 4): DEMO_MODE kapalıyken EmailChannel ile gönder.
     }
 
     return {
       message:
-        'Eger bu e-posta adresiyle bir hesap varsa, sifirlama baglantisi gonderildi.',
+        'Eğer bu e-posta adresiyle bir hesap varsa, sıfırlama bağlantısı gönderildi.',
     };
   }
 
@@ -182,7 +182,7 @@ export class AuthService {
       record.user.deletedAt !== null
     ) {
       throw new UnauthorizedException(
-        'Sifirlama baglantisi gecersiz veya suresi dolmus.',
+        'Sıfırlama bağlantısı geçersiz veya süresi dolmuş.',
       );
     }
 
@@ -197,13 +197,13 @@ export class AuthService {
       }),
     ]);
 
-    // Sifre degisti: eski oturumlarin hepsi kapansin.
-    // Hesap ele gecirildiyse saldirganin oturumu da boylece biter.
+    // Şifre değişti: eski oturumların hepsi kapansın.
+    // Hesap ele geçirildiyse saldırganın oturumu da böylece biter.
     await this.tokens.revokeAllForUser(record.userId);
   }
 }
 
-/** Sabit zamanli dize karsilastirmasi (ileride token karsilastirmalari icin). */
+/** Sabit zamanli dize karşılaştırması (ileride token karşılaştırmaları için). */
 export function safeEqual(a: string, b: string): boolean {
   const bufA = Buffer.from(a);
   const bufB = Buffer.from(b);

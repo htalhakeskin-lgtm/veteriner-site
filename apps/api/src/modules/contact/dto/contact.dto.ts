@@ -18,12 +18,12 @@ export class ContactMessageDto {
   name!: string;
 
   @ApiProperty()
-  @IsEmail({}, { message: 'Gecerli bir e-posta adresi girin.' })
+  @IsEmail({}, { message: 'Geçerli bir e-posta adresi girin.' })
   email!: string;
 
   @ApiProperty({ required: false })
   @IsOptional()
-  @Matches(PHONE_REGEX, { message: 'Gecerli bir cep telefonu girin.' })
+  @Matches(PHONE_REGEX, { message: 'Geçerli bir cep telefonu girin.' })
   phone?: string;
 
   @ApiProperty()
@@ -34,15 +34,15 @@ export class ContactMessageDto {
 
   @ApiProperty()
   @IsString()
-  @MinLength(10, { message: 'Mesaj en az 10 karakter olmali.' })
+  @MinLength(10, { message: 'Mesaj en az 10 karakter olmalı.' })
   @MaxLength(2000)
   message!: string;
 
   /**
-   * Honeypot. Formda gizlidir; gercek kullanici gormez ve doldurmaz.
-   * Botlar tum alanlari doldurdugu icin dolu gelmesi spam isaretidir.
+   * Honeypot. Formda gizlidir; gerçek kullanıcı görmez ve doldurmaz.
+   * Botlar tüm alanları doldurduğu için dolu gelmesi spam işaretidir.
    */
-  @ApiProperty({ required: false, description: 'Doldurmayin (bot tuzagi)' })
+  @ApiProperty({ required: false, description: 'Doldurmayın (bot tuzağı)' })
   @IsOptional()
   @IsString()
   @MaxLength(200)
@@ -51,6 +51,6 @@ export class ContactMessageDto {
 
 export class SubscribeDto {
   @ApiProperty()
-  @IsEmail({}, { message: 'Gecerli bir e-posta adresi girin.' })
+  @IsEmail({}, { message: 'Geçerli bir e-posta adresi girin.' })
   email!: string;
 }

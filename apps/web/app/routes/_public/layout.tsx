@@ -12,9 +12,9 @@ export default function PublicLayout() {
   const settings = root?.settings ?? null;
   const location = useLocation();
 
-  // Kaydirma hizi ayarlardan gelir; klinik kendi tercihini secebilir.
+  // Kaydırma hızı ayarlardan gelir; klinik kendi tercihini seçebilir.
   useSmoothScroll(settings?.theme.scrollSpeed ?? 4);
-  // Sayfa degisince yeni icerik icin gozlemciyi yeniden kur.
+  // Sayfa değişince yeni içerik için gözlemciyi yeniden kur.
   useScrollReveal([location.pathname]);
 
   return (
@@ -25,7 +25,7 @@ export default function PublicLayout() {
       </main>
       <Footer settings={settings} />
       <FloatingActions settings={settings} />
-      {/* Demo modunda gorunur; gercek kurulumda features ile kapatilir. */}
+      {/* Demo modunda görünür; gerçek kurulumda features ile kapatılır. */}
       <ThemeSwitcher enabled={settings?.features?.demoMode !== false} />
     </>
   );

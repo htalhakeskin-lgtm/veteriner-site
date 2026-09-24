@@ -23,7 +23,7 @@ export class BlogController {
 
   @Public()
   @Get('blog/posts')
-  @ApiOperation({ summary: 'Yayindaki yazilar' })
+  @ApiOperation({ summary: 'Yayındaki yazılar' })
   findPublished(
     @Query('category') category?: string,
     @Query('q') q?: string,
@@ -40,14 +40,14 @@ export class BlogController {
 
   @Public()
   @Get('blog/categories')
-  @ApiOperation({ summary: 'Yazisi olan kategoriler' })
+  @ApiOperation({ summary: 'Yazısı olan kategoriler' })
   categories() {
     return this.blog.categories();
   }
 
   @Public()
   @Get('blog/posts/:slug')
-  @ApiOperation({ summary: 'Yazi detayi' })
+  @ApiOperation({ summary: 'Yazı detayı' })
   findBySlug(@Param('slug') slug: string) {
     return this.blog.findBySlug(slug);
   }

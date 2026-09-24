@@ -13,7 +13,7 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { SettingsService } from '../settings/settings.service';
 import type { CreateAppointmentDto } from './dto/appointments.dto';
 
-/** Postgres exclusion_violation. Unique ihlalindeki P2002 DEGIL. */
+/** Postgres exclusion_violation. Unique ihlalindeki P2002 DEĞİL. */
 const PG_EXCLUSION_VIOLATION = '23P01';
 
 const DETAIL_INCLUDE = {
@@ -32,43 +32,43 @@ export class AppointmentsService {
   ) {}
 
   // ─────────────────────────────────────────
-  //  Olusturma
+  //  Oluşturma
   // ─────────────────────────────────────────
 
   async create(dto: CreateAppointmentDto, userId?: string) {
     const rules = await this.settings.getAppointmentRules();
     const startAt = new Date(dto.startAt);
     if (Number.isNaN(startAt.getTime())) {
-      throw new BadRequestException('Gecersiz tarih/saat.');
+      throw new BadRequestException('Geçersiz tarih/saat.');
     }
 
-    // Uye randevusuysa hayvanin gercekten bu kullaniciya ait oldugunu dogrula.
+    // Üye randevusuysa hayvanın gerçekten bu kullanıcıya ait olduğunu doğrula.
     if (dto.petId) {
       if (!userId) {
         throw new BadRequestException(
-          'Kayitli hayvan secmek icin giris yapmalisiniz.',
+          'Kayıtlı hayvan seçmek için giriş yapmalısınız.',
         );
       }
       const pet = await this.prisma.pet.findFirst({
         where: { id: dto.petId, ownerId: userId, deletedAt: null },
       });
       if (!pet) {
-        // Baskasinin hayvani icin randevu alinmasini engeller.
-        throw new ForbiddenException('Bu hayvan size ait degil.');
+        // Başkasının hayvanı için randevu alınmasını engeller.
+        throw new ForbiddenException('Bu hayvan size ait değil.');
       }
     }
 
-    // Misafir randevusunda iletisim bilgisi sart: onay gonderilemezse
-    // randevunun kimseye faydasi yok.
+    // Misafir randevusunda iletişim bilgisi şart: onay gönderilemezse
+    // randevunun kimseye faydası yok.
     if (!userId && !dto.guestPhone) {
       throw new BadRequestException(
-        'Uye olmadan randevu alirken telefon numarasi zorunludur.',
+        'Üye olmadan randevu alırken telefon numarası zorunludur.',
       );
     }
 
-    // ⭐ Musaitlik motoru son sozu soyler ve "farketmez" durumunda
-    // hekimi SOMUT olarak atar. Atanmazsa veritabanindaki cakisma
-    // kisiti devreye giremez (kisit staffId IS NULL satirlarini kapsamiyor).
+    // ⭐ Müsaitlik motoru son sözü söyler ve "farketmez" durumunda
+    // hekimi SOMUT olarak atar. Atanmazsa veritabanındaki çakışma
+    // kısıtı devreye giremez (kısıt staffId IS NULL satırlarını kapsamıyor).
     const slot = await this.availability.resolveSlot({
       serviceId: dto.serviceId,
       startAt,
@@ -100,19 +100,19 @@ export class AppointmentsService {
         include: DETAIL_INCLUDE,
       });
 
-      // Bildirim gonderimi randevunun olusmasini engellememeli:
-      // dispatch kendi icinde hata yutuyor.
+      // Bildirim gönderimi randevunun oluşmasını engellememeli:
+      // dispatch kendi içinde hata yutuyor.
       await this.notifications.appointmentCreated(created);
       if (created.status === AppointmentStatus.CONFIRMED) {
         await this.notifications.appointmentConfirmed(created);
       }
       return created;
     } catch (err) {
-      // Yaris durumu: motor "musait" dedi ama aradaki milisaniyelerde
-      // baska biri ayni slotu aldi. Veritabani son savunma hatti.
+      // Yarış durumu: motor "müsait" dedi ama aradaki milisaniyelerde
+      // başka biri aynı slotu aldı. Veritabanı son savunma hattı.
       if (isExclusionViolation(err)) {
         throw new ConflictException({
-          message: 'Bu saat az once doldu. Lutfen baska bir saat secin.',
+          message: 'Bu saat az önce doldu. Lütfen başka bir saat seçin.',
           code: 'SLOT_TAKEN',
         });
       }
@@ -121,11 +121,11 @@ export class AppointmentsService {
   }
 
   /**
-   * RND-2026-0042. Yil basina sirali.
-   * Not: yogun trafikte iki istek ayni sayiyi uretebilir; code alani
-   * unique oldugu icin veritabani ikinciyi reddeder. Tek klinikli bir
-   * sistemde bu olasilik ihmal edilebilir; sorun olursa Postgres
-   * sequence'ine tasinir.
+   * RND-2026-0042. Yıl başına sıralı.
+   * Not: yoğun trafikte iki istek aynı sayıyı üretebilir; code alanı
+   * unique olduğu için veritabanı ikinciyi reddeder. Tek klinikli bir
+   * sistemde bu olasılık ihmal edilebilir; sorun olursa Postgres
+   * sequence'ine taşınır.
    */
   private async nextCode(startAt: Date): Promise<string> {
     const year = startAt.getFullYear();
@@ -151,7 +151,7 @@ export class AppointmentsService {
     });
   }
 
-  /** Uye olmayanlarin randevu sorgusu: kod + telefon birlikte dogrulanir. */
+  /** Üye olmayanlarin randevu sorgusu: kod + telefon birlikte doğrulanır. */
   async lookup(code: string, phone: string) {
     const appointment = await this.prisma.appointment.findUnique({
       where: { code },
@@ -167,9 +167,9 @@ export class AppointmentsService {
         digits(appointment.user?.phone).endsWith(given.slice(-10)));
 
     if (!matches) {
-      // Kod dogru ama telefon yanlissa da ayni mesaj: rastgele kod
-      // deneyerek baskasinin randevusu ogrenilemesin.
-      throw new NotFoundException('Randevu bulunamadi. Kod ve telefonu kontrol edin.');
+      // Kod doğru ama telefon yanlışsa da aynı mesaj: rastgele kod
+      // deneyerek başkasının randevusu öğrenilemesin.
+      throw new NotFoundException('Randevu bulunamadı. Kod ve telefonu kontrol edin.');
     }
 
     const { user: _user, ...rest } = appointment;
@@ -181,29 +181,29 @@ export class AppointmentsService {
       where: { id },
       include: DETAIL_INCLUDE,
     });
-    if (!appointment) throw new NotFoundException('Randevu bulunamadi.');
+    if (!appointment) throw new NotFoundException('Randevu bulunamadı.');
     this.assertOwnership(appointment.userId, requester);
     return appointment;
   }
 
   // ─────────────────────────────────────────
-  //  Degisiklikler
+  //  Değişiklikler
   // ─────────────────────────────────────────
 
   async cancel(id: string, requester: { id: string; role: Role }, reason?: string) {
     const appointment = await this.prisma.appointment.findUnique({ where: { id } });
-    if (!appointment) throw new NotFoundException('Randevu bulunamadi.');
+    if (!appointment) throw new NotFoundException('Randevu bulunamadı.');
     this.assertOwnership(appointment.userId, requester);
 
     if (
       appointment.status === AppointmentStatus.CANCELLED ||
       appointment.status === AppointmentStatus.COMPLETED
     ) {
-      throw new BadRequestException('Bu randevu zaten kapanmis.');
+      throw new BadRequestException('Bu randevu zaten kapanmış.');
     }
 
-    // Iptal suresi kurali yalnizca MUSTERI icin. Admin telefonla gelen
-    // iptalleri her zaman isleyebilmeli.
+    // Iptal süresi kuralı yalnızca MÜŞTERİ için. Admin telefonla gelen
+    // iptalleri her zaman işleyebilmeli.
     if (requester.role === 'CUSTOMER') {
       const rules = await this.settings.getAppointmentRules();
       const limit = new Date(
@@ -211,8 +211,8 @@ export class AppointmentsService {
       );
       if (new Date() > limit) {
         throw new BadRequestException(
-          `Randevular en gec ${rules.cancelBeforeHours} saat oncesine kadar iptal edilebilir. ` +
-            'Lutfen klinigi arayin.',
+          `Randevular en geç ${rules.cancelBeforeHours} saat öncesine kadar iptal edilebilir. ` +
+            'Lütfen kliniği arayın.',
         );
       }
     }
@@ -236,24 +236,24 @@ export class AppointmentsService {
     body: { startAt: string; staffId?: string },
   ) {
     const appointment = await this.prisma.appointment.findUnique({ where: { id } });
-    if (!appointment) throw new NotFoundException('Randevu bulunamadi.');
+    if (!appointment) throw new NotFoundException('Randevu bulunamadı.');
     this.assertOwnership(appointment.userId, requester);
 
     if (
       appointment.status === AppointmentStatus.CANCELLED ||
       appointment.status === AppointmentStatus.COMPLETED
     ) {
-      throw new BadRequestException('Kapanmis randevu ertelenemez.');
+      throw new BadRequestException('Kapanmış randevu ertelenemez.');
     }
 
     const startAt = new Date(body.startAt);
     if (Number.isNaN(startAt.getTime())) {
-      throw new BadRequestException('Gecersiz tarih/saat.');
+      throw new BadRequestException('Geçersiz tarih/saat.');
     }
 
-    // Randevu kendi eski slotunu isgal ettigi icin motor onu "dolu" gorur.
-    // Once iptal isaretleyip sonra tasimak yerine, gecici olarak slottan
-    // cikariyoruz: boylece ayni saate erteleme de calisir.
+    // Randevu kendi eski slotunu işgal ettiği için motor onu "dolu" görür.
+    // Önce iptal işaretleyip sonra taşımak yerine, geçici olarak slottan
+    // çıkarıyoruz: böylece aynı saate erteleme de çalışır.
     await this.prisma.appointment.update({
       where: { id },
       data: { status: AppointmentStatus.CANCELLED },
@@ -272,19 +272,19 @@ export class AppointmentsService {
           startAt,
           endAt: slot.endAt,
           staffId: slot.staffId,
-          status: appointment.status, // onceki durumu geri koy
+          status: appointment.status, // önceki durumu geri koy
         },
         include: DETAIL_INCLUDE,
       });
     } catch (err) {
-      // Basarisizsa randevuyu eski haline dondur — musteri randevusuz kalmasin.
+      // Başarısızsa randevuyu eski haline döndür — müşteri randevusuz kalmasın.
       await this.prisma.appointment.update({
         where: { id },
         data: { status: appointment.status },
       });
       if (isExclusionViolation(err)) {
         throw new ConflictException({
-          message: 'Bu saat az once doldu. Lutfen baska bir saat secin.',
+          message: 'Bu saat az önce doldu. Lütfen başka bir saat seçin.',
           code: 'SLOT_TAKEN',
         });
       }
@@ -336,7 +336,7 @@ export class AppointmentsService {
 
   async setStatus(id: string, status: AppointmentStatus, reason?: string) {
     const appointment = await this.prisma.appointment.findUnique({ where: { id } });
-    if (!appointment) throw new NotFoundException('Randevu bulunamadi.');
+    if (!appointment) throw new NotFoundException('Randevu bulunamadı.');
 
     try {
       const updated = await this.prisma.appointment.update({
@@ -350,7 +350,7 @@ export class AppointmentsService {
         include: DETAIL_INCLUDE,
       });
 
-      // Durum degisimi musteriyi ilgilendiriyorsa haber ver.
+      // Durum değişimi müşteriyi ilgilendiriyorsa haber ver.
       if (status === AppointmentStatus.CONFIRMED) {
         await this.notifications.appointmentConfirmed(updated);
       } else if (status === AppointmentStatus.CANCELLED) {
@@ -358,10 +358,10 @@ export class AppointmentsService {
       }
       return updated;
     } catch (err) {
-      // Iptal edilmis bir randevuyu geri acarken slot baskasina verilmis olabilir.
+      // Iptal edilmiş bir randevuyu geri açarken slot başkasına verilmiş olabilir.
       if (isExclusionViolation(err)) {
         throw new ConflictException({
-          message: 'Bu saat artik dolu; randevu yeniden acilamiyor.',
+          message: 'Bu saat artık dolu; randevu yeniden açılamıyor.',
           code: 'SLOT_TAKEN',
         });
       }
@@ -377,14 +377,14 @@ export class AppointmentsService {
   ): void {
     if (requester.role === 'ADMIN' || requester.role === 'STAFF') return;
     if (ownerId !== requester.id) {
-      throw new ForbiddenException('Bu randevuya erisim yetkiniz yok.');
+      throw new ForbiddenException('Bu randevuya erişim yetkiniz yok.');
     }
   }
 }
 
 function isExclusionViolation(err: unknown): boolean {
   if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    // Prisma ham Postgres kodunu meta.code icinde tasir.
+    // Prisma ham Postgres kodunu meta.code içinde taşır.
     const meta = err.meta as { code?: string } | undefined;
     if (meta?.code === PG_EXCLUSION_VIOLATION) return true;
   }

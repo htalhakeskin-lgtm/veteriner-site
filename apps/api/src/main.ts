@@ -19,29 +19,29 @@ async function bootstrap(): Promise<void> {
   });
   const logger = new Logger('Bootstrap');
 
-  // ConfigService yerine dogrudan process.env: validateEnv zaten
-  // ConfigModule acilisinda calisti, buraya gelindiyse degerler gecerli.
+  // ConfigService yerine doğrudan process.env: validateEnv zaten
+  // ConfigModule açılışında çalıştı, buraya gelindiyse değerler geçerli.
   const env = process.env as unknown as Env;
   const port = Number(env.PORT ?? 3000);
   const webOrigin = env.WEB_ORIGIN ?? 'http://localhost:5173';
   const isProd = env.NODE_ENV === 'production';
 
   app.use(helmet({
-    // Swagger arayuzu inline script kullaniyor; uretimde zaten kapali.
+    // Swagger arayüzü inline script kullanıyor; üretimde zaten kapalı.
     contentSecurityPolicy: isProd ? undefined : false,
   }));
   app.use(cookieParser());
 
-  // Refresh token httpOnly cookie ile tasindigi icin credentials sart.
+  // Refresh token httpOnly cookie ile taşındığı için credentials şart.
   app.enableCors({
     origin: webOrigin,
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
   });
 
-  // Yuklenen gorseller. Bu dizin yalnizca sharp ile yeniden kodlanmis
-  // WebP dosyalari icerir (bkz. media.service.ts), yani calistirilabilir
-  // icerik barindirmaz.
+  // Yüklenen görseller. Bu dizin yalnızca sharp ile yeniden kodlanmış
+  // WebP dosyaları içerir (bkz. media.service.ts), yani çalıştırılabilir
+  // içerik barındırmaz.
   app.useStaticAssets(join(process.cwd(), env.UPLOAD_DIR ?? './uploads'), {
     prefix: '/uploads/',
     maxAge: '7d',
@@ -49,23 +49,23 @@ async function bootstrap(): Promise<void> {
   });
 
   app.setGlobalPrefix('api/v1', {
-    // Statik dosyalar ve saglik kontrolu prefix disinda kalsin.
+    // Statik dosyalar ve sağlık kontrolü prefix dışında kalsın.
     exclude: [],
   });
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,          // DTO'da tanimsiz alanlari at
-      forbidNonWhitelisted: true, // ve gonderildiyse hata ver
+      whitelist: true,          // DTO'da tanımsız alanları at
+      forbidNonWhitelisted: true, // ve gönderildiyse hata ver
       transform: true,
     }),
   );
 
-  // Swagger sadece uretim disinda: uc listesini herkese acmayalim.
+  // Swagger sadece üretim dışında: uç listesini herkese açmayalım.
   if (!isProd) {
     const config = new DocumentBuilder()
       .setTitle('Veteriner Klinik API')
-      .setDescription('Randevu, hasta ve klinik yonetimi API dokumantasyonu')
+      .setDescription('Randevu, hasta ve klinik yönetimi API dokümantasyonu')
       .setVersion('0.1.0')
       .addBearerAuth()
       .build();
@@ -77,8 +77,8 @@ async function bootstrap(): Promise<void> {
   }
 
   await app.listen(port);
-  logger.log(`API hazir: http://localhost:${port}/api/v1`);
-  logger.log(`Saglik kontrolu: http://localhost:${port}/api/v1/health`);
+  logger.log(`API hazır: http://localhost:${port}/api/v1`);
+  logger.log(`Sağlık kontrolü: http://localhost:${port}/api/v1/health`);
   if (!isProd) {
     logger.log(`Swagger: http://localhost:${port}/api/docs`);
   }

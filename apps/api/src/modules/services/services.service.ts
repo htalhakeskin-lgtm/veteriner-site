@@ -4,7 +4,7 @@ import type { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../../prisma/prisma.service';
 
-/** Admin CRUD'unda yazilmasina izin verilen alanlar (bkz. staff.service.ts). */
+/** Admin CRUD'unda yazılmasına izin verilen alanlar (bkz. staff.service.ts). */
 const WRITABLE = [
   'slug', 'title', 'shortDesc', 'longDesc', 'icon', 'category',
   'price', 'durationMinutes', 'isFeatured', 'isActive', 'sortOrder',
@@ -44,7 +44,7 @@ export class ServicesService {
         },
       },
     });
-    if (!service) throw new NotFoundException('Hizmet bulunamadi.');
+    if (!service) throw new NotFoundException('Hizmet bulunamadı.');
     return service;
   }
 
@@ -72,8 +72,8 @@ export class ServicesService {
 
   /**
    * Silme yerine PASIFE alma.
-   * Gecmis randevular hizmete bagli (onDelete: Restrict); gercek silme
-   * ya hata verir ya da randevu gecmisini ucururdu.
+   * Geçmiş randevular hizmete bağlı (onDelete: Restrict); gerçek silme
+   * ya hata verir ya da randevu geçmişini uçururdu.
    */
   async deactivate(id: string) {
     await this.ensureExists(id);
@@ -97,6 +97,6 @@ export class ServicesService {
 
   private async ensureExists(id: string) {
     const found = await this.prisma.service.findUnique({ where: { id } });
-    if (!found) throw new NotFoundException('Hizmet bulunamadi.');
+    if (!found) throw new NotFoundException('Hizmet bulunamadı.');
   }
 }

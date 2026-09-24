@@ -29,9 +29,9 @@ export class ContactController {
   @Public()
   @Post('contact')
   @HttpCode(HttpStatus.OK)
-  // Spam korumasi: honeypot + saatte 3 mesaj.
+  // Spam koruması: honeypot + saatte 3 mesaj.
   @Throttle({ default: { limit: 3, ttl: 3_600_000 } })
-  @ApiOperation({ summary: 'Iletisim formu gonder' })
+  @ApiOperation({ summary: 'İletişim formu gönder' })
   submit(@Body() dto: ContactMessageDto, @Req() req: Request) {
     return this.contact.submit(dto, req.ip);
   }
@@ -40,14 +40,14 @@ export class ContactController {
   @Post('newsletter/subscribe')
   @HttpCode(HttpStatus.OK)
   @Throttle({ default: { limit: 5, ttl: 3_600_000 } })
-  @ApiOperation({ summary: 'E-bultene abone ol' })
+  @ApiOperation({ summary: 'E-bültene abone ol' })
   subscribe(@Body() dto: SubscribeDto) {
     return this.contact.subscribe(dto);
   }
 
   @Public()
   @Get('newsletter/unsubscribe/:token')
-  @ApiOperation({ summary: 'Abonelikten cik' })
+  @ApiOperation({ summary: 'Abonelikten çık' })
   unsubscribe(@Param('token') token: string) {
     return this.contact.unsubscribe(token);
   }
@@ -95,7 +95,7 @@ export class ContactController {
   @Get('admin/newsletter/export')
   @Roles('ADMIN')
   @Header('Content-Type', 'text/csv; charset=utf-8')
-  @Header('Content-Disposition', 'attachment; filename="e-bulten-aboneleri.csv"')
+  @Header('Content-Disposition', 'attachment; filename="e-bülten-aboneleri.csv"')
   @ApiOperation({ summary: 'Abone listesini CSV indir' })
   exportCsv() {
     return this.contact.exportSubscribersCsv();

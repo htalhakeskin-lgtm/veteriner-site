@@ -16,7 +16,7 @@ const NAV: NavItem[] = [
   { to: '/panel/ayarlar', label: 'Ayarlar', icon: 'settings' },
 ];
 
-/** Modul sabiti — bkz. hesap/layout.tsx acikalamasi. */
+/** Modül sabiti — bkz. hesap/layout.tsx açikalaması. */
 const ALLOW: Role[] = ['ADMIN', 'STAFF'];
 
 export default function AdminLayout() {

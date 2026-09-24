@@ -3,11 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 import { formatNumber } from '~/lib/format';
 
 /**
- * Sayac animasyonu.
+ * Sayaç animasyonu.
  *
- * Sunucu tarafinda ve hareket kapaliyken DOGRUDAN son degeri basar:
- * prerender edilen HTML'de "0" gorunmesi hem SEO hem de JavaScript
- * calismayan durumlar icin yanlis olurdu.
+ * Sunucu tarafında ve hareket kapalıyken DOĞRUDAN son değeri başar:
+ * prerender edilen HTML'de "0" görünmesi hem SEO hem de JavaScript
+ * çalışmayan durumlar için yanlış olurdu.
  */
 export function CountUp({
   to,

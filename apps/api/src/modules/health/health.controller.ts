@@ -10,7 +10,7 @@ export class HealthController {
 
   @Public()
   @Get()
-  @ApiOperation({ summary: 'Servis ve veritabani durumu' })
+  @ApiOperation({ summary: 'Servis ve veritabanı durumu' })
   async check() {
     const dbUp = await this.prisma.isHealthy();
     return {

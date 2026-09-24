@@ -1,14 +1,17 @@
 /**
- * Seed icerigi — statik demo verisi.
- * Mantik prisma/seed.ts icinde; burada sadece "ne" var, "nasil" degil.
+ * Seed içeriği — statik demo verisi.
+ * Mantık prisma/seed.ts içinde; burada sadece "ne" var, "nasıl" değil.
+ *
+ * DİKKAT: slug alanları bilerek ASCII kalır (genel-muayene, dis-bakimi…).
+ * Türkçe karaktere çevrilirlerse URL'ler ve kayıtlı bağlantılar kırılır.
  */
 
 /**
- * Demo gorselleri Unsplash'ten (telifsiz) cekiliyor.
+ * Demo görselleri Unsplash'ten (telifsiz) çekiliyor.
  *
- * Gercek kurulumda klinigin kendi fotograflari yonetim panelinden
- * yuklenmeli. Bunlar yalnizca sunum sirasinda sitenin bos gorunmemesi
- * icin; internet baglantisi gerektirirler.
+ * Gerçek kurulumda kliniğin kendi fotoğrafları yönetim panelinden
+ * yüklenmeli. Bunlar yalnızca sunum sırasında sitenin boş görünmemesi
+ * için; internet bağlantısı gerektirirler.
  */
 const STOCK = 'https://images.unsplash.com/photo-';
 
@@ -16,9 +19,9 @@ export const SERVICES = [
   {
     slug: 'genel-muayene',
     title: 'Genel Muayene',
-    shortDesc: 'Bastan ayaga kontrol, kilo ve beslenme degerlendirmesi.',
+    shortDesc: 'Baştan ayağa kontrol, kilo ve beslenme değerlendirmesi.',
     longDesc:
-      'Vucut sicakligi, kalp ve akciger dinlemesi, karin palpasyonu, goz-kulak-agiz kontrolu ve kilo takibi yapilir. Ortalama 30 dakika ayrilir; acele ettirilmez.',
+      'Vücut sıcaklığı, kalp ve akciğer dinlemesi, karın palpasyonu, göz-kulak-ağız kontrolü ve kilo takibi yapılır. Ortalama 30 dakika ayrılır; acele ettirilmez.',
     icon: 'stethoscope',
     category: 'Genel',
     durationMinutes: 30,
@@ -27,10 +30,10 @@ export const SERVICES = [
   },
   {
     slug: 'asilama',
-    title: 'Asilama & Koruyucu Hekimlik',
-    shortDesc: 'Karma, kuduz ve ic-dis parazit programi.',
+    title: 'Aşılama & Koruyucu Hekimlik',
+    shortDesc: 'Karma, kuduz ve iç-dış parazit programı.',
     longDesc:
-      'Yasa ve yasam tarzina gore kisisellestirilmis asi takvimi olusturulur. Takvim sistem tarafindan takip edilir, zamani gelince hatirlatma gonderilir.',
+      'Yaşa ve yaşam tarzına göre kişiselleştirilmiş aşı takvimi oluşturulur. Takvim sistem tarafından takip edilir, zamanı gelince hatırlatma gönderilir.',
     icon: 'syringe',
     category: 'Koruyucu',
     durationMinutes: 20,
@@ -40,9 +43,9 @@ export const SERVICES = [
   {
     slug: 'cerrahi',
     title: 'Cerrahi Operasyonlar',
-    shortDesc: 'Modern anestezi ve kesintisiz monitorizasyon.',
+    shortDesc: 'Modern anestezi ve kesintisiz monitörizasyon.',
     longDesc:
-      'Yumusak doku ve ortopedik operasyonlar, tam donanimli ameliyathanede yapilir. Operasyon boyunca kalp ritmi, oksijen satürasyonu ve tansiyon izlenir.',
+      'Yumuşak doku ve ortopedik operasyonlar, tam donanımlı ameliyathanede yapılır. Operasyon boyunca kalp ritmi, oksijen satürasyonu ve tansiyon izlenir.',
     icon: 'scissors',
     category: 'Cerrahi',
     durationMinutes: 90,
@@ -51,10 +54,10 @@ export const SERVICES = [
   },
   {
     slug: 'dis-bakimi',
-    title: 'Dis Bakimi',
-    shortDesc: 'Ultrasonik dis tasi temizligi ve agiz sagligi.',
+    title: 'Diş Bakımı',
+    shortDesc: 'Ultrasonik diş taşı temizliği ve ağız sağlığı.',
     longDesc:
-      'Ultrasonik dis tasi temizligi, dis cekimi, agiz ici muayene ve periodontal tedaviler. Agiz sagligi genel sagligin ayrilmaz parcasidir.',
+      'Ultrasonik diş taşı temizliği, diş çekimi, ağız içi muayene ve periodontal tedaviler. Ağız sağlığı genel sağlığın ayrılmaz parçasıdır.',
     icon: 'smile',
     category: 'Genel',
     durationMinutes: 45,
@@ -64,23 +67,23 @@ export const SERVICES = [
   {
     slug: 'dermatoloji',
     title: 'Dermatoloji',
-    shortDesc: 'Cilt hastaliklari, alerji testleri ve tedavi.',
+    shortDesc: 'Cilt hastalıkları, alerji testleri ve tedavi.',
     longDesc:
-      'Kasinti, tuy dokulmesi, mantar ve alerji problemlerinin tani ve tedavisi. Deri kazinti, sitoloji ve kultur testleri uygulanir.',
-    icon: 'shield-plus',
-    category: 'Uzmanlik',
+      'Kaşıntı, tüy dökülmesi, mantar ve alerji problemlerinin tanı ve tedavisi. Deri kazıntı, sitoloji ve kültür testleri uygulanır.',
+    icon: 'shield',
+    category: 'Uzmanlık',
     durationMinutes: 30,
     isFeatured: false,
     price: 900,
   },
   {
     slug: 'radyoloji',
-    title: 'Radyoloji & Goruntuleme',
-    shortDesc: 'Dijital rontgen ve ultrason ile hassas tani.',
+    title: 'Radyoloji & Görüntüleme',
+    shortDesc: 'Dijital röntgen ve ultrason ile hassas tanı.',
     longDesc:
-      'Dijital rontgen ve ultrason ile ic organlarin detayli goruntulenmesi. Sonuclar ayni ziyarette ekranda birlikte incelenir.',
+      'Dijital röntgen ve ultrason ile iç organların detaylı görüntülenmesi. Sonuçlar aynı ziyarette ekranda birlikte incelenir.',
     icon: 'scan',
-    category: 'Tani',
+    category: 'Tanı',
     durationMinutes: 30,
     isFeatured: false,
     price: 1100,
@@ -88,22 +91,22 @@ export const SERVICES = [
   {
     slug: 'laboratuvar',
     title: 'Laboratuvar Hizmetleri',
-    shortDesc: 'Hemogram, biyokimya, idrar ve diski analizleri.',
+    shortDesc: 'Hemogram, biyokimya, idrar ve dışkı analizleri.',
     longDesc:
-      'Tam kan sayimi, biyokimya paneli, idrar analizi ve diski parazit taramasi klinik icinde yapilir; cogu sonuc 20 dakikada cikar.',
-    icon: 'flask-conical',
-    category: 'Tani',
+      'Tam kan sayımı, biyokimya paneli, idrar analizi ve dışkı parazit taraması klinik içinde yapılır; çoğu sonuç 20 dakikada çıkar.',
+    icon: 'flask',
+    category: 'Tanı',
     durationMinutes: 20,
     isFeatured: false,
     price: 850,
   },
   {
     slug: 'kisirlastirma',
-    title: 'Kisirlastirma',
-    shortDesc: 'Guvenli operasyon ve sonrasi bakim takibi.',
+    title: 'Kısırlaştırma',
+    shortDesc: 'Güvenli operasyon ve sonrası bakım takibi.',
     longDesc:
-      'Kedi ve kopekler icin guvenli anestezi altinda kisirlastirma. Operasyon sonrasi bakim talimatlari yazili verilir, kontrol randevusu planlanir.',
-    icon: 'heart-pulse',
+      'Kedi ve köpekler için güvenli anestezi altında kısırlaştırma. Operasyon sonrası bakım talimatları yazılı verilir, kontrol randevusu planlanır.',
+    icon: 'heart',
     category: 'Cerrahi',
     durationMinutes: 90,
     isFeatured: false,
@@ -111,22 +114,22 @@ export const SERVICES = [
   },
   {
     slug: 'dahiliye',
-    title: 'Ic Hastaliklari',
-    shortDesc: 'Diyabet, bobrek ve karaciger takibi.',
+    title: 'İç Hastalıkları',
+    shortDesc: 'Diyabet, böbrek ve karaciğer takibi.',
     longDesc:
-      'Diyabet, bobrek yetmezligi, karaciger hastaliklari ve tiroid bozukluklarinin tani, tedavi ve uzun donem takibi.',
+      'Diyabet, böbrek yetmezliği, karaciğer hastalıkları ve tiroid bozukluklarının tanı, tedavi ve uzun dönem takibi.',
     icon: 'activity',
-    category: 'Uzmanlik',
+    category: 'Uzmanlık',
     durationMinutes: 40,
     isFeatured: false,
     price: 950,
   },
   {
     slug: 'mikrocip',
-    title: 'Mikrocip Uygulamasi',
-    shortDesc: 'Kayip riskine karsi kalici kimlik cozumu.',
+    title: 'Mikroçip Uygulaması',
+    shortDesc: 'Kayıp riskine karşı kalıcı kimlik çözümü.',
     longDesc:
-      'ISO standartlarina uygun mikrocip uygulamasi ve ulusal veri tabanina kayit. Islem birkac saniye surer, anestezi gerektirmez.',
+      'ISO standartlarına uygun mikroçip uygulaması ve ulusal veri tabanına kayıt. İşlem birkaç saniye sürer, anestezi gerektirmez.',
     icon: 'cpu',
     category: 'Genel',
     durationMinutes: 15,
@@ -138,12 +141,12 @@ export const SERVICES = [
 export const STAFF = [
   {
     slug: 'dr-ahmet-yilmaz',
-    fullName: 'Dr. Ahmet Yilmaz',
-    title: 'Bas Veteriner Hekim',
-    speciality: 'Genel Cerrahi & Ic Hastaliklari',
+    fullName: 'Dr. Ahmet Yılmaz',
+    title: 'Baş Veteriner Hekim',
+    speciality: 'Genel Cerrahi & İç Hastalıkları',
     experienceYears: 15,
-    education: 'Istanbul Universitesi Veteriner Fakultesi',
-    bio: 'Istanbul Universitesi mezunu. 15 yildir kucuk hayvan cerrahisi ve ic hastaliklari alaninda calisiyor; ortopedik vakalar ozel ilgi alani.',
+    education: 'İstanbul Üniversitesi Veteriner Fakültesi',
+    bio: 'İstanbul Üniversitesi mezunu. 15 yıldır küçük hayvan cerrahisi ve iç hastalıkları alanında çalışıyor; ortopedik vakalar özel ilgi alanı.',
     photoUrl: `${STOCK}1612349317150-e413f6a5b16d?auto=format&fit=crop&w=800&q=80`,
     // Bu hekim her hizmeti verebiliyor
     serviceSlugs: null,
@@ -162,8 +165,8 @@ export const STAFF = [
     title: 'Veteriner Hekim',
     speciality: 'Dermatoloji & Beslenme',
     experienceYears: 10,
-    education: 'Ankara Universitesi Veteriner Fakultesi',
-    bio: 'Ankara Universitesi mezunu. Kasinti ve alerji vakalarinda sabirli takip yapar, sahibe ozel diyet planlari hazirlar.',
+    education: 'Ankara Üniversitesi Veteriner Fakültesi',
+    bio: 'Ankara Üniversitesi mezunu. Kaşıntı ve alerji vakalarında sabırlı takip yapar, sahibe özel diyet planları hazırlar.',
     photoUrl: `${STOCK}1559839734-2b71ea197ec2?auto=format&fit=crop&w=800&q=80`,
     serviceSlugs: [
       'genel-muayene',
@@ -188,8 +191,8 @@ export const STAFF = [
     title: 'Veteriner Hekim',
     speciality: 'Ortopedi & Radyoloji',
     experienceYears: 8,
-    education: 'Uludag Universitesi Veteriner Fakultesi',
-    bio: 'Uludag Universitesi mezunu. Kirik, eklem ve omurga vakalarinda dijital goruntuleme agirlikli calisir.',
+    education: 'Uludağ Üniversitesi Veteriner Fakültesi',
+    bio: 'Uludağ Üniversitesi mezunu. Kırık, eklem ve omurga vakalarında dijital görüntüleme ağırlıklı çalışır.',
     photoUrl: `${STOCK}1582750433449-648ed127bb54?auto=format&fit=crop&w=800&q=80`,
     serviceSlugs: [
       'genel-muayene',
@@ -208,39 +211,39 @@ export const STAFF = [
   },
 ] as const;
 
-/** Demo musterileri — Turkce isimler, gercekci telefon formati. */
+/** Demo müşterileri — Türkçe isimler, gerçekçi telefon formatı. */
 export const CUSTOMER_NAMES = [
-  'Ayse Kara', 'Mehmet Yildiz', 'Zeynep Aksoy', 'Ali Koc', 'Fatma Demir',
-  'Mustafa Sahin', 'Elif Yilmaz', 'Can Ozturk', 'Merve Arslan', 'Burak Dogan',
-  'Seda Celik', 'Emre Aydin', 'Gizem Polat', 'Okan Kurt', 'Deniz Erdogan',
-  'Ipek Tas', 'Kerem Bulut', 'Nazli Ozdemir', 'Serkan Avci', 'Pelin Guler',
+  'Ayşe Kara', 'Mehmet Yıldız', 'Zeynep Aksoy', 'Ali Koç', 'Fatma Demir',
+  'Mustafa Şahin', 'Elif Yılmaz', 'Can Öztürk', 'Merve Arslan', 'Burak Doğan',
+  'Seda Çelik', 'Emre Aydın', 'Gizem Polat', 'Okan Kurt', 'Deniz Erdoğan',
+  'İpek Taş', 'Kerem Bulut', 'Nazlı Özdemir', 'Serkan Avcı', 'Pelin Güler',
 ] as const;
 
 export const CAT_NAMES = [
-  'Boncuk', 'Pamuk', 'Minnos', 'Tekir', 'Duman', 'Zeytin', 'Misket',
-  'Sutlac', 'Findik', 'Kedi', 'Lokum', 'Badem',
+  'Boncuk', 'Pamuk', 'Minnoş', 'Tekir', 'Duman', 'Zeytin', 'Mısket',
+  'Sütlaç', 'Fındık', 'Kömür', 'Lokum', 'Badem',
 ] as const;
 
 export const DOG_NAMES = [
-  'Karamel', 'Rocky', 'Pasa', 'Luna', 'Max', 'Cakil', 'Bal', 'Kont',
-  'Zeus', 'Mia', 'Tarcin', 'Cesur',
+  'Karamel', 'Rocky', 'Paşa', 'Luna', 'Max', 'Çakıl', 'Bal', 'Kont',
+  'Zeus', 'Mia', 'Tarçın', 'Cesur',
 ] as const;
 
 export const CAT_BREEDS = [
-  'British Shorthair', 'Tekir', 'Iran Kedisi', 'Scottish Fold',
+  'British Shorthair', 'Tekir', 'İran Kedisi', 'Scottish Fold',
   'Van Kedisi', 'Ankara Kedisi', 'Siyam',
 ] as const;
 
 export const DOG_BREEDS = [
-  'Golden Retriever', 'Alman Coban', 'Labrador', 'Pomeranian',
+  'Golden Retriever', 'Alman Çoban', 'Labrador', 'Pomeranian',
   'Kangal', 'Beagle', 'Cocker Spaniel', 'Terrier',
 ] as const;
 
 export const BLOG_CATEGORIES = [
   { slug: 'beslenme', name: 'Beslenme', icon: 'utensils', sortOrder: 1 },
-  { slug: 'bakim', name: 'Bakim', icon: 'bath', sortOrder: 2 },
-  { slug: 'saglik', name: 'Saglik', icon: 'heart-pulse', sortOrder: 3 },
-  { slug: 'egitim', name: 'Egitim', icon: 'graduation-cap', sortOrder: 4 },
+  { slug: 'bakim', name: 'Bakım', icon: 'bath', sortOrder: 2 },
+  { slug: 'saglik', name: 'Sağlık', icon: 'heart', sortOrder: 3 },
+  { slug: 'egitim', name: 'Eğitim', icon: 'graduation-cap', sortOrder: 4 },
   { slug: 'genel', name: 'Genel', icon: 'newspaper', sortOrder: 5 },
 ] as const;
 
@@ -251,176 +254,217 @@ export const BLOG_POSTS = [
     title: 'Kedinizin Beslenmesinde Dikkat Etmeniz Gereken 7 Nokta',
     categorySlug: 'beslenme',
     excerpt:
-      'Mamanin uzerindeki etiketi okumak, su tuketimini takip etmek ve porsiyon kontrolu: kedinizin omrunu uzatan aliskanliklar.',
+      'Mamanın üzerindeki etiketi okumak, su tüketimini takip etmek ve porsiyon kontrolü: kedinizin ömrünü uzatan alışkanlıklar.',
     readMinutes: 6,
     body: [
-      'Kediler zorunlu etcildir. Bu, mamadaki protein oraninin bitkisel kaynakli olmamasi gerektigi anlamina gelir. Etiketteki ilk uc malzemeye bakin: ilk sirada "tavuk unu" degil "tavuk" yaziyorsa iyi bir isarettir.',
-      'Kediler susuzluga dayanikli gorunur ama bu bir avantaj degil, risktir. Dogada avlarindan su alan kediler, kuru mama ile beslendiginde kronik su acigina girebilir ve bu bobrekleri yorar. Su kabini mama kabindan uzaga koyun; akan su cesmeleri tuketimi belirgin sekilde artirir.',
-      'Porsiyon kontrolu en cok atlanan konu. Mama kabini surekli dolu tutmak yerine gunluk miktari tartip iki ogune bolmek, kilo problemlerinin buyuk bolumunu bastan onler.',
-      'Ani mama degisikligi ishale yol acar. Yeni mamaya gecerken 7 gun boyunca kademeli karistirin: ilk iki gun dortte bir, sonraki iki gun yarim, sonra dortte uc.',
+      'Kediler zorunlu etçildir. Bu, mamadaki protein oranının bitkisel kaynaklı olmaması gerektiği anlamına gelir. Etiketteki ilk üç malzemeye bakın: ilk sırada "tavuk unu" değil "tavuk" yazıyorsa iyi bir işarettir.',
+      'Kediler susuzluğa dayanıklı görünür ama bu bir avantaj değil, risktir. Doğada avlarından su alan kediler, kuru mama ile beslendiğinde kronik su açığına girebilir ve bu böbrekleri yorar. Su kabını mama kabından uzağa koyun; akan su çeşmeleri tüketimi belirgin şekilde artırır.',
+      'Porsiyon kontrolü en çok atlanan konu. Mama kabını sürekli dolu tutmak yerine günlük miktarı tartıp iki öğüne bölmek, kilo problemlerinin büyük bölümünü baştan önler.',
+      'Ani mama değişikliği ishale yol açar. Yeni mamaya geçerken 7 gün boyunca kademeli karıştırın: ilk iki gün dörtte bir, sonraki iki gün yarım, sonra dörtte üç.',
     ],
   },
   {
     slug: 'kopek-asi-takvimi',
     coverImageUrl: `${STOCK}1601758228041-f3b2795255f1?auto=format&fit=crop&w=1200&q=80`,
-    title: 'Yavru Kopeklerde Asi Takvimi Nasil Ilerler?',
+    title: 'Yavru Köpeklerde Aşı Takvimi Nasıl İlerler?',
     categorySlug: 'saglik',
     excerpt:
-      'Ilk asi ne zaman yapilir, kuduz kacinci haftada gelir, tekrarlar neden onemlidir? Adim adim takvim.',
+      'İlk aşı ne zaman yapılır, kuduz kaçıncı haftada gelir, tekrarlar neden önemlidir? Adım adım takvim.',
     readMinutes: 5,
     body: [
-      'Yavrular anne sutuyle gecici bagisiklik alir. Bu koruma 6-8. haftalarda zayiflamaya baslar; asi takvimi tam bu aralikta devreye girer.',
-      'Karma asi genellikle 6-8. haftada yapilir ve 3-4 hafta arayla iki tekrar gelir. Tekrarlar opsiyonel degildir: tek doz, kalici bagisiklik icin yeterli olmaz.',
-      'Kuduz asisi ulkemizde yasal zorunluluktur ve genellikle 12. haftadan sonra uygulanir. Seyahat planiniz varsa mikrocip ile birlikte planlanmasi gerekir.',
-      'Asi sonrasi 24 saat hafif halsizlik normaldir. Yuzde sislik, kusma veya nefes darligi normal degildir; bu durumda hemen aramaniz gerekir.',
+      'Yavrular anne sütüyle geçici bağışıklık alır. Bu koruma 6-8. haftalarda zayıflamaya başlar; aşı takvimi tam bu aralıkta devreye girer.',
+      'Karma aşı genellikle 6-8. haftada yapılır ve 3-4 hafta arayla iki tekrar gelir. Tekrarlar opsiyonel değildir: tek doz, kalıcı bağışıklık için yeterli olmaz.',
+      'Kuduz aşısı ülkemizde yasal zorunluluktur ve genellikle 12. haftadan sonra uygulanır. Seyahat planınız varsa mikroçip ile birlikte planlanması gerekir.',
+      'Aşı sonrası 24 saat hafif halsizlik normaldir. Yüzde şişlik, kusma veya nefes darlığı normal değildir; bu durumda hemen aramanız gerekir.',
     ],
   },
   {
     slug: 'dis-tasi-neden-tehlikeli',
     coverImageUrl: `${STOCK}1583337130417-3346a1be7dee?auto=format&fit=crop&w=1200&q=80`,
-    title: 'Dis Tasi Neden Sadece Bir Estetik Sorun Degil?',
+    title: 'Diş Taşı Neden Sadece Bir Estetik Sorun Değil?',
     categorySlug: 'saglik',
     excerpt:
-      'Agizdaki bakteriler kan dolasimina karisip kalp ve bobrekleri etkileyebilir. Erken mudahale neden onemli?',
+      'Ağızdaki bakteriler kan dolaşımına karışıp kalp ve böbrekleri etkileyebilir. Erken müdahale neden önemli?',
     readMinutes: 4,
     body: [
-      'Dis tasi, diseti ile dis arasinda bakteri barindiran sert bir tabakadir. Koku yalnizca gorunen sonucudur.',
-      'Ilerlemis periodontal hastalikta bakteriler kan dolasimina gecebilir. Kalp kapakciklari ve bobrekler bu yukten en cok etkilenen organlardir.',
-      'Evde firca aliskanligi kucukken kazandirilirsa en etkili korumadir. Insan dis macunu kullanilmaz: floru zehirlidir.',
-      'Yilda bir agiz kontrolu, ileri yasta anestezi gerektiren buyuk islemlerin cogunu onler.',
+      'Diş taşı, dişeti ile diş arasında bakteri barındıran sert bir tabakadır. Koku yalnızca görünen sonucudur.',
+      'İlerlemiş periodontal hastalıkta bakteriler kan dolaşımına geçebilir. Kalp kapakçıkları ve böbrekler bu yükten en çok etkilenen organlardır.',
+      'Evde fırça alışkanlığı küçükken kazandırılırsa en etkili korumadır. İnsan diş macunu kullanılmaz: florü zehirlidir.',
+      'Yılda bir ağız kontrolü, ileri yaşta anestezi gerektiren büyük işlemlerin çoğunu önler.',
     ],
   },
   {
     slug: 'kedi-stres-belirtileri',
     coverImageUrl: `${STOCK}1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=1200&q=80`,
-    title: 'Kedinizde Stresi Nasil Anlarsiniz?',
+    title: 'Kedinizde Stresi Nasıl Anlarsınız?',
     categorySlug: 'bakim',
     excerpt:
-      'Kum disina tuvalet, asiri yalanma ve saklanma: cogu zaman huysuzluk degil, stres isareti.',
+      'Kum dışına tuvalet, aşırı yalanma ve saklanma: çoğu zaman huysuzluk değil, stres işareti.',
     readMinutes: 5,
     body: [
-      'Kediler rahatsizligi gizlemekte ustadir. Davranis degisikligi genellikle ilk ve tek sinyaldir.',
-      'Kum kabinin disina tuvalet yapmak cogu zaman inat degil, idrar yolu problemi veya stres gostergesidir. Once tibbi neden elenmelidir.',
-      'Asiri yalanmaya bagli tuy dokulmesi, ozellikle karin ve bacak iclerinde, kaygi kaynakli olabilir.',
-      'Ev degisikligi, yeni bir hayvan veya mobilya duzeni gibi kucuk gorunen olaylar kediler icin buyuk degisimdir. Dikey alan ve saklanma noktasi saglamak belirgin rahatlama yaratir.',
+      'Kediler rahatsızlığı gizlemekte ustadır. Davranış değişikliği genellikle ilk ve tek sinyaldir.',
+      'Kum kabının dışına tuvalet yapmak çoğu zaman inat değil, idrar yolu problemi veya stres göstergesidir. Önce tıbbi neden elenmelidir.',
+      'Aşırı yalanmaya bağlı tüy dökülmesi, özellikle karın ve bacak içlerinde, kaygı kaynaklı olabilir.',
+      'Ev değişikliği, yeni bir hayvan veya mobilya düzeni gibi küçük görünen olaylar kediler için büyük değişimdir. Dikey alan ve saklanma noktası sağlamak belirgin rahatlama yaratır.',
     ],
   },
   {
     slug: 'kisirlastirma-dogru-zaman',
     coverImageUrl: `${STOCK}1629909613654-28e377c37b09?auto=format&fit=crop&w=1200&q=80`,
-    title: 'Kisirlastirma Icin Dogru Zaman Ne Zaman?',
+    title: 'Kısırlaştırma İçin Doğru Zaman Ne Zaman?',
     categorySlug: 'saglik',
     excerpt:
-      'Erken mi, geç mi? Tura girmeden once yapilmasinin saglik uzerindeki somut etkileri.',
+      'Erken mi, geç mi? Tura girmeden önce yapılmasının sağlık üzerindeki somut etkileri.',
     readMinutes: 6,
     body: [
-      'Kisirlastirma yalnizca populasyon kontrolu degil, ciddi bir koruyucu saglik uygulamasidir.',
-      'Disilerde ilk turdan once yapilan operasyon, meme tumoru riskini belirgin olcude dusurur. Rahim iltihabi (pyometra) riski de ortadan kalkar.',
-      'Erkeklerde prostat problemleri ve bazi davranis kaynakli kacma girisimleri azalir.',
-      'Irk ve vucut yapisina gore ideal zamanlama degisir; ozellikle buyuk irk kopeklerde eklem gelisimi dikkate alinmalidir. Karar hekiminizle birlikte verilmelidir.',
+      'Kısırlaştırma yalnızca popülasyon kontrolü değil, ciddi bir koruyucu sağlık uygulamasıdır.',
+      'Dişilerde ilk türden önce yapılan operasyon, meme tümörü riskini belirgin ölçüde düşürür. Rahim iltihabı (pyometra) riski de ortadan kalkar.',
+      'Erkeklerde prostat problemleri ve bazı davranış kaynaklı kaçma girişimleri azalır.',
+      'Irk ve vücut yapısına göre ideal zamanlama değişir; özellikle büyük ırk köpeklerde eklem gelişimi dikkate alınmalıdır. Karar hekiminizle birlikte verilmelidir.',
     ],
   },
   {
     slug: 'yasli-hayvan-bakimi',
     coverImageUrl: `${STOCK}1450778869180-41d0601e046e?auto=format&fit=crop&w=1200&q=80`,
-    title: 'Yaslanan Dostunuz Icin Degistirmeniz Gereken 5 Aliskanlik',
+    title: 'Yaşlanan Dostunuz İçin Değiştirmeniz Gereken 5 Alışkanlık',
     categorySlug: 'bakim',
     excerpt:
-      'Yas bir hastalik degil ama hastalik riskini artirir. Alti aylik kontroller ve ev duzenlemeleri.',
+      'Yaş bir hastalık değil ama hastalık riskini artırır. Altı aylık kontroller ve ev düzenlemeleri.',
     readMinutes: 5,
     body: [
-      'Yedi yasindan sonra yillik kontrol yerine alti aylik kontrol onerilir. Erken yakalanan bobrek ve tiroid problemleri cok daha iyi yonetilir.',
-      'Kayan zeminler eklem agrisi olan hayvanlar icin risklidir. Hali veya kaymaz paspas belirgin fark yaratir.',
-      'Mama kabini yukseltmek, boyun ve omuz uzerindeki yuku azaltir.',
-      'Kilo takibi kritiktir: fazla kilo eklemlerdeki yuku katlar, zayiflama ise gizli bir hastaligin ilk isareti olabilir.',
-      'Bilissel degisiklikler (gece huzursuzlugu, yon kaybi) yaslanmanin normal parcasi degildir; tedavi edilebilir.',
+      'Yedi yaşından sonra yıllık kontrol yerine altı aylık kontrol önerilir. Erken yakalanan böbrek ve tiroid problemleri çok daha iyi yönetilir.',
+      'Kayan zeminler eklem ağrısı olan hayvanlar için risklidir. Halı veya kaymaz paspas belirgin fark yaratır.',
+      'Mama kabını yükseltmek, boyun ve omuz üzerindeki yükü azaltır.',
+      'Kilo takibi kritiktir: fazla kilo eklemlerdeki yükü katlar, zayıflama ise gizli bir hastalığın ilk işareti olabilir.',
+      'Bilişsel değişiklikler (gece huzursuzluğu, yön kaybı) yaşlanmanın normal parçası değildir; tedavi edilebilir.',
     ],
   },
   {
     slug: 'acil-durum-rehberi',
     coverImageUrl: `${STOCK}1559839734-2b71ea197ec2?auto=format&fit=crop&w=1200&q=80`,
-    title: 'Hangi Durumda Sabahi Beklememelisiniz?',
+    title: 'Hangi Durumda Sabahı Beklememelisiniz?',
     categorySlug: 'saglik',
     excerpt:
-      'Zehirlenme supheleri, nefes guclugu ve idrar yapamama: bekleyemeyecek durumlar listesi.',
+      'Zehirlenme şüpheleri, nefes güçlüğü ve idrar yapamama: bekleyemeyecek durumlar listesi.',
     readMinutes: 4,
     body: [
-      'Nefes guclugu her zaman aciltir. Acik agizla nefes alan bir kedi, hastane yolunda olmalidir.',
-      'Erkek kedilerde idrar yapamama saatler icinde hayati tehlike yaratir. Kum kabina girip cikip bosaltamayan kedi beklemez.',
-      'Cikolata, uzum, kuru uzum, soğan, sarimsak, ksilitol ve zambak (kedilerde) zehirlidir. Supheli tuketimde miktar bilinmese bile aranmalidir.',
-      'Kusma ve ishal tek basina her zaman acil degildir, ancak kanli ise, 24 saati astiysa veya hayvan su icemiyorsa acildir.',
-      'Karin sisligi ve huzursuzluk, ozellikle buyuk irk kopeklerde mide burulmasi olabilir; dakikalar onemlidir.',
+      'Nefes güçlüğü her zaman acildir. Açık ağızla nefes alan bir kedi, hastane yolunda olmalıdır.',
+      'Erkek kedilerde idrar yapamama saatler içinde hayati tehlike yaratır. Kum kabına girip çıkıp boşaltamayan kedi beklemez.',
+      'Çikolata, üzüm, kuru üzüm, soğan, sarımsak, ksilitol ve zambak (kedilerde) zehirlidir. Şüpheli tüketimde miktar bilinmese bile aranmalıdır.',
+      'Kusma ve ishal tek başına her zaman acil değildir, ancak kanlı ise, 24 saati aştıysa veya hayvan su içemiyorsa acildir.',
+      'Karın şişliği ve huzursuzluk, özellikle büyük ırk köpeklerde mide burulması olabilir; dakikalar önemlidir.',
     ],
   },
   {
     slug: 'yeni-yavru-eve-geldi',
     coverImageUrl: `${STOCK}1425082661705-1834bfd09dca?auto=format&fit=crop&w=1200&q=80`,
-    title: 'Eve Yeni Yavru Geldi: Ilk Haftada Yapilacaklar',
+    title: 'Eve Yeni Yavru Geldi: İlk Haftada Yapılacaklar',
     categorySlug: 'egitim',
     excerpt:
-      'Ilk veteriner ziyareti, tuvalet egitimi ve sosyallesme penceresi hakkinda bilmeniz gerekenler.',
+      'İlk veteriner ziyareti, tuvalet eğitimi ve sosyalleşme penceresi hakkında bilmeniz gerekenler.',
     readMinutes: 6,
     body: [
-      'Ilk veteriner ziyareti, yavru eve geldikten sonraki ilk birkac gun icinde yapilmalidir. Amac sadece asi degil; parazit taramasi ve genel degerlendirmedir.',
-      'Sosyallesme penceresi kopeklerde yaklasik 3-14 hafta arasidir. Bu donemde guvenli sekilde karsilastigi her yeni ses, zemin ve insan, ileride sakin bir yetiskin olmasini saglar.',
-      'Tuvalet egitiminde ceza ise yaramaz; dogru yere yaptiginda hemen odullendirmek ise yarar.',
-      'Yalniz kalmaya aliskanligi kucuk adimlarla kazandirin. Ilk gunden uzun sureli yalnizlik, ayrilik kaygisinin en sik nedenidir.',
+      'İlk veteriner ziyareti, yavru eve geldikten sonraki ilk birkaç gün içinde yapılmalıdır. Amaç sadece aşı değil; parazit taraması ve genel değerlendirmedir.',
+      'Sosyalleşme penceresi köpeklerde yaklaşık 3-14 hafta arasıdır. Bu dönemde güvenli şekilde karşılaştığı her yeni ses, zemin ve insan, ileride sakin bir yetişkin olmasını sağlar.',
+      'Tuvalet eğitiminde ceza işe yaramaz; doğru yere yaptığında hemen ödüllendirmek işe yarar.',
+      'Yalnız kalmaya alışkanlığı küçük adımlarla kazandırın. İlk günden uzun süreli yalnızlık, ayrılık kaygısının en sık nedenidir.',
     ],
   },
 ] as const;
 
 export const TESTIMONIALS = [
   {
-    authorName: 'Ayse K.',
+    authorName: 'Ayşe K.',
     petName: 'Boncuk',
     petSpecies: 'CAT' as const,
     rating: 5,
-    text: "Boncuk'un ameliyatindan iki gun sonra beni arayip nasil oldugunu sordular. Bunu baska hicbir yerde gormedim.",
+    text: "Boncuk'un ameliyatından iki gün sonra beni arayıp nasıl olduğunu sordular. Bunu başka hiçbir yerde görmedim.",
   },
   {
     authorName: 'Mehmet Y.',
     petName: 'Karamel',
     petSpecies: 'DOG' as const,
     rating: 5,
-    text: 'Karamel veterinerden cok korkardi. Burada kapidan iceri kendi giriyor artik. Acele ettirmiyorlar.',
+    text: 'Karamel veterinerden çok korkardı. Burada kapıdan içeri kendi giriyor artık. Acele ettirmiyorlar.',
   },
   {
     authorName: 'Fatma D.',
-    petName: 'Minnos',
+    petName: 'Minnoş',
     petSpecies: 'CAT' as const,
     rating: 5,
-    text: "Gece 2'de zehirlenme suphesiyle aradik, telefonu hekim acti. On dakikada klinige aldilar.",
+    text: "Gece 2'de zehirlenme şüphesiyle aradık, telefonu hekim açtı. On dakikada kliniğe aldılar.",
   },
   {
     authorName: 'Zeynep A.',
     petName: 'Pamuk',
     petSpecies: 'CAT' as const,
     rating: 5,
-    text: "Pamuk'un cilt problemi aylardir gecmiyordu. Dr. Elif sabirla takip etti, diyet degisikligiyle cozuldu.",
+    text: "Pamuk'un cilt problemi aylardır geçmiyordu. Dr. Elif sabırla takip etti, diyet değişikliğiyle çözüldü.",
   },
   {
     authorName: 'Ali K.',
     petName: 'Rocky',
     petSpecies: 'DOG' as const,
     rating: 5,
-    text: "Rocky'nin bacak kirigi operasyonu basarili gecti. Rontgenleri ekranda tek tek anlattilar, ne yapildigini anladim.",
+    text: "Rocky'nın bacak kırığı operasyonu başarılı geçti. Röntgenleri ekranda tek tek anlattılar, ne yapıldığını anladım.",
   },
   {
     authorName: 'Merve A.',
     petName: 'Luna',
     petSpecies: 'DOG' as const,
     rating: 4,
-    text: 'Yogun saatlerde biraz beklemek gerekebiliyor ama muayenede hic acele yok. Bu takasi kabul ederim.',
+    text: 'Yoğun saatlerde biraz beklemek gerekebiliyor ama muayenede hiç acele yok. Bu takası kabul ederim.',
   },
 ] as const;
 
 export const MEDICAL_TEMPLATES = [
-  { type: 'VACCINATION' as const, title: 'Karma Asi', description: 'Yillik karma asi dozu uygulandi. Reaksiyon gozlenmedi.', repeatMonths: 12 },
-  { type: 'VACCINATION' as const, title: 'Kuduz Asisi', description: 'Kuduz asisi uygulandi, kayit sistemine islendi.', repeatMonths: 12 },
-  { type: 'VACCINATION' as const, title: 'Ic-Dis Parazit', description: 'Parazit uygulamasi yapildi.', repeatMonths: 3 },
-  { type: 'EXAMINATION' as const, title: 'Genel Saglik Muayenesi', description: 'Genel durum iyi. Kilo ve beslenme uygun.', repeatMonths: null },
-  { type: 'EXAMINATION' as const, title: 'Kontrol Muayenesi', description: 'Onceki tedavinin kontrolu yapildi, iyilesme beklendigi gibi.', repeatMonths: null },
-  { type: 'LAB_TEST' as const, title: 'Kan Tahlili', description: 'Hemogram ve biyokimya paneli calisildi. Degerler referans araliginda.', repeatMonths: null },
-  { type: 'TREATMENT' as const, title: 'Dis Tasi Temizligi', description: 'Ultrasonik dis tasi temizligi yapildi.', repeatMonths: 12 },
-  { type: 'SURGERY' as const, title: 'Kisirlastirma Operasyonu', description: 'Operasyon sorunsuz tamamlandi. Dikisler 10. gun alindi.', repeatMonths: null },
+  {
+    type: 'VACCINATION' as const,
+    title: 'Karma Aşı',
+    description: 'Yıllık karma aşı dozu uygulandı. Reaksiyon gözlenmedi.',
+    repeatMonths: 12,
+  },
+  {
+    type: 'VACCINATION' as const,
+    title: 'Kuduz Aşısı',
+    description: 'Kuduz aşısı uygulandı, kayıt sistemine işlendi.',
+    repeatMonths: 12,
+  },
+  {
+    type: 'VACCINATION' as const,
+    title: 'İç-Dış Parazit',
+    description: 'Parazit uygulaması yapıldı.',
+    repeatMonths: 3,
+  },
+  {
+    type: 'EXAMINATION' as const,
+    title: 'Genel Sağlık Muayenesi',
+    description: 'Genel durum iyi. Kilo ve beslenme uygun.',
+    repeatMonths: null,
+  },
+  {
+    type: 'EXAMINATION' as const,
+    title: 'Kontrol Muayenesi',
+    description: 'Önceki tedavinin kontrolü yapıldı, iyileşme beklendiği gibi.',
+    repeatMonths: null,
+  },
+  {
+    type: 'LAB_TEST' as const,
+    title: 'Kan Tahlili',
+    description:
+      'Hemogram ve biyokimya paneli çalışıldı. Değerler referans aralığında.',
+    repeatMonths: null,
+  },
+  {
+    type: 'TREATMENT' as const,
+    title: 'Diş Taşı Temizliği',
+    description: 'Ultrasonik diş taşı temizliği yapıldı.',
+    repeatMonths: 12,
+  },
+  {
+    type: 'SURGERY' as const,
+    title: 'Kısırlaştırma Operasyonu',
+    description: 'Operasyon sorunsuz tamamlandı. Dikişler 10. gün alındı.',
+    repeatMonths: null,
+  },
 ] as const;

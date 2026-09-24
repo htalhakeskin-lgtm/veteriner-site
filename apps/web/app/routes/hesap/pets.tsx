@@ -77,7 +77,7 @@ export default function MyPets() {
         breed: form.breed || undefined,
         birthDate: form.birthDate ? `${form.birthDate}T00:00:00.000Z` : undefined,
         gender: form.gender,
-        // Bos metin gonderilirse sayi dogrulamasi patlar.
+        // Boş metin gönderilirse sayı doğrulaması patlar.
         weightKg: form.weightKg ? Number(form.weightKg) : undefined,
         color: form.color || undefined,
         isNeutered: form.isNeutered,

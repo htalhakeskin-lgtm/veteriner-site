@@ -26,7 +26,7 @@ export function meta() {
   });
 }
 
-/** Sunucudaki SiteSetting JSON kolonlarinin tamami. */
+/** Sunucudaki SiteSetting JSON kolonlarının tamamı. */
 interface FullSettings {
   clinic: Record<string, unknown>;
   contact: Record<string, unknown>;
@@ -75,7 +75,7 @@ export default function AdminSettings() {
       .catch(() => setData(null));
   }, []);
 
-  /** Ic ice JSON alanini gunceller: patch('clinic', 'name', 'Yeni Ad') */
+  /** Ic içe JSON alanını günceller: patch('clinic', 'name', 'Yeni Ad') */
   function patch(section: keyof FullSettings, key: string, value: unknown) {
     setData((d) =>
       d
@@ -111,7 +111,7 @@ export default function AdminSettings() {
       setSuccess(
         'Ayarlar kaydedildi. Değişiklikler siteye en geç bir dakika içinde yansır.',
       );
-      // Tema secimi hemen gorulsun.
+      // Tema seçimi hemen görülsün.
       const preset = (data.theme as { activePreset?: string }).activePreset;
       if (preset) document.documentElement.setAttribute('data-theme', preset);
     } catch (err) {

@@ -23,7 +23,7 @@ export class UsersController {
 
   @Get()
   @Roles('ADMIN')
-  @ApiOperation({ summary: 'Musteri listesi (yalnizca admin)' })
+  @ApiOperation({ summary: 'Müşteri listesi (yalnızca admin)' })
   list(
     @Query('q') q?: string,
     @Query('page') page?: string,
@@ -43,14 +43,14 @@ export class UsersController {
   }
 
   @Patch('me')
-  @ApiOperation({ summary: 'Profilimi guncelle' })
+  @ApiOperation({ summary: 'Profilimi güncelle' })
   updateMe(@CurrentUser() user: AuthUser, @Body() dto: UpdateProfileDto) {
     return this.users.updateProfile(user.id, dto);
   }
 
   @Patch('me/password')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Sifremi degistir' })
+  @ApiOperation({ summary: 'Şifremi değiştir' })
   changePassword(@CurrentUser() user: AuthUser, @Body() dto: ChangePasswordDto) {
     return this.users.changePassword(user.id, dto);
   }

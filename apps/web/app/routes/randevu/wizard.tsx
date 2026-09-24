@@ -81,7 +81,7 @@ export default function Wizard() {
     [services, serviceId],
   );
 
-  // ── Baslangic verisi ──
+  // ── Başlangıç verisi ──
   useEffect(() => {
     void (async () => {
       const [svc, stf] = await Promise.all([
@@ -91,8 +91,8 @@ export default function Wizard() {
       setServices(svc);
       setStaff(stf);
 
-      // Hizmet/hekim sayfa baglantisiyla gelmis olabilir
-      // (or. /randevu?hizmet=asilama).
+      // Hizmet/hekim sayfa bağlantısıyla gelmis olabilir
+      // (or. /randevu?hizmet=aşılama).
       const svcSlug = params.get('hizmet');
       if (svcSlug) {
         const found = svc.find((s) => s.slug === svcSlug);
@@ -106,7 +106,7 @@ export default function Wizard() {
     })();
   }, [params]);
 
-  // Uyenin kayitli hayvanlari
+  // Şyenin kayıtlı hayvanlari
   useEffect(() => {
     if (!user) return;
     void api
@@ -118,7 +118,7 @@ export default function Wizard() {
       .catch(() => setPets([]));
   }, [user]);
 
-  // ── Musaitlik ──
+  // ── Müsaitlik ──
   const loadAvailability = useCallback(async () => {
     if (!serviceId) return;
     setLoadingSlots(true);
@@ -133,7 +133,7 @@ export default function Wizard() {
       const data = await api.get<Availability>(`/availability?${query}`);
       setAvailability(data);
 
-      // Ilk musait gunu otomatik sec: kullanici bos bir takvime bakmasin.
+      // Ilk müsait günü otomatik seç: kullanıcı boş bir takvime bakmasin.
       const firstOpen = data.days.find((d) => d.isOpen && d.slots.length > 0);
       setSelectedDay(firstOpen?.date ?? null);
     } catch (err) {
@@ -152,7 +152,7 @@ export default function Wizard() {
 
   const dayData = availability?.days.find((d) => d.date === selectedDay);
 
-  // ── Gonderim ──
+  // ── Gönderim ──
   async function submit() {
     if (!slot || !service) return;
     setSubmitting(true);
@@ -186,8 +186,8 @@ export default function Wizard() {
       const message =
         err instanceof ApiError ? err.message : 'Randevu oluşturulamadı.';
       setError(message);
-      // Slot kapildiysa kullaniciyi saat secimine geri gonder ve
-      // listeyi tazele; aksi halde ayni dolu saati tekrar denerdi.
+      // Slot kapıldıysa kullanıcıyı saat seçimine geri gönder ve
+      // listeyi tazele; aksi halde aynı dolu saati tekrar denerdi.
       if (err instanceof ApiError && (err.code === 'SLOT_TAKEN' || err.status === 400)) {
         setSlot(null);
         setStep(1);
@@ -198,7 +198,7 @@ export default function Wizard() {
     }
   }
 
-  // ── Basari ekrani ──
+  // ── Başarı ekranı ──
   if (step === 4 && result) {
     return (
       <section className="py-18 md:py-28">
@@ -246,7 +246,7 @@ export default function Wizard() {
           Müsait saatleri canlı görüyorsunuz. Seçtiğiniz saat anında ayrılır.
         </p>
 
-        {/* ── Adim gostergesi ── */}
+        {/* ── Adım göstergesi ── */}
         <ol className="mt-10 flex flex-wrap gap-x-2 gap-y-3" aria-label="Adımlar">
           {STEPS.map((label, i) => (
             <li key={label} className="flex items-center gap-2">
@@ -284,7 +284,7 @@ export default function Wizard() {
           </div>
         )}
 
-        {/* ── Adim 1: Hizmet ── */}
+        {/* ── Adım 1: Hizmet ── */}
         {step === 0 && (
           <div className="mt-10">
             <h2 className="font-sans text-lg font-semibold">
@@ -349,7 +349,7 @@ export default function Wizard() {
           </div>
         )}
 
-        {/* ── Adim 2: Tarih & Saat ── */}
+        {/* ── Adım 2: Tarih & Saat ── */}
         {step === 1 && (
           <div className="mt-10">
             <div className="flex flex-wrap items-center justify-between gap-4">
@@ -387,7 +387,7 @@ export default function Wizard() {
               </div>
             ) : (
               <>
-                {/* Gun secici */}
+                {/* Gün seçici */}
                 <div className="mt-6 grid grid-cols-4 gap-2 sm:grid-cols-7">
                   {availability?.days.map((d) => {
                     const date = new Date(`${d.date}T00:00:00`);
@@ -422,7 +422,7 @@ export default function Wizard() {
                   })}
                 </div>
 
-                {/* Saat secici */}
+                {/* Saat seçici */}
                 <div className="mt-8">
                   {dayData && dayData.slots.length > 0 ? (
                     <>
@@ -481,7 +481,7 @@ export default function Wizard() {
           </div>
         )}
 
-        {/* ── Adim 3: Bilgiler ── */}
+        {/* ── Adım 3: Bilgiler ── */}
         {step === 2 && (
           <div className="mt-10">
             <h2 className="font-sans text-lg font-semibold">
@@ -627,7 +627,7 @@ export default function Wizard() {
           </div>
         )}
 
-        {/* ── Adim 4: Onay ── */}
+        {/* ── Adım 4: Onay ── */}
         {step === 3 && slot && service && (
           <div className="mt-10">
             <h2 className="font-sans text-lg font-semibold">Randevu özeti</h2>

@@ -3,9 +3,9 @@ import type { SVGProps } from 'react';
 /**
  * Ince cizgili SVG ikon seti.
  *
- * Her ikonun viewBox'i 24x24. Bu ONEMLI: viewBox verilmezse tarayici
- * cizimi kirpar ve ikonlar yarim gorunur (tasarim onizlemesinde
- * yasanan hata buydu).
+ * Her ikonun viewBox'i 24x24. Bu ÖNEMLİ: viewBox verilmezse tarayıcı
+ * cizimi kirpar ve ikonlar yarım görünür (tasarım önizlemesinde
+ * yaşanan hata buydu).
  */
 
 const P = {
@@ -184,7 +184,7 @@ const PATHS: Record<string, React.ReactNode> = {
       <path d="m16 17 5-5-5-5M21 12H9" />
     </g>
   ),
-  menu: (
+  menü: (
     <g {...P} strokeWidth={1.8}>
       <path d="M4 7h16M4 12h16M4 17h16" />
     </g>

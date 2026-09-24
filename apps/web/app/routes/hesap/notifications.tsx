@@ -53,8 +53,8 @@ export default function Notifications() {
   }
 
   async function markOne(id: string) {
-    // Iyimser guncelleme: sunucu yanitini beklemeden isaretliyoruz,
-    // liste anlik tepki versin.
+    // Iyimser güncelleme: sunucu yanıtını beklemeden isaretliyoruz,
+    // liste anlık tepki versin.
     setItems((prev) =>
       prev?.map((n) => (n.id === id ? { ...n, isRead: true } : n)) ?? null,
     );

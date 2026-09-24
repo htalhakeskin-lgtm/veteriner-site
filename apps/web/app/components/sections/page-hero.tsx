@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-/** Ic sayfalarin ortak ust bolumu. Tum sayfalarda ayni ritim olsun diye. */
+/** Ic sayfaların ortak üst bölümü. Tüm sayfalarda aynı ritim olsun diye. */
 export function PageHero({
   eyebrow,
   title,

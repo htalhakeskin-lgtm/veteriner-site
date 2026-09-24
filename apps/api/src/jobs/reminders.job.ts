@@ -7,11 +7,11 @@ import { NotificationsService } from '../modules/notifications/notifications.ser
 import { TestimonialsService } from '../modules/testimonials/testimonials.service';
 
 /**
- * Zamanlanmis gorevler.
+ * Zamanlanmış görevler.
  *
- * DEMO_MODE=true iken mesajlar gercekten gonderilmez; SimulatedChannel
- * loga yazip veritabanina "gonderilmemis" olarak isler. Klinik sunumunda
- * yanlislikla mesaj gitmesini engeller.
+ * DEMO_MODE=true iken mesajlar gerçekten gönderilmez; SimulatedChannel
+ * loga yazıp veritabanına "gönderilmemiş" olarak işler. Klinik sunumunda
+ * yanlışlıkla mesaj gitmesini engeller.
  */
 @Injectable()
 export class RemindersJob {
@@ -24,9 +24,9 @@ export class RemindersJob {
   ) {}
 
   /**
-   * Randevu hatirlatmasi — saatlik.
-   * 24 saat sonrasindaki randevular taranir. reminderSentAt isaretlenir
-   * ki saatlik calisan gorev ayni randevuyu tekrar tekrar hatirlatmasin.
+   * Randevu hatırlatması — saatlik.
+   * 24 saat sonrasındaki randevular taranır. reminderSentAt işaretlenir
+   * ki saatlik çalışan görev aynı randevuyu tekrar tekrar hatırlatmasın.
    */
   @Cron(CronExpression.EVERY_HOUR, { name: 'randevu-hatirlatma' })
   async appointmentReminders(): Promise<void> {
@@ -55,12 +55,12 @@ export class RemindersJob {
       });
     }
 
-    this.logger.log(`${appointments.length} randevu hatirlatmasi gonderildi.`);
+    this.logger.log(`${appointments.length} randevu hatırlatması gönderildi.`);
   }
 
   /**
-   * Asi hatirlatmasi — her gun 09:00.
-   * 7 gun icinde tekrari gelen asilar icin sahibine bildirim.
+   * Aşı hatırlatması — her gün 09:00.
+   * 7 gün içinde tekrarı gelen aşılar için sahibine bildirim.
    */
   @Cron('0 9 * * *', { name: 'asi-hatirlatma', timeZone: 'Europe/Istanbul' })
   async vaccinationReminders(): Promise<void> {
@@ -80,9 +80,9 @@ export class RemindersJob {
       await this.notifications.dispatch({
         userId: record.pet.ownerId,
         type: 'VACCINATION_DUE',
-        title: 'Asi zamani yaklasiyor',
+        title: 'Aşı zamanı yaklaşıyor',
         message:
-          `${record.pet.name} icin "${record.title}" tekrari ` +
+          `${record.pet.name} için "${record.title}" tekrarı ` +
           `${record.nextDueAt.toLocaleDateString('tr-TR')} tarihinde. ` +
           'Randevu almak ister misiniz?',
         linkUrl: '/randevu',
@@ -90,13 +90,13 @@ export class RemindersJob {
       sent++;
     }
 
-    if (sent > 0) this.logger.log(`${sent} asi hatirlatmasi gonderildi.`);
+    if (sent > 0) this.logger.log(`${sent} aşı hatırlatması gönderildi.`);
   }
 
   /**
-   * Gecmis randevu temizligi — her gun 00:30.
-   * Tarihi gecmis ama hala bekleyen randevular "gelmedi" sayilir;
-   * aksi halde admin panelindeki "onay bekleyen" sayaci surekli sisar.
+   * Geçmiş randevu temizliği — her gün 00:30.
+   * Tarihi geçmiş ama hala bekleyen randevular "gelmedi" sayılır;
+   * aksi halde admin panelindeki "onay bekleyen" sayacı sürekli şişer.
    */
   @Cron('30 0 * * *', { name: 'gecmis-randevu-temizligi', timeZone: 'Europe/Istanbul' })
   async closeStaleAppointments(): Promise<void> {
@@ -108,13 +108,13 @@ export class RemindersJob {
       data: { status: AppointmentStatus.NO_SHOW },
     });
     if (result.count > 0) {
-      this.logger.log(`${result.count} gecmis randevu NO_SHOW olarak kapatildi.`);
+      this.logger.log(`${result.count} geçmiş randevu NO_SHOW olarak kapatıldı.`);
     }
   }
 
   /**
-   * Suresi dolmus token temizligi — her gun 03:00.
-   * Bu satirlar birikirse RefreshToken tablosu sonsuza kadar buyur.
+   * Süresi dolmuş token temizliği — her gün 03:00.
+   * Bu satırlar birikirse RefreshToken tablosu sonsuza kadar buyur.
    */
   @Cron('0 3 * * *', { name: 'token-temizligi', timeZone: 'Europe/Istanbul' })
   async cleanupTokens(): Promise<void> {
@@ -124,7 +124,7 @@ export class RemindersJob {
         where: {
           OR: [
             { expiresAt: { lt: now } },
-            // Iptal edilmis token'lar denetim icin 30 gun tutulur.
+            // Iptal edilmiş token'lar denetim için 30 gün tutulur.
             { revokedAt: { lt: new Date(now.getTime() - 30 * 86_400_000) } },
           ],
         },
@@ -136,12 +136,12 @@ export class RemindersJob {
 
     if (refresh.count + reset.count > 0) {
       this.logger.log(
-        `Token temizligi: ${refresh.count} oturum, ${reset.count} sifirlama token'i silindi.`,
+        `Token temizliği: ${refresh.count} oturum, ${reset.count} sıfırlama token'i silindi.`,
       );
     }
   }
 
-  /** Google yorumlari — her gun 04:00. */
+  /** Google yorumları — her gün 04:00. */
   @Cron('0 4 * * *', { name: 'google-yorum-senkronu', timeZone: 'Europe/Istanbul' })
   async syncGoogleReviews(): Promise<void> {
     await this.testimonials.syncGoogleReviews();

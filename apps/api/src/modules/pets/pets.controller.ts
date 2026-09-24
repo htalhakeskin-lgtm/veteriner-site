@@ -27,7 +27,7 @@ export class PetsController {
   constructor(private readonly pets: PetsService) {}
 
   @Get('pets')
-  @ApiOperation({ summary: 'Hayvanlarim' })
+  @ApiOperation({ summary: 'Hayvanlarım' })
   findMine(@CurrentUser() user: AuthUser) {
     return this.pets.findMine(user.id);
   }
@@ -53,19 +53,19 @@ export class PetsController {
   }
 
   @Delete('pets/:id')
-  @ApiOperation({ summary: 'Hayvani kaldir (yumusak silme)' })
+  @ApiOperation({ summary: 'Hayvanı kaldır (yumuşak silme)' })
   remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.pets.remove(id, user);
   }
 
   @Get('pets/:id/medical-records')
-  @ApiOperation({ summary: 'Saglik karti' })
+  @ApiOperation({ summary: 'Sağlık kartı' })
   medicalRecords(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.pets.medicalRecords(id, user);
   }
 
   @Get('pets/:id/vaccination-schedule')
-  @ApiOperation({ summary: 'Yaklasan asi ve kontroller' })
+  @ApiOperation({ summary: 'Yaklaşan aşı ve kontroller' })
   vaccinations(@Param('id') id: string, @CurrentUser() user: AuthUser) {
     return this.pets.vaccinationSchedule(id, user);
   }
@@ -74,14 +74,14 @@ export class PetsController {
 
   @Get('admin/pets')
   @Roles('ADMIN', 'STAFF')
-  @ApiOperation({ summary: 'Tum hasta kayitlari' })
+  @ApiOperation({ summary: 'Tüm hasta kayıtları' })
   findAllAdmin(@Query('q') q?: string, @Query('ownerId') ownerId?: string) {
     return this.pets.findAllAdmin({ q, ownerId });
   }
 
   @Post('admin/medical-records')
   @Roles('ADMIN', 'STAFF')
-  @ApiOperation({ summary: 'Saglik kaydi gir' })
+  @ApiOperation({ summary: 'Sağlık kaydı gir' })
   createRecord(@Body() dto: CreateMedicalRecordDto) {
     return this.pets.createMedicalRecord(dto);
   }

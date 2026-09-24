@@ -36,8 +36,8 @@ export default function Register() {
     e.preventDefault();
     setError(null);
 
-    // Sunucu bunu kontrol etmiyor (tek sifre alani aliyor); burada
-    // yakalamak kullaniciyi yanlis sifreyle kayitli kalmaktan korur.
+    // Sunucu bunu kontrol etmiyor (tek şifre alanı aliyor); burada
+    // yakalamak kullanıcıyı yanlış şifreyle kayıtlı kalmaktan korur.
     if (form.password !== form.passwordAgain) {
       setError('Şifreler eşleşmiyor.');
       return;

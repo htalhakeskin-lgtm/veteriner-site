@@ -13,11 +13,11 @@ import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import type { AuthUser, JwtPayload } from '../types/auth.types';
 
 /**
- * Global guard: varsayilan olarak HER uc korumalidir.
- * Disarida kalmasi gerekenler @Public() ile isaretlenir.
+ * Global guard: varsayılan olarak HER uç korumalıdır.
+ * Dışarıda kalması gerekenler @Public() ile işaretlenir.
  *
- * Passport kullanilmiyor — tek bir strateji icin ek katman gereksiz;
- * JwtService dogrudan yeterli ve hata mesajlarini biz kontrol ediyoruz.
+ * Passport kullanılmıyor — tek bir strateji için ek katman gereksiz;
+ * JwtService doğrudan yeterli ve hata mesajlarını biz kontrol ediyoruz.
  */
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -37,32 +37,32 @@ export class JwtAuthGuard implements CanActivate {
     const token = extractBearer(req);
 
     if (isPublic) {
-      // Acik uclarda token ZORUNLU degil ama varsa yine de cozumlenmeli.
+      // Açık uçlarda token ZORUNLU değil ama varsa yine de çözümlenmeli.
       //
-      // Aksi halde "hem misafir hem uye kullanabilir" tipindeki uclar
-      // (ornegin randevu olusturma) giris yapmis kullaniciyi goremez:
-      // randevu misafir randevusu olarak kaydedilir, "Randevularim"da
-      // gorunmez ve uyeden bosuna telefon istenir.
+      // Aksi halde "hem misafir hem üye kullanabilir" tipindeki uçlar
+      // (örneğin randevu oluşturma) giriş yapmış kullanıcıyı göremez:
+      // randevu misafir randevusu olarak kaydedilir, "Randevularım"da
+      // görünmez ve üyeden boşuna telefon istenir.
       if (token) {
         try {
           req.user = await this.resolve(token);
         } catch {
-          // Gecersiz token acik ucu engellemez; misafir olarak devam eder.
+          // Geçersiz token açık ucu engellemez; misafir olarak devam eder.
         }
       }
       return true;
     }
 
     if (!token) {
-      throw new UnauthorizedException('Oturum acmaniz gerekiyor.');
+      throw new UnauthorizedException('Oturum açmanız gerekiyor.');
     }
 
     try {
       req.user = await this.resolve(token);
     } catch {
-      // Suresi dolmus ve gecersiz imza ayni mesaji alir:
-      // saldirgana hangi durumda oldugunu soylemiyoruz.
-      throw new UnauthorizedException('Oturum gecersiz veya suresi dolmus.');
+      // Süresi dolmuş ve geçersiz imza aynı mesajı alır:
+      // saldırgana hangi durumda olduğunu söylemiyoruz.
+      throw new UnauthorizedException('Oturum geçersiz veya süresi dolmuş.');
     }
     return true;
   }

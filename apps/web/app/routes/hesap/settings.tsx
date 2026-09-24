@@ -131,7 +131,7 @@ export default function AccountSettings() {
             </Field>
 
             {/*
-              E-posta bilerek salt okunur: degistirmek dogrulama akisi
+              E-posta bilerek salt okunur: değiştirmek doğrulama akışı
               gerektirir, aksi halde hesap ele gecirilebilir.
             */}
             <Field label="E-posta" htmlFor="email" hint="E-posta adresi değiştirilemez">
@@ -153,7 +153,7 @@ export default function AccountSettings() {
           )}
         </Card>
 
-        {/* ── Sifre ── */}
+        {/* ── Şifre ── */}
         <Card className="p-6 md:p-8">
           <h2 className="font-sans text-lg font-semibold">Şifre değiştir</h2>
           <p className="mt-1.5 text-sm text-ink-muted">

@@ -9,11 +9,11 @@ import sharp from 'sharp';
 import { PrismaService } from '../../prisma/prisma.service';
 
 /**
- * Yuklenen dosyanin gercekten iddia ettigi turde olup olmadigini
- * ilk baytlarindan (magic bytes) anliyoruz.
+ * Yüklenen dosyanın gerçekten iddia ettiği türde olup olmadığını
+ * ilk baytlarından (magic bytes) anlıyoruz.
  *
- * Yalnizca Content-Type basligina guvenilemez: istemci onu serbestce
- * yazar. ".jpg" uzantili bir HTML dosyasi tarayicida calisabilirdi.
+ * Yalnızca Content-Type başlığına güvenilemez: istemci onu serbestçe
+ * yazar. ".jpg" uzantılı bir HTML dosyası tarayıcıda çalışabilirdi.
  */
 const MAGIC: Array<{ mime: string; test: (b: Buffer) => boolean }> = [
   { mime: 'image/jpeg', test: (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff },
@@ -59,18 +59,18 @@ export class MediaService {
     const detected = detectImageType(file.buffer);
     if (!detected) {
       throw new BadRequestException(
-        'Yalnizca JPEG, PNG, GIF veya WebP gorsel yuklenebilir.',
+        'Yalnızca JPEG, PNG, GIF veya WebP görsel yüklenebilir.',
       );
     }
 
-    // Gorseli sharp ile YENIDEN KODLUYORUZ. Bu, dosyaya gomulmus olabilecek
-    // betik veya EXIF icindeki zararli veriyi eler; cikti temiz bir WebP olur.
+    // Görseli sharp ile YENIDEN KODLUYORUZ. Bu, dosyaya gömülmüş olabilecek
+    // betik veya EXIF içindeki zararlı veriyi eler; çıktı temiz bir WebP olur.
     let output: Buffer;
     let width: number | undefined;
     let height: number | undefined;
     try {
       const pipeline = sharp(file.buffer, { animated: detected === 'image/gif' })
-        .rotate() // EXIF yonlendirmesini uygula, sonra metadatayi birak
+        .rotate() // EXIF yönlendirmesini uygula, sonra metadatayı bırak
         .resize({ width: 2000, height: 2000, fit: 'inside', withoutEnlargement: true })
         .webp({ quality: 82 });
 
@@ -79,11 +79,11 @@ export class MediaService {
       width = meta.width;
       height = meta.height;
     } catch {
-      throw new BadRequestException('Gorsel islenemedi. Dosya bozuk olabilir.');
+      throw new BadRequestException('Görsel işlenemedi. Dosya bozuk olabilir.');
     }
 
-    // Dosya adi istemciden ALINMAZ: "../../etc/passwd" gibi yollar
-    // dizin disina yazmaya calisirdi.
+    // Dosya adı istemciden ALINMAZ: "../../etc/passwd" gibi yollar
+    // dizin dışına yazmaya çalışırdı.
     const name = `${Date.now()}-${randomBytes(8).toString('hex')}.webp`;
     const dir = this.uploadDir;
     await mkdir(dir, { recursive: true });
@@ -111,17 +111,17 @@ export class MediaService {
 
   async remove(id: string) {
     const asset = await this.prisma.mediaAsset.findUnique({ where: { id } });
-    if (!asset) throw new NotFoundException('Dosya bulunamadi.');
+    if (!asset) throw new NotFoundException('Dosya bulunamadı.');
 
-    // Once veritabani kaydini sil; disk silme basarisiz olsa bile
-    // yonetimde hayalet kayit kalmasin.
+    // Önce veritabanı kaydını sil; disk silme başarısız olsa bile
+    // yönetimde hayalet kayıt kalmasın.
     await this.prisma.mediaAsset.delete({ where: { id } });
     await unlink(join(this.uploadDir, asset.filename)).catch(() => undefined);
 
     return { deleted: true };
   }
 
-  /** Ayni dosyanin tekrar yuklenmesini tespit etmek icin (ileride kullanilacak). */
+  /** Aynı dosyanın tekrar yüklenmesini tespit etmek için (ileride kullanılacak). */
   static checksum(buffer: Buffer): string {
     return createHash('sha256').update(buffer).digest('hex');
   }

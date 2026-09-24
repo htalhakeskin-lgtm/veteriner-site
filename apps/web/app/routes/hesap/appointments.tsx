@@ -62,7 +62,7 @@ export default function MyAppointments() {
   }, [load]);
 
   async function cancel(id: string) {
-    // Randevu iptali geri alinamaz; once onay aliyoruz.
+    // Randevu iptali geri alınamaz; önce onay aliyoruz.
     if (!confirm('Bu randevuyu iptal etmek istediğinize emin misiniz?')) return;
     setBusyId(id);
     setError(null);

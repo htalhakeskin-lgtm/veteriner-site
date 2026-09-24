@@ -220,8 +220,8 @@ export default function Contact() {
                 </Field>
 
                 {/*
-                  Honeypot: gercek kullanici gormez, bot doldurur.
-                  Sunucu dolu geldiginde mesaji sessizce atar.
+                  Honeypot: gerçek kullanıcı görmez, bot doldurur.
+                  Sunucu dolu geldiğinde mesajı sessizce atar.
                 */}
                 <div aria-hidden="true" className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
                   <label htmlFor="website">Bu alanı boş bırakın</label>

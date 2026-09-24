@@ -12,14 +12,14 @@ export class TestimonialsController {
 
   @Public()
   @Get('testimonials')
-  @ApiOperation({ summary: 'Onayli musteri yorumlari' })
+  @ApiOperation({ summary: 'Onaylı müşteri yorumları' })
   findApproved(@Query('limit') limit?: string) {
     return this.testimonials.findApproved(limit ? Number(limit) : undefined);
   }
 
   @Public()
   @Get('testimonials/rating')
-  @ApiOperation({ summary: 'Ortalama puan (JSON-LD icin)' })
+  @ApiOperation({ summary: 'Ortalama puan (JSON-LD için)' })
   rating() {
     return this.testimonials.aggregateRating();
   }
@@ -53,7 +53,7 @@ export class TestimonialsController {
 
   @Post('admin/testimonials/sync-google')
   @Roles('ADMIN')
-  @ApiOperation({ summary: 'Google yorumlarini simdi senkronize et' })
+  @ApiOperation({ summary: 'Google yorumlarını şimdi senkronize et' })
   syncGoogle() {
     return this.testimonials.syncGoogleReviews();
   }

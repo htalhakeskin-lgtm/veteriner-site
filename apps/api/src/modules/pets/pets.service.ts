@@ -31,7 +31,7 @@ export class PetsService {
         owner: { select: { id: true, fullName: true, phone: true, email: true } },
       },
     });
-    if (!pet) throw new NotFoundException('Hayvan bulunamadi.');
+    if (!pet) throw new NotFoundException('Hayvan bulunamadı.');
     this.assertOwnership(pet.ownerId, requester);
     return pet;
   }
@@ -55,7 +55,7 @@ export class PetsService {
   }
 
   async update(id: string, requester: Requester, dto: UpdatePetDto) {
-    await this.findOne(id, requester); // sahiplik kontrolu
+    await this.findOne(id, requester); // sahiplik kontrolü
     return this.prisma.pet.update({
       where: { id },
       data: {
@@ -78,8 +78,8 @@ export class PetsService {
   }
 
   /**
-   * Yumusak silme. Gercek silme, hayvana bagli randevu ve saglik
-   * gecmisini de goturur; klinik kaydi boyle kaybedilmemeli.
+   * Yumuşak silme. Gerçek silme, hayvana bağlı randevu ve sağlık
+   * geçmişini de götürür; klinik kaydı böyle kaybedilmemeli.
    */
   async remove(id: string, requester: Requester) {
     await this.findOne(id, requester);
@@ -102,7 +102,7 @@ export class PetsService {
     });
   }
 
-  /** Yaklasan asi / kontrol takvimi. */
+  /** Yaklaşan aşı / kontrol takvimi. */
   async vaccinationSchedule(petId: string, requester: Requester) {
     await this.findOne(petId, requester);
     const records = await this.prisma.medicalRecord.findMany({
@@ -120,7 +120,7 @@ export class PetsService {
     const now = new Date();
     return records.map((r) => ({
       ...r,
-      // Tarihi gecmis tekrarlar isaretleniyor ki arayuz one cikarabilsin.
+      // Tarihi geçmiş tekrarlar işaretleniyor ki arayüz öne çıkarabilsin.
       isOverdue: r.nextDueAt !== null && r.nextDueAt < now,
     }));
   }
@@ -144,7 +144,7 @@ export class PetsService {
 
   async removeMedicalRecord(id: string) {
     const found = await this.prisma.medicalRecord.findUnique({ where: { id } });
-    if (!found) throw new NotFoundException('Saglik kaydi bulunamadi.');
+    if (!found) throw new NotFoundException('Sağlık kaydı bulunamadı.');
     await this.prisma.medicalRecord.delete({ where: { id } });
     return { deleted: true };
   }
@@ -183,7 +183,7 @@ export class PetsService {
   private assertOwnership(ownerId: string, requester: Requester): void {
     if (requester.role === 'ADMIN' || requester.role === 'STAFF') return;
     if (ownerId !== requester.id) {
-      throw new ForbiddenException('Bu hayvan size ait degil.');
+      throw new ForbiddenException('Bu hayvan size ait değil.');
     }
   }
 }

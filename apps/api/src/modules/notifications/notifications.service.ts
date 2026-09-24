@@ -24,28 +24,28 @@ export class NotificationsService {
     db: DatabaseChannel,
     simulated: SimulatedChannel,
   ) {
-    // Sira onemli degil; her kanal kendi isEnabled() kontrolunu yapar.
-    // Faz ilerledikce EmailChannel / WhatsappChannel buraya eklenir.
+    // Sıra önemli değil; her kanal kendi isEnabled() kontrolünü yapar.
+    // Faz ilerledikçe EmailChannel / WhatsappChannel buraya eklenir.
     this.channels = [db, simulated];
   }
 
-  /** Tum acik kanallara gonderir. Bir kanalin hatasi digerlerini durdurmaz. */
+  /** Tüm açık kanallara gönderir. Bir kanalın hatası diğerlerini durdurmaz. */
   async dispatch(msg: OutboundMessage): Promise<void> {
     for (const channel of this.channels) {
       if (!channel.isEnabled()) continue;
       try {
         await channel.send(msg);
       } catch (err) {
-        // Bildirim gonderilemedigi icin randevu islemi basarisiz olmamali.
+        // Bildirim gönderilemediği için randevu işlemi başarısız olmamalı.
         this.logger.error(
-          `${channel.name} kanali basarisiz: ${(err as Error).message}`,
+          `${channel.name} kanalı başarısız: ${(err as Error).message}`,
         );
       }
     }
   }
 
   // ─────────────────────────────────────────
-  //  Randevu yasam dongusu mesajlari
+  //  Randevu yaşam döngüsü mesajları
   // ─────────────────────────────────────────
 
   private formatDate(d: Date): string {
@@ -70,10 +70,10 @@ export class NotificationsService {
     await this.dispatch({
       ...this.recipient(a),
       type: 'APPOINTMENT_CREATED',
-      title: 'Randevu talebiniz alindi',
+      title: 'Randevu talebiniz alındı',
       message:
-        `${this.formatDate(a.startAt)} icin ${a.service.title} randevu talebiniz alindi. ` +
-        `Kod: ${a.code}. Onaylandiginda bilgilendirileceksiniz.`,
+        `${this.formatDate(a.startAt)} için ${a.service.title} randevu talebiniz alındı. ` +
+        `Kod: ${a.code}. Onaylandığında bilgilendirileceksiniz.`,
       linkUrl: `/hesap/randevularim`,
     });
   }
@@ -82,9 +82,9 @@ export class NotificationsService {
     await this.dispatch({
       ...this.recipient(a),
       type: 'APPOINTMENT_CONFIRMED',
-      title: 'Randevunuz onaylandi',
+      title: 'Randevunuz onaylandı',
       message:
-        `Randevunuz onaylandi: ${this.formatDate(a.startAt)} - ${a.service.title}` +
+        `Randevunuz onaylandı: ${this.formatDate(a.startAt)} - ${a.service.title}` +
         (a.staff ? ` (${a.staff.fullName})` : '') +
         `. Kod: ${a.code}`,
       linkUrl: `/hesap/randevularim`,
@@ -98,7 +98,7 @@ export class NotificationsService {
       title: 'Randevunuz iptal edildi',
       message:
         `${this.formatDate(a.startAt)} tarihli ${a.service.title} randevunuz iptal edildi. ` +
-        `Yeni randevu icin sitemizi ziyaret edebilirsiniz.`,
+        `Yeni randevu için sitemizi ziyaret edebilirsiniz.`,
       linkUrl: `/randevu`,
     });
   }
@@ -107,9 +107,9 @@ export class NotificationsService {
     await this.dispatch({
       ...this.recipient(a),
       type: 'APPOINTMENT_REMINDER',
-      title: 'Randevu hatirlatmasi',
+      title: 'Randevu hatırlatması',
       message:
-        `Yarin ${this.formatDate(a.startAt)} randevunuz var: ${a.service.title}` +
+        `Yarın ${this.formatDate(a.startAt)} randevunuz var: ${a.service.title}` +
         (a.staff ? ` - ${a.staff.fullName}` : '') +
         '.',
       linkUrl: `/hesap/randevularim`,
@@ -117,7 +117,7 @@ export class NotificationsService {
   }
 
   // ─────────────────────────────────────────
-  //  Kullanici tarafi
+  //  Kullanıcı tarafı
   // ─────────────────────────────────────────
 
   findMine(userId: string, onlyUnread = false) {
@@ -136,12 +136,12 @@ export class NotificationsService {
   }
 
   async markRead(id: string, userId: string) {
-    // updateMany + userId: baskasinin bildirimini okundu isaretlemeyi engeller.
+    // updateMany + userId: başkasının bildirimini okundu işaretlemeyi engeller.
     const result = await this.prisma.notification.updateMany({
       where: { id, userId },
       data: { isRead: true, readAt: new Date() },
     });
-    if (result.count === 0) throw new NotFoundException('Bildirim bulunamadi.');
+    if (result.count === 0) throw new NotFoundException('Bildirim bulunamadı.');
     return { updated: result.count };
   }
 

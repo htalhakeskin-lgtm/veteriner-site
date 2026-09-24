@@ -36,7 +36,7 @@ export default function ResetPassword() {
     try {
       await api.post('/auth/reset-password', { token, password });
       setDone(true);
-      // Kullaniciyi bilgilendirip giris sayfasina gonderiyoruz.
+      // Kullanıcıyı bilgilendirip giriş sayfasına gönderiyoruz.
       setTimeout(() => navigate('/giris', { replace: true }), 2500);
     } catch (err) {
       setError(

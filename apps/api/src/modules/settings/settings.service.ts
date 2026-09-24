@@ -7,7 +7,7 @@ import {
   type AppointmentRules,
 } from './settings.types';
 
-/** Ayarlar her istekte okunuyor; kisa sureli onbellek veritabanini korur. */
+/** Ayarlar her istekte okunuyor; kısa süreli önbellek veritabanını korur. */
 const CACHE_MS = 30_000;
 
 @Injectable()
@@ -25,21 +25,21 @@ export class SettingsService {
     });
     if (!value) {
       throw new NotFoundException(
-        'Site ayarlari bulunamadi. Seed calistirildi mi? (npm run db:seed)',
+        'Site ayarları bulunamadı. Seed çalıştırıldı mi? (npm run db:seed)',
       );
     }
     this.cache = { value, at: Date.now() };
     return value;
   }
 
-  /** Admin: tum ayarlar. */
+  /** Admin: tüm ayarlar. */
   getAll(): Promise<SiteSetting> {
     return this.load();
   }
 
   /**
-   * Herkese acik alt kume. googlePlaceId ve benzeri operasyonel alanlar
-   * disarida birakilir: sitede gorunmesi gerekmiyor.
+   * Herkese açık alt küme. googlePlaceId ve benzeri operasyonel alanlar
+   * dışarıda bırakılır: sitede görünmesi gerekmiyor.
    */
   async getPublic() {
     const s = await this.load();
@@ -51,7 +51,7 @@ export class SettingsService {
       features: s.features,
       seo: s.seo,
       socialLinks: s.socialLinks,
-      // Randevu kurallarindan yalnizca arayuzun ihtiyaci olanlar
+      // Randevu kurallarından yalnızca arayüzün ihtiyacı olanlar
       appointment: {
         daysInAdvance:
           (s.appointmentRules as unknown as AppointmentRules).daysInAdvance,
@@ -61,11 +61,11 @@ export class SettingsService {
     };
   }
 
-  /** Musaitlik motoru ve randevu servisi bunu kullanir. */
+  /** Müsaitlik motoru ve randevu servisi bunu kullanır. */
   async getAppointmentRules(): Promise<AppointmentRules> {
     const s = await this.load();
-    // Eksik alan olursa varsayilana duser: ayarlar panelden elle
-    // duzenlenebildigi icin yarim JSON gelme ihtimali var.
+    // Eksik alan olursa varsayılana düşer: ayarlar panelden elle
+    // düzenlenebildiği için yarım JSON gelme ihtimali var.
     return {
       ...DEFAULT_APPOINTMENT_RULES,
       ...((s.appointmentRules ?? {}) as Partial<AppointmentRules>),
@@ -74,7 +74,7 @@ export class SettingsService {
 
   async update(patch: Record<string, unknown>) {
     const data: Prisma.SiteSettingUpdateInput = {};
-    // Yalnizca bilinen JSON bolumleri guncellenebilir.
+    // Yalnızca bilinen JSON bölümleri güncellenebilir.
     for (const key of [
       'clinic', 'contact', 'workingHours', 'theme', 'features',
       'appointmentRules', 'seo', 'socialLinks',
@@ -91,7 +91,7 @@ export class SettingsService {
       where: { id: 'singleton' },
       data,
     });
-    this.cache = null; // onbellegi dusur, degisiklik hemen yansisin
+    this.cache = null; // önbelleği düşür, değişiklik hemen yansısın
     return updated;
   }
 }

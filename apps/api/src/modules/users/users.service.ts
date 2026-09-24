@@ -28,7 +28,7 @@ export class UsersService {
     private readonly tokens: TokenService,
   ) {}
 
-  /** Admin: musteri listesi (arama + sayfalama). Admin panelinin temeli. */
+  /** Admin: müşteri listesi (arama + sayfalama). Admin panelinin temeli. */
   async list(params: { q?: string; page?: number; limit?: number }) {
     const page = Math.max(1, params.page ?? 1);
     const limit = Math.min(100, Math.max(1, params.limit ?? 20));
@@ -65,13 +65,13 @@ export class UsersService {
       where: { id: userId, deletedAt: null },
       select: PUBLIC_FIELDS,
     });
-    if (!user) throw new NotFoundException('Hesap bulunamadi.');
+    if (!user) throw new NotFoundException('Hesap bulunamadı.');
     return user;
   }
 
   async updateProfile(userId: string, dto: UpdateProfileDto) {
-    // E-posta ve rol bilerek guncellenmiyor: e-posta degisikligi
-    // dogrulama akisi ister, rol ise yetki yukseltme riski tasir.
+    // E-posta ve rol bilerek güncellenmiyor: e-posta değişikliği
+    // doğrulama akışı ister, rol ise yetki yükseltme riski taşır.
     return this.prisma.user.update({
       where: { id: userId },
       data: {
@@ -86,10 +86,10 @@ export class UsersService {
     const user = await this.prisma.user.findFirst({
       where: { id: userId, deletedAt: null },
     });
-    if (!user) throw new NotFoundException('Hesap bulunamadi.');
+    if (!user) throw new NotFoundException('Hesap bulunamadı.');
 
     if (!(await verify(user.passwordHash, dto.currentPassword))) {
-      throw new UnauthorizedException('Mevcut sifreniz hatali.');
+      throw new UnauthorizedException('Mevcut şifreniz hatalı.');
     }
 
     await this.prisma.user.update({
@@ -97,9 +97,9 @@ export class UsersService {
       data: { passwordHash: await hash(dto.newPassword, ARGON_OPTS) },
     });
 
-    // Sifre degisti: diger cihazlardaki oturumlar da kapansin.
+    // Şifre değişti: diğer cihazlardaki oturumlar da kapansın.
     await this.tokens.revokeAllForUser(userId);
 
-    return { message: 'Sifreniz guncellendi. Diger cihazlardaki oturumlar kapatildi.' };
+    return { message: 'Şifreniz güncellendi. Diğer cihazlardaki oturumlar kapatıldı.' };
   }
 }

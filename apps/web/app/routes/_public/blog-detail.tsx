@@ -104,7 +104,7 @@ export default function BlogDetail({ loaderData }: Route.ComponentProps) {
           {/*
             contentHtml sunucuda sanitize-html ile temizlenmis halde
             geliyor (bkz. blog.service.ts). Burada tekrar temizlemek
-            gerekmiyor; kaydetme aninda temizlemek dogru yerdir.
+            gerekmiyor; kaydetme anında temizlemek doğru yerdir.
           */}
           <div
             className="prose-vet mt-12"

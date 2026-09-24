@@ -13,10 +13,10 @@ export interface NavItem {
 }
 
 /**
- * Musteri ve yonetim panellerinin ortak kabugu.
+ * Müşteri ve yönetim panellerinin ortak kabugu.
  *
- * Yetki kontrolu burada tek yerde: her sayfanin kendi kontrolunu
- * yazmasi, birini unutunca sessiz bir acik birakirdi.
+ * Yetki kontrolü burada tek yerde: her sayfanin kendi kontrolünü
+ * yazmasi, birini unutunca sessiz bir açık bırakırdı.
  */
 export function PanelShell({
   title,
@@ -39,12 +39,12 @@ export function PanelShell({
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      // Giristen sonra kullanici geldigi sayfaya donsun.
+      // Girişten sonra kullanıcı geldigi sayfaya dönsün.
       navigate(`/giris?devam=${encodeURIComponent(location.pathname)}`, {
         replace: true,
       });
     } else if (!allow.includes(user.role)) {
-      // Yetkisi yetmiyorsa kendi paneline yonlendir.
+      // Yetkisi yetmiyorsa kendi paneline yönlendir.
       navigate(user.role === 'CUSTOMER' ? '/hesap' : '/panel', { replace: true });
     }
   }, [user, loading, allow, navigate, location.pathname]);
@@ -59,7 +59,7 @@ export function PanelShell({
 
   return (
     <div className="min-h-screen bg-bg">
-      {/* ── Ust bar ── */}
+      {/* ── Üst bar ── */}
       <header className="sticky top-0 z-40 border-b border-line bg-surface/90 backdrop-blur-lg">
         <div className="wrap flex h-16 items-center gap-4">
           <Link to="/" className="flex items-center gap-2.5">
@@ -95,7 +95,7 @@ export function PanelShell({
       </header>
 
       <div className="wrap grid gap-8 py-8 lg:grid-cols-[240px_1fr] lg:gap-12">
-        {/* ── Yan menu ── */}
+        {/* ── Yan menü ── */}
         <nav
           className={cx(
             'lg:sticky lg:top-24 lg:block lg:self-start',
@@ -131,7 +131,7 @@ export function PanelShell({
   );
 }
 
-/** Panel sayfalarinin ortak basligi. */
+/** Panel sayfalarının ortak başlığı. */
 export function PanelHeader({
   title,
   description,

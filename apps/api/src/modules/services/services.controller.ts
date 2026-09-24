@@ -22,14 +22,14 @@ export class ServicesController {
 
   @Public()
   @Get('services/:slug')
-  @ApiOperation({ summary: 'Hizmet detayi' })
+  @ApiOperation({ summary: 'Hizmet detayı' })
   findOne(@Param('slug') slug: string) {
     return this.services.findBySlug(slug);
   }
 
   @Get('admin/services')
   @Roles('ADMIN')
-  @ApiOperation({ summary: 'Tum hizmetler (pasifler dahil)' })
+  @ApiOperation({ summary: 'Tüm hizmetler (pasifler dahil)' })
   findAllAdmin() {
     return this.services.findAllAdmin();
   }

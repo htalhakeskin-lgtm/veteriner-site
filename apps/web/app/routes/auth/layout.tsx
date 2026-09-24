@@ -4,9 +4,9 @@ import type { SiteSettings } from '~/lib/types';
 import { Icon } from '~/components/ui';
 
 /**
- * Kimlik dogrulama sayfalarinin sade duzeni.
- * Header/footer yok: kullaniciyi tek bir isten (giris yapmak)
- * uzaklastiracak baglanti gostermiyoruz.
+ * Kimlik doğrulama sayfalarının sade düzeni.
+ * Header/footer yok: kullanıcıyı tek bir isten (giriş yapmak)
+ * uzaklastiracak bağlantı göstermiyoruz.
  */
 export default function AuthLayout() {
   const root = useRouteLoaderData('root') as { settings: SiteSettings | null } | undefined;

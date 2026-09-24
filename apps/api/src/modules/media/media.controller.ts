@@ -18,16 +18,16 @@ export class MediaController {
   constructor(private readonly media: MediaService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Yuklenen gorseller' })
+  @ApiOperation({ summary: 'Yüklenen görseller' })
   list(@Query('limit') limit?: string) {
     return this.media.list(limit ? Number(limit) : undefined);
   }
 
   @Post()
   @ApiConsumes('multipart/form-data')
-  @ApiOperation({ summary: 'Gorsel yukle (WebP olarak yeniden kodlanir)' })
-  // Bellekte tutuluyor: sharp ile yeniden kodlamadan once diske
-  // hic dokunmuyoruz, boylece islenmemis dosya sunucuda kalmiyor.
+  @ApiOperation({ summary: 'Görsel yükle (WebP olarak yeniden kodlanır)' })
+  // Bellekte tutuluyor: sharp ile yeniden kodlamadan önce diske
+  // hiç dokunmuyoruz, böylece işlenmemiş dosya sunucuda kalmıyor.
   @UseInterceptors(FileInterceptor('file'))
   upload(
     @UploadedFile() file: { buffer: Buffer; originalname: string; mimetype: string; size: number },

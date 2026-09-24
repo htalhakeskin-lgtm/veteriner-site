@@ -1,22 +1,22 @@
 /**
  * ═══════════════════════════════════════════════════════════════
- *  MUSAITLIK MOTORU — saf hesaplama
+ *  MÜSAİTLİK MOTORU — saf hesaplama
  * ═══════════════════════════════════════════════════════════════
  *
- * Bilerek veritabanindan tamamen bagimsiz: girdi olarak hazir veri alir,
- * cikti olarak slot listesi dondurur. Sistemin en cok kural iceren ve en
- * cok hata yapmaya musait parcasi burasi, bu yuzden veritabani kurmadan
- * birim testiyle kosturulabilmeli.
+ * Bilerek veritabanından tamamen bağımsız: girdi olarak hazır veri alır,
+ * çıktı olarak slot listesi döndürür. Sistemin en çok kural içeren ve en
+ * çok hata yapmaya müsait parçası burası, bu yüzden veritabanı kurmadan
+ * birim testiyle koşturulabilmeli.
  *
- * Cakisma kurali her yerde YARI ACIK aralik: [start, end)
- * Yani 09:00-09:30 ile 09:30-10:00 CAKISMAZ. Veritabanindaki
- * Appointment_no_overlap kisiti da ayni araligi kullaniyor; ikisi
- * farkli olsaydi motor "musait" dedigi bir slotu kaydetmeye calisir
- * ve veritabani reddederdi.
+ * Çakışma kuralı her yerde YARI AÇIK aralık: [start, end)
+ * Yani 09:00-09:30 ile 09:30-10:00 ÇAKIŞMAZ. Veritabanındaki
+ * Appointment_no_overlap kısıtı da aynı aralığı kullanıyor; ikisi
+ * farklı olsaydı motor "müsait" dediği bir slotu kaydetmeye çalışır
+ * ve veritabanı reddederdi.
  */
 
 export interface WorkWindow {
-  /** 0 = Pazar ... 6 = Cumartesi (JavaScript getDay() ile ayni) */
+  /** 0 = Pazar ... 6 = Cumartesi (JavaScript getDay() ile aynı) */
   dayOfWeek: number;
   /** "HH:mm" */
   startTime: string;
@@ -32,30 +32,30 @@ export interface Interval {
 export interface StaffAvailabilityInput {
   id: string;
   name: string;
-  /** Haftalik calisma pencereleri */
+  /** Haftalık çalışma pencereleri */
   windows: WorkWindow[];
-  /** Izin / tatil araliklari */
+  /** Izin / tatil aralıkları */
   timeOff: Interval[];
-  /** Mevcut randevular (yalnizca slotu isgal eden durumlar) */
+  /** Mevcut randevular (yalnızca slotu işgal eden durumlar) */
   busy: Interval[];
 }
 
 export interface AvailabilityInput {
-  /** Kapsanacak gunler (yerel gun baslangiclari) */
+  /** Kapsanacak günler (yerel gün başlangıçları) */
   days: Date[];
-  /** Hizmetin suresi — slotun ne kadar yer kapladigini belirler */
+  /** Hizmetin süresi — slotun ne kadar yer kapladigini belirler */
   durationMinutes: number;
-  /** Slot izgarasinin adimi (or. 30 dk) */
+  /** Slot izgarasinin adımı (or. 30 dk) */
   stepMinutes: number;
-  /** Bu kadar saatten yakin randevu alinamaz */
+  /** Bu kadar saatten yakın randevu alınamaz */
   leadTimeHours: number;
-  /** Gun basina azami aktif randevu; 0 veya altiysa sinir yok */
+  /** Gün başına azami aktif randevu; 0 veya altıysa sınır yok */
   maxDailySlots: number;
-  /** Klinigin tamamen kapali oldugu haftanin gunleri */
+  /** Kliniğin tamamen kapalı olduğu haftanin günleri */
   blockedWeekdays: number[];
   /** Resmi tatiller, "YYYY-MM-DD" */
   holidays: Set<string>;
-  /** Hesaplama ani — testlerde sabitlenebilsin diye disaridan veriliyor */
+  /** Hesaplama ani — testlerde sabitlenebilsin diye dışarıdan veriliyor */
   now: Date;
   staff: StaffAvailabilityInput[];
 }
@@ -84,10 +84,10 @@ export interface AvailabilityDay {
 }
 
 // ─────────────────────────────────────────────
-//  Yardimcilar
+//  Yardımcılar
 // ─────────────────────────────────────────────
 
-/** Yerel tarih anahtari. toISOString() KULLANILMAZ: UTC'ye cevirip gunu kaydirir. */
+/** Yerel tarih anahtarı. toISOString() KULLANILMAZ: UTC'ye çevirip günü kaydırır. */
 export function dateKey(d: Date): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -111,7 +111,7 @@ function atMinutes(day: Date, minutes: number): Date {
   return d;
 }
 
-/** Yari acik aralik cakismasi: [aStart, aEnd) ile [bStart, bEnd) */
+/** Yarı açık aralık çakışması: [aStart, aEnd) ile [bStart, bEnd) */
 export function overlaps(
   aStart: Date,
   aEnd: Date,
@@ -153,7 +153,7 @@ export function computeAvailability(
       return { date: key, isOpen: false, reason: 'WEEKLY_CLOSED', slots: [] };
     }
 
-    // O gun calisan hekim var mi?
+    // O gün çalışan hekim var mi?
     const working = staff.filter((s) =>
       s.windows.some((w) => w.dayOfWeek === day.getDay()),
     );
@@ -166,7 +166,7 @@ export function computeAvailability(
       };
     }
 
-    // Gun basina randevu siniri: o gune ait mevcut randevular sayilir.
+    // Gün başına randevu sınırı: o güne ait mevcut randevular sayılır.
     if (maxDailySlots > 0) {
       const bookedToday = staff.reduce(
         (sum, s) =>
@@ -183,9 +183,9 @@ export function computeAvailability(
       }
     }
 
-    // Slot baslangici -> o slotu verebilecek ILK hekim.
-    // Map kullaniliyor cunku ayni saatte birden fazla hekim musait olabilir;
-    // musteriye tek bir secenek gosterip arkada hekimi biz atiyoruz.
+    // Slot başlangıcı -> o slotu verebilecek ILK hekim.
+    // Map kullanılıyor çünkü aynı saatte birden fazla hekim müsait olabilir;
+    // müşteriye tek bir seçenek gösterip arkada hekimi biz atıyoruz.
     const byTime = new Map<number, Slot>();
 
     for (const member of working) {
@@ -199,7 +199,7 @@ export function computeAvailability(
           const start = atMinutes(day, t);
           const end = new Date(start.getTime() + durationMinutes * 60_000);
 
-          // Cok yakin randevular alinamaz (hazirlik payi).
+          // Çok yakın randevular alınamaz (hazırlık payı).
           if (start < earliest) continue;
 
           const busy =
@@ -225,13 +225,13 @@ export function computeAvailability(
       (a, b) => a.start.getTime() - b.start.getTime(),
     );
 
-    // Gun acik ama hic slot yoksa isOpen true kalir: klinik calisiyor,
-    // sadece doluyuz. "Kapali" demek yanlis bilgi olurdu.
+    // Gün açık ama hiç slot yoksa isOpen true kalır: klinik çalışıyor,
+    // sadece doluyuz. "Kapalı" demek yanlış bilgi olurdu.
     return { date: key, isOpen: true, slots };
   });
 }
 
-/** from..to arasindaki yerel gun baslangiclarini uretir (ikisi de dahil). */
+/** from..to arasındaki yerel gün başlangıçlarını üretir (ikisi de dahil). */
 export function buildDayRange(from: Date, to: Date): Date[] {
   const days: Date[] = [];
   const cursor = new Date(from);

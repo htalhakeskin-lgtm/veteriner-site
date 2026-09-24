@@ -6,8 +6,8 @@ import { AuthService } from './auth.service';
 import { TokenService } from './token.service';
 
 @Module({
-  // Sirlar imzalama/dogrulama aninda ConfigService'ten okunuyor,
-  // burada global kayit yapmiyoruz.
+  // Sırlar imzalama/doğrulama anında ConfigService'ten okunuyor,
+  // burada global kayıt yapmıyoruz.
   imports: [JwtModule.register({})],
   controllers: [AuthController],
   providers: [AuthService, TokenService],

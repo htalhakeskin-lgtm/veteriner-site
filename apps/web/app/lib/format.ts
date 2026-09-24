@@ -1,4 +1,4 @@
-/** Turkce bicimleme yardimcilari. Tum sitede ayni gorunumu saglar. */
+/** Türkçe biçimleme yardımcıları. Tüm sitede aynı görünümü sağlar. */
 
 const TR = 'tr-TR';
 
@@ -54,7 +54,7 @@ export function formatPrice(value: string | number | null): string {
   }).format(n);
 }
 
-/** YEREL gun anahtari. toISOString() UTC'ye cevirip gunu kaydirir. */
+/** YEREL gün anahtarı. toISOString() UTC'ye çevirip günü kaydırır. */
 export function dayKey(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
     d.getDate(),
@@ -116,7 +116,7 @@ export const RECORD_TYPE_OPTIONS = Object.entries(RECORD_TYPE).map(
   ([value, label]) => ({ value, label }),
 );
 
-/** Hayvanin yasini dogum tarihinden hesaplar. */
+/** Hayvanın yaşını doğum tarihinden hesaplar. */
 export function petAge(birthDate: string | null): string {
   if (!birthDate) return '—';
   const birth = new Date(birthDate);
@@ -133,7 +133,7 @@ export function petAge(birthDate: string | null): string {
   return rest === 0 ? `${years} yaşında` : `${years} yaş ${rest} ay`;
 }
 
-/** WhatsApp derin baglantisi. Turkiye numaralarini 90 ile normalize eder. */
+/** WhatsApp derin bağlantısı. Türkiye numaralarını 90 ile normalize eder. */
 export function whatsappLink(phone: string, text: string): string {
   const digits = phone.replace(/\D/g, '');
   const intl = digits.startsWith('90')

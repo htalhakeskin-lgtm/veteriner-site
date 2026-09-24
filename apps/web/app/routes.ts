@@ -6,7 +6,7 @@ import {
 } from '@react-router/dev/routes';
 
 export default [
-  // ── Tanitim sayfalari (prerender edilir, SEO onemli) ──
+  // ── Tanıtım sayfaları (prerender edilir, SEO önemli) ──
   layout('routes/_public/layout.tsx', [
     index('routes/_public/home.tsx'),
     route('hizmetler', 'routes/_public/services.tsx'),
@@ -21,7 +21,7 @@ export default [
     route('randevu-sorgula', 'routes/randevu/lookup.tsx'),
   ]),
 
-  // ── Kimlik dogrulama (kendi sade duzeni) ──
+  // ── Kimlik doğrulama (kendi sade düzeni) ──
   layout('routes/auth/layout.tsx', [
     route('giris', 'routes/auth/login.tsx'),
     route('kayit', 'routes/auth/register.tsx'),
@@ -29,7 +29,7 @@ export default [
     route('sifre-sifirla', 'routes/auth/reset-password.tsx'),
   ]),
 
-  // ── Musteri paneli (korumali) ──
+  // ── Müşteri paneli (korumalı) ──
   layout('routes/hesap/layout.tsx', [
     route('hesap', 'routes/hesap/dashboard.tsx'),
     route('hesap/randevularim', 'routes/hesap/appointments.tsx'),
@@ -39,7 +39,7 @@ export default [
     route('hesap/ayarlar', 'routes/hesap/settings.tsx'),
   ]),
 
-  // ── Yonetim paneli (korumali, ADMIN/STAFF) ──
+  // ── Yönetim paneli (korumalı, ADMIN/STAFF) ──
   layout('routes/panel/layout.tsx', [
     route('panel', 'routes/panel/dashboard.tsx'),
     route('panel/randevular', 'routes/panel/appointments.tsx'),
@@ -53,7 +53,7 @@ export default [
     route('panel/ayarlar', 'routes/panel/settings.tsx'),
   ]),
 
-  // SEO dosyalari — kaynak olarak sunulur
+  // SEO dosyaları — kaynak olarak sunulur
   route('sitemap.xml', 'routes/sitemap[.]xml.ts'),
   route('robots.txt', 'routes/robots[.]txt.ts'),
 ] satisfies RouteConfig;

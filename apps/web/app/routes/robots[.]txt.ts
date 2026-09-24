@@ -5,7 +5,7 @@ export function loader() {
     'User-agent: *',
     'Allow: /',
     '',
-    '# Kisiye ozel sayfalar taranmasin',
+    '# Kişiye özel sayfalar taranmasin',
     'Disallow: /hesap',
     'Disallow: /panel',
     'Disallow: /api',

@@ -13,7 +13,7 @@ export class TestimonialsService {
     private readonly settings: SettingsService,
   ) {}
 
-  /** Sitede gosterilen yorumlar — yalnizca onayli olanlar. */
+  /** Sitede gösterilen yorumlar — yalnızca onaylı olanlar. */
   findApproved(limit = 12) {
     return this.prisma.testimonial.findMany({
       where: { isApproved: true },
@@ -28,8 +28,8 @@ export class TestimonialsService {
   }
 
   /**
-   * Arama sonuclarinda yildiz gorunmesi icin AggregateRating verisi.
-   * Frontend bunu JSON-LD olarak sayfaya gomer.
+   * Arama sonuçlarında yıldız görünmesi için AggregateRating verisi.
+   * Frontend bunu JSON-LD olarak sayfaya gömer.
    */
   async aggregateRating() {
     const rows = await this.prisma.testimonial.findMany({
@@ -82,8 +82,8 @@ export class TestimonialsService {
       data: {
         ...(data.isApproved !== undefined ? { isApproved: data.isApproved as boolean } : {}),
         ...(data.sortOrder !== undefined ? { sortOrder: Number(data.sortOrder) } : {}),
-        // Google yorumlarinin metni degistirilemez; degistirilseydi
-        // "dogrulanmis yorum" rozeti yalan olurdu.
+        // Google yorumlarının metni değiştirilemez; değiştirilseydi
+        // "doğrulanmış yorum" rozeti yalan olurdu.
         ...(data.text !== undefined ? { text: String(data.text) } : {}),
         ...(data.authorName !== undefined ? { authorName: String(data.authorName) } : {}),
       },
@@ -97,14 +97,14 @@ export class TestimonialsService {
   }
 
   /**
-   * Google Isletme yorumlarini ceker ve veritabanina yazar (§10b.2).
+   * Google İşletme yorumlarını çeker ve veritabanına yazar (§10b.2).
    *
-   * Her sayfa acilisinda API cagirmak yerine gunde bir kez senkronize
-   * ediliyor: kota tukenmez, gecikme olmaz ve Google erisilemezse site
-   * calismaya devam eder.
+   * Her sayfa açılışında API çağırmak yerine günde bir kez senkronize
+   * ediliyor: kota tükenmez, gecikme olmaz ve Google erişilemezse site
+   * çalışmaya devam eder.
    *
-   * googlePlaceId bos ise sessizce atlanir; henuz Google kaydi olmayan
-   * bir klinige de demo yapilabilsin diye.
+   * googlePlaceId boş ise sessizce atlanır; henüz Google kaydı olmayan
+   * bir kliniğe de demo yapılabilsin diye.
    */
   async syncGoogleReviews(): Promise<{ synced: number; skipped: boolean }> {
     const settings = await this.settings.getAll();
@@ -113,7 +113,7 @@ export class TestimonialsService {
 
     if (!placeId || !apiKey) {
       this.logger.log(
-        'Google yorum senkronizasyonu atlandi (googlePlaceId veya API anahtari yok).',
+        'Google yorum senkronizasyonu atlandı (googlePlaceId veya API anahtarı yok).',
       );
       return { synced: 0, skipped: true };
     }
@@ -130,8 +130,8 @@ export class TestimonialsService {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       payload = (await res.json()) as GooglePlaceResponse;
     } catch (err) {
-      // Google erisilemiyorsa mevcut yorumlar yerinde kalir.
-      this.logger.error(`Google yorumlari alinamadi: ${(err as Error).message}`);
+      // Google erişilemiyorsa mevcut yorumlar yerinde kalır.
+      this.logger.error(`Google yorumları alınamadı: ${(err as Error).message}`);
       return { synced: 0, skipped: true };
     }
 
@@ -147,17 +147,17 @@ export class TestimonialsService {
         create: {
           source: TestimonialSource.GOOGLE,
           externalId,
-          authorName: review.authorAttribution?.displayName ?? 'Google kullanicisi',
+          authorName: review.authorAttribution?.displayName ?? 'Google kullanıcısı',
           authorPhotoUrl: review.authorAttribution?.photoUri ?? null,
           rating: review.rating ?? 5,
           text: review.originalText?.text ?? review.text?.text ?? '',
           sourceUrl: review.authorAttribution?.uri ?? null,
-          // Dusuk puanli yorumlar otomatik yayinlanmaz; admin karar verir.
+          // Düşük puanlı yorumlar otomatik yayınlanmaz; admin karar verir.
           isApproved: (review.rating ?? 5) >= 4,
           displayDate: review.publishTime ? new Date(review.publishTime) : new Date(),
         },
         update: {
-          // Metin ve puan Google'da degismis olabilir.
+          // Metin ve puan Google'da değişmiş olabilir.
           rating: review.rating ?? 5,
           text: review.originalText?.text ?? review.text?.text ?? '',
         },
@@ -165,13 +165,13 @@ export class TestimonialsService {
       synced++;
     }
 
-    this.logger.log(`Google yorum senkronizasyonu: ${synced} yorum islendi.`);
+    this.logger.log(`Google yorum senkronizasyonu: ${synced} yorum işlendi.`);
     return { synced, skipped: false };
   }
 
   private async ensureExists(id: string) {
     const found = await this.prisma.testimonial.findUnique({ where: { id } });
-    if (!found) throw new NotFoundException('Yorum bulunamadi.');
+    if (!found) throw new NotFoundException('Yorum bulunamadı.');
   }
 }
 

@@ -25,22 +25,22 @@ export class PrismaService
   async onModuleInit(): Promise<void> {
     try {
       await this.$connect();
-      this.logger.log('Veritabani baglantisi kuruldu');
+      this.logger.log('Veritabanı bağlantısı kuruldu');
     } catch (err) {
-      // Docker calismiyorsa en sik karsilasilan durum bu.
-      // Genel "connect ECONNREFUSED" yerine ne yapilacagini soyluyoruz.
+      // Docker çalışmıyorsa en sık karşılaşılan durum bu.
+      // Genel "connect ECONNREFUSED" yerine ne yapılacağını söylüyoruz.
       this.logger.error(
-        'Veritabanina baglanilamadi. Docker Desktop calisiyor mu? ' +
-          'Calistirmak icin: npm run db:up',
+        'Veritabanına bağlanılamadı. Docker Desktop çalışıyor mu? ' +
+          'Çalıştırmak için: npm run db:up',
       );
 
-      // Uretimde hizlica cok: orkestrator yeniden baslatsin.
-      // Gelistirmede ayakta kaliyoruz - aksi halde /health ucu hic cevap
-      // veremez ve "neden calismiyor" sorusuna bakacak yer kalmaz.
+      // Üretimde hızlıca çok: orkestratör yeniden başlatsın.
+      // Geliştirmede ayakta kalıyoruz - aksi halde /health ucu hiç cevap
+      // veremez ve "neden çalışmıyor" sorusuna bakacak yer kalmaz.
       if (process.env.NODE_ENV === 'production') throw err;
 
       this.logger.warn(
-        'Gelistirme modunda devam ediliyor. /health ucu "degraded" donecek.',
+        'Geliştirme modunda devam ediliyor. /health ucu "degraded" dönecek.',
       );
     }
   }
@@ -49,7 +49,7 @@ export class PrismaService
     await this.$disconnect();
   }
 
-  /** /health ucunun kullandigi hafif canlilik sorgusu. */
+  /** /health ucunun kullandığı hafif canlılık sorgusu. */
   async isHealthy(): Promise<boolean> {
     try {
       await this.$queryRaw`SELECT 1`;

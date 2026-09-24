@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
   useRouteError,
+  useRouteLoaderData,
 } from 'react-router';
 
 import { AuthProvider } from '~/lib/auth';
@@ -26,24 +27,32 @@ export const links: Route.LinksFunction = () => [
 ];
 
 /**
- * Site ayarlari KOK loader'da cekiliyor.
- * Boylece klinik adi, tema ve iletisim bilgileri her sayfada hazir olur;
- * her bilesen ayri ayri istek atmak zorunda kalmaz.
+ * Site ayarları KÖK loader'da çekiliyor.
+ * Böylece klinik adı, tema ve iletişim bilgileri her sayfada hazır olur;
+ * her bileşen ayrı ayrı istek atmak zorunda kalmaz.
  */
 export async function loader() {
   try {
     const settings = await serverFetch<SiteSettings>('/settings');
     return { settings };
   } catch {
-    // API kapaliyken bile site acilabilmeli: iskelet gorunur,
-    // veriye bagli bolumler bos kalir.
+    // API kapalıyken bile site acilabilmeli: iskelet görünür,
+    // veriye bağlı bölümler boş kalır.
     return { settings: null };
   }
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  // Tema veritabanından gelir: yönetim panelinden seçilen tema TÜM
+  // ziyaretçilere uygulanmali. Daha önce burada sabit "adaçayı" yazıyordu,
+  // bu yüzden panelden yapılan seçim hiçbir yere yansimiyordu.
+  const root = useRouteLoaderData('root') as
+    | { settings: SiteSettings | null }
+    | undefined;
+  const dbTheme = root?.settings?.theme?.activePreset ?? 'adacayi';
+
   return (
-    <html lang="tr" data-theme="adacayi">
+    <html lang="tr" data-theme={dbTheme}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -51,8 +60,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
         {/*
-          Service worker kaydi. Yalnizca uretimde: gelistirmede
-          onbellek, degisikliklerin gorunmesini engeller.
+          Service worker kaydı. Yalnızca üretimde: geliştirmede
+          önbellek, değişikliklerin görünmesini engeller.
         */}
         <script
           dangerouslySetInnerHTML={{
@@ -65,12 +74,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
         {/*
           Tema, React devreye girmeden UYGULANMALI. Aksi halde koyu tema
-          secen kullanici ilk karede acik temayi gorur (flash).
-          Bu betik senkron calisir ve body boyanmadan biter.
+          seçen kullanıcı ilk karede açık temayı görür (flash).
+          Bu betik senkron çalışır ve body boyanmadan biter.
         */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{
+              // Demo tema seçicisi yalnızca ÖNİZLEME amaçlı: ziyaretci
+              // kendi tercihini yaptiysa onu uygular. Yapmadiysa sunucudan
+              // gelen (veritabanındaki) tema olduğu gibi kalır.
               var t=localStorage.getItem('vet_theme');
               if(t)document.documentElement.setAttribute('data-theme',t);
               var m=localStorage.getItem('vet_motion');

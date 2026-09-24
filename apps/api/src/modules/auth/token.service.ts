@@ -8,7 +8,7 @@ import type { Role, User } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import type { JwtPayload } from '../../common/types/auth.types';
 
-/** jsonwebtoken'in expiresIn icin bekledigi bicim: "15m", "2h", "7d". */
+/** jsonwebtoken'in expiresIn için bekledigi bicim: "15m", "2h", "7d". */
 type TimeSpan = `${number}${'s' | 'm' | 'h' | 'd'}`;
 
 export interface IssuedTokens {
@@ -26,17 +26,17 @@ export class TokenService {
   ) {}
 
   /**
-   * Refresh token'lar JWT DEGIL, 32 baytlik rastgele dize.
+   * Refresh token'lar JWT DEĞİL, 32 baytlık rastgele dize.
    *
-   * Sebep: JWT kendi kendini dogrular, yani iptal edilemez — cikis yapmis
-   * bir kullanicinin token'i suresi dolana kadar gecerli kalirdi.
-   * Veritabaninda tutulan opak token her istekte kontrol edilir ve
-   * aninda iptal edilebilir.
+   * Sebep: JWT kendi kendini doğrular, yani iptal edilemez — çıkış yapmış
+   * bir kullanıcının token'i süresi dolana kadar geçerli kalırdı.
+   * Veritabanında tutulan opak token her istekte kontrol edilir ve
+   * anında iptal edilebilir.
    *
-   * Hash icin SHA-256 yeterli (argon2 degil): token zaten 256 bit entropiye
-   * sahip rastgele bir deger, sozluk saldirisi soz konusu degil. Ustelik
-   * hash uzerinden indeksli arama yapilabiliyor; argon2 olsaydi her
-   * dogrulamada tum token satirlarini taramak gerekirdi.
+   * Hash için SHA-256 yeterli (argon2 değil): token zaten 256 bit entropiye
+   * sahip rastgele bir değer, sözlük saldırısı söz konusu değil. Üstelik
+   * hash üzerinden indeksli arama yapılabiliyor; argon2 olsaydı her
+   * doğrulamada tüm token satırlarını taramak gerekirdi.
    */
   private hashToken(token: string): string {
     return createHash('sha256').update(token).digest('hex');
@@ -54,15 +54,15 @@ export class TokenService {
     };
     return this.jwt.signAsync(payload, {
       secret: this.config.get<string>('JWT_ACCESS_SECRET'),
-      // jsonwebtoken duz string kabul etmiyor, "15m" gibi bir sablon tipi
-      // bekliyor. Bicim env semasinda regex ile dogrulandigi icin bu
-      // donusum guvenli.
+      // jsonwebtoken düz string kabul etmiyor, "15m" gibi bir şablon tipi
+      // bekliyor. Bicim env şemasında regex ile doğrulandığı için bu
+      // dönüşüm güvenli.
       expiresIn: (this.config.get<string>('JWT_ACCESS_TTL') ??
         '15m') as TimeSpan,
     });
   }
 
-  /** Yeni access + refresh cifti uretir ve refresh'i kaydeder. */
+  /** Yeni access + refresh çifti üretir ve refresh'i kaydeder. */
   async issue(
     user: Pick<User, 'id' | 'email' | 'role'>,
     meta: { userAgent?: string; ipAddress?: string } = {},
@@ -87,8 +87,8 @@ export class TokenService {
   }
 
   /**
-   * Token rotasyonu: kullanilan refresh token iptal edilir, yenisi verilir.
-   * Boylece calinmis bir token en fazla bir kez ise yarar.
+   * Token rotasyonu: kullanılan refresh token iptal edilir, yenisi verilir.
+   * Böylece çalınmış bir token en fazla bir kez ise yarar.
    */
   async rotate(
     refreshToken: string,
@@ -107,10 +107,10 @@ export class TokenService {
       record.user.deletedAt !== null;
 
     if (invalid) {
-      throw new UnauthorizedException('Oturum gecersiz. Tekrar giris yapin.');
+      throw new UnauthorizedException('Oturum geçersiz. Tekrar giriş yapın.');
     }
 
-    // Eski token'i once iptal et, sonra yenisini ver.
+    // Eski token'i önce iptal et, sonra yenisini ver.
     await this.prisma.refreshToken.update({
       where: { id: record.id },
       data: { revokedAt: new Date() },
@@ -119,7 +119,7 @@ export class TokenService {
     return this.issue(record.user, meta);
   }
 
-  /** Tek oturumu kapatir (cikis). Bilinmeyen token sessizce yok sayilir. */
+  /** Tek oturumu kapatır (çıkış). Bilinmeyen token sessizce yok sayılır. */
   async revoke(refreshToken: string): Promise<void> {
     await this.prisma.refreshToken.updateMany({
       where: { tokenHash: this.hashToken(refreshToken), revokedAt: null },
@@ -127,7 +127,7 @@ export class TokenService {
     });
   }
 
-  /** Kullanicinin TUM oturumlarini kapatir (sifre degisikligi / sifirlama). */
+  /** Kullanıcının TÜM oturumlarını kapatır (şifre değişikliği / sıfırlama). */
   async revokeAllForUser(userId: string): Promise<void> {
     await this.prisma.refreshToken.updateMany({
       where: { userId, revokedAt: null },

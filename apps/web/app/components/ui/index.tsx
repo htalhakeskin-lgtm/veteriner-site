@@ -99,7 +99,7 @@ export function LinkButton({
 }
 
 // ─────────────────────────────────────────────
-//  Yuzeyler
+//  Yüzeyler
 // ─────────────────────────────────────────────
 
 export function Card({
@@ -183,7 +183,7 @@ export function Spinner({ size = 18 }: { size?: number }) {
 }
 
 // ─────────────────────────────────────────────
-//  Form elemanlari
+//  Form elemanları
 // ─────────────────────────────────────────────
 
 const FIELD =
@@ -213,7 +213,7 @@ export function Field({ label, error, hint, required, children, htmlFor }: Field
         </label>
       )}
       {children}
-      {/* role="alert": ekran okuyucu hatayi anlik duyursun */}
+      {/* role="alert": ekran okuyucu hatayi anlık duyursun */}
       {error && (
         <p role="alert" className="text-xs text-danger">
           {error}
@@ -251,7 +251,7 @@ export function Select({
 }
 
 // ─────────────────────────────────────────────
-//  Durum gostergeleri
+//  Durum göstergeleri
 // ─────────────────────────────────────────────
 
 export function EmptyState({
@@ -294,7 +294,7 @@ export function SuccessNote({ children }: { children: ReactNode }) {
   );
 }
 
-/** Yukleme sirasinda yer tutucu — icerik atlamasini (layout shift) onler. */
+/** Yükleme sırasında yer tutucu — içerik atlamasini (layout shift) önler. */
 export function Skeleton({ className }: { className?: string }) {
   return (
     <div className={cx('animate-pulse rounded-md bg-line-soft', className)} />
@@ -302,7 +302,7 @@ export function Skeleton({ className }: { className?: string }) {
 }
 
 // ─────────────────────────────────────────────
-//  Bolum basligi
+//  Bölüm başlığı
 // ─────────────────────────────────────────────
 
 export function SectionHead({

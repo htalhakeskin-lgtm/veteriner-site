@@ -20,8 +20,8 @@ export function meta() {
 
 export async function loader() {
   const staff = await serverFetch<StaffMember[]>('/staff').catch(() => []);
-  // Calisma takvimi detay sayfasinda; listede her hekim icin ayri
-  // istek atmak yerine hepsini paralel cekiyoruz.
+  // Çalışma takvimi detay sayfasında; listede her hekim için ayrı
+  // istek atmak yerine hepsini paralel çekiyoruz.
   const detailed = await Promise.all(
     staff.map((s) =>
       serverFetch<StaffMember>(`/staff/${s.slug}`).catch(() => s),
@@ -59,7 +59,7 @@ export default function Team({ loaderData }: Route.ComponentProps) {
               id={member.slug}
               className={cx(
                 'grid items-center gap-10 md:gap-16 lg:grid-cols-2',
-                // Zigzag: tek sirada fotograf sagda
+                // Zigzag: tek sırada fotoğraf sağda
                 i % 2 === 1 && 'lg:[&>figure]:order-2',
               )}
               data-reveal

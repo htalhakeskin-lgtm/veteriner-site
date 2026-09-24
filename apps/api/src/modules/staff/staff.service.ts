@@ -4,9 +4,9 @@ import type { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
 /**
- * Admin CRUD'unda yazilmasina IZIN VERILEN alanlar.
- * Govde dogrudan Prisma'ya gecirilseydi id, userId veya iliski alanlari
- * da yazilabilirdi. Beyaz liste bunu bastan keser.
+ * Admin CRUD'unda yazılmasına IZIN VERILEN alanlar.
+ * Gövde doğrudan Prisma'ya geçirilseydi id, userId veya ilişki alanları
+ * da yazılabilirdi. Beyaz liste bunu baştan keser.
  */
 const WRITABLE = [
   'slug', 'fullName', 'title', 'speciality', 'experienceYears',
@@ -53,7 +53,7 @@ export class StaffService {
         },
       },
     });
-    if (!member) throw new NotFoundException('Personel bulunamadi.');
+    if (!member) throw new NotFoundException('Personel bulunamadı.');
     return member;
   }
 
@@ -88,7 +88,7 @@ export class StaffService {
       where: { id },
       data: {
         ...pickWritable(data),
-        // set: tam listeyle degistir; connect olsaydi eski baglar kalirdi.
+        // set: tam listeyle değiştir; connect olsaydı eski bağlar kalırdı.
         ...(serviceIds ? { services: { set: serviceIds.map((i) => ({ id: i })) } } : {}),
       } as Prisma.StaffMemberUpdateInput,
     });
@@ -99,7 +99,7 @@ export class StaffService {
     return this.prisma.staffMember.update({ where: { id }, data: { isActive: false } });
   }
 
-  /** Haftalik takvimi tamamen degistirir. */
+  /** Haftalık takvimi tamamen değiştirir. */
   async setSchedule(
     id: string,
     windows: Array<{ dayOfWeek: number; startTime: string; endTime: string }>,
@@ -108,15 +108,15 @@ export class StaffService {
 
     for (const w of windows) {
       if (w.dayOfWeek < 0 || w.dayOfWeek > 6) {
-        throw new BadRequestException('dayOfWeek 0-6 araliginda olmali.');
+        throw new BadRequestException('dayOfWeek 0-6 aralığında olmalı.');
       }
       if (!/^\d{2}:\d{2}$/.test(w.startTime) || !/^\d{2}:\d{2}$/.test(w.endTime)) {
-        throw new BadRequestException('Saatler "HH:mm" biciminde olmali.');
+        throw new BadRequestException('Saatler "HH:mm" biçiminde olmalı.');
       }
       if (w.startTime >= w.endTime) {
-        // Metin karsilastirmasi "HH:mm" biciminde dogru siralama verir.
+        // Metin karşılaştırması "HH:mm" biçiminde doğru sıralama verir.
         throw new BadRequestException(
-          `Bitis saati baslangictan sonra olmali: ${w.startTime}-${w.endTime}`,
+          `Bitiş saati başlangıçtan sonra olmalı: ${w.startTime}-${w.endTime}`,
         );
       }
     }
@@ -139,7 +139,7 @@ export class StaffService {
     const startAt = new Date(body.startAt);
     const endAt = new Date(body.endAt);
     if (!(endAt > startAt)) {
-      throw new BadRequestException('Izin bitisi baslangictan sonra olmali.');
+      throw new BadRequestException('Izin bitişi başlangıçtan sonra olmalı.');
     }
     return this.prisma.staffTimeOff.create({
       data: { staffId: id, startAt, endAt, reason: body.reason ?? null },
@@ -148,13 +148,13 @@ export class StaffService {
 
   async removeTimeOff(timeOffId: string) {
     const found = await this.prisma.staffTimeOff.findUnique({ where: { id: timeOffId } });
-    if (!found) throw new NotFoundException('Izin kaydi bulunamadi.');
+    if (!found) throw new NotFoundException('Izin kaydı bulunamadı.');
     await this.prisma.staffTimeOff.delete({ where: { id: timeOffId } });
     return { deleted: true };
   }
 
   private async ensureExists(id: string) {
     const found = await this.prisma.staffMember.findUnique({ where: { id } });
-    if (!found) throw new NotFoundException('Personel bulunamadi.');
+    if (!found) throw new NotFoundException('Personel bulunamadı.');
   }
 }
