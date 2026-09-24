@@ -386,3 +386,15 @@ svg:not([width]) {
   background: var(--color-surface-2);
   font-weight: 600;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   GRID TASMA DUZELTMESI
+   ═══════════════════════════════════════════════════════════════
+   Grid ve flex ogeleri varsayilan olarak min-width:auto kullanir:
+   icerideki form elemani, uzun bir kelime veya gorsel sutunu
+   zorlayabilir. Mobilde sayfanin 4px yana kaymasina yol aciyordu.
+   :where() ile ozgulluk sifir tutuluyor, gerektiginde kolayca
+   ezilebilsin. */
+:where(.wrap) > * {
+  min-width: 0;
+}

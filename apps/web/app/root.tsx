@@ -51,9 +51,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
         {/*
+          Service worker kaydi. Yalnizca uretimde: gelistirmede
+          onbellek, degisikliklerin gorunmesini engeller.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if('serviceWorker' in navigator && location.hostname!=='localhost'){
+              window.addEventListener('load',function(){
+                navigator.serviceWorker.register('/sw.js').catch(function(){});
+              });
+            }`,
+          }}
+        />
+        {/*
           Tema, React devreye girmeden UYGULANMALI. Aksi halde koyu tema
           secen kullanici ilk karede acik temayi gorur (flash).
-          Bu betik senkron calisir ve <body> boyanmadan biter.
+          Bu betik senkron calisir ve body boyanmadan biter.
         */}
         <script
           dangerouslySetInnerHTML={{

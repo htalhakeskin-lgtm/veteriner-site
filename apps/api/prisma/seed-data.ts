@@ -3,6 +3,15 @@
  * Mantik prisma/seed.ts icinde; burada sadece "ne" var, "nasil" degil.
  */
 
+/**
+ * Demo gorselleri Unsplash'ten (telifsiz) cekiliyor.
+ *
+ * Gercek kurulumda klinigin kendi fotograflari yonetim panelinden
+ * yuklenmeli. Bunlar yalnizca sunum sirasinda sitenin bos gorunmemesi
+ * icin; internet baglantisi gerektirirler.
+ */
+const STOCK = 'https://images.unsplash.com/photo-';
+
 export const SERVICES = [
   {
     slug: 'genel-muayene',
@@ -135,6 +144,7 @@ export const STAFF = [
     experienceYears: 15,
     education: 'Istanbul Universitesi Veteriner Fakultesi',
     bio: 'Istanbul Universitesi mezunu. 15 yildir kucuk hayvan cerrahisi ve ic hastaliklari alaninda calisiyor; ortopedik vakalar ozel ilgi alani.',
+    photoUrl: `${STOCK}1612349317150-e413f6a5b16d?auto=format&fit=crop&w=800&q=80`,
     // Bu hekim her hizmeti verebiliyor
     serviceSlugs: null,
     schedule: [
@@ -154,6 +164,7 @@ export const STAFF = [
     experienceYears: 10,
     education: 'Ankara Universitesi Veteriner Fakultesi',
     bio: 'Ankara Universitesi mezunu. Kasinti ve alerji vakalarinda sabirli takip yapar, sahibe ozel diyet planlari hazirlar.',
+    photoUrl: `${STOCK}1559839734-2b71ea197ec2?auto=format&fit=crop&w=800&q=80`,
     serviceSlugs: [
       'genel-muayene',
       'asilama',
@@ -179,6 +190,7 @@ export const STAFF = [
     experienceYears: 8,
     education: 'Uludag Universitesi Veteriner Fakultesi',
     bio: 'Uludag Universitesi mezunu. Kirik, eklem ve omurga vakalarinda dijital goruntuleme agirlikli calisir.',
+    photoUrl: `${STOCK}1582750433449-648ed127bb54?auto=format&fit=crop&w=800&q=80`,
     serviceSlugs: [
       'genel-muayene',
       'radyoloji',
@@ -235,6 +247,7 @@ export const BLOG_CATEGORIES = [
 export const BLOG_POSTS = [
   {
     slug: 'kedi-beslenme-rehberi',
+    coverImageUrl: `${STOCK}1548767797-d8c844163c4c?auto=format&fit=crop&w=1200&q=80`,
     title: 'Kedinizin Beslenmesinde Dikkat Etmeniz Gereken 7 Nokta',
     categorySlug: 'beslenme',
     excerpt:
@@ -249,6 +262,7 @@ export const BLOG_POSTS = [
   },
   {
     slug: 'kopek-asi-takvimi',
+    coverImageUrl: `${STOCK}1601758228041-f3b2795255f1?auto=format&fit=crop&w=1200&q=80`,
     title: 'Yavru Kopeklerde Asi Takvimi Nasil Ilerler?',
     categorySlug: 'saglik',
     excerpt:
@@ -263,6 +277,7 @@ export const BLOG_POSTS = [
   },
   {
     slug: 'dis-tasi-neden-tehlikeli',
+    coverImageUrl: `${STOCK}1583337130417-3346a1be7dee?auto=format&fit=crop&w=1200&q=80`,
     title: 'Dis Tasi Neden Sadece Bir Estetik Sorun Degil?',
     categorySlug: 'saglik',
     excerpt:
@@ -277,6 +292,7 @@ export const BLOG_POSTS = [
   },
   {
     slug: 'kedi-stres-belirtileri',
+    coverImageUrl: `${STOCK}1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=1200&q=80`,
     title: 'Kedinizde Stresi Nasil Anlarsiniz?',
     categorySlug: 'bakim',
     excerpt:
@@ -291,6 +307,7 @@ export const BLOG_POSTS = [
   },
   {
     slug: 'kisirlastirma-dogru-zaman',
+    coverImageUrl: `${STOCK}1629909613654-28e377c37b09?auto=format&fit=crop&w=1200&q=80`,
     title: 'Kisirlastirma Icin Dogru Zaman Ne Zaman?',
     categorySlug: 'saglik',
     excerpt:
@@ -305,6 +322,7 @@ export const BLOG_POSTS = [
   },
   {
     slug: 'yasli-hayvan-bakimi',
+    coverImageUrl: `${STOCK}1450778869180-41d0601e046e?auto=format&fit=crop&w=1200&q=80`,
     title: 'Yaslanan Dostunuz Icin Degistirmeniz Gereken 5 Aliskanlik',
     categorySlug: 'bakim',
     excerpt:
@@ -320,6 +338,7 @@ export const BLOG_POSTS = [
   },
   {
     slug: 'acil-durum-rehberi',
+    coverImageUrl: `${STOCK}1559839734-2b71ea197ec2?auto=format&fit=crop&w=1200&q=80`,
     title: 'Hangi Durumda Sabahi Beklememelisiniz?',
     categorySlug: 'saglik',
     excerpt:
@@ -335,6 +354,7 @@ export const BLOG_POSTS = [
   },
   {
     slug: 'yeni-yavru-eve-geldi',
+    coverImageUrl: `${STOCK}1425082661705-1834bfd09dca?auto=format&fit=crop&w=1200&q=80`,
     title: 'Eve Yeni Yavru Geldi: Ilk Haftada Yapilacaklar',
     categorySlug: 'egitim',
     excerpt:
