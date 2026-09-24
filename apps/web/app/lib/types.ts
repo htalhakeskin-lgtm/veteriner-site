@@ -172,6 +172,9 @@ export interface Appointment {
   cancelReason: string | null;
   guestName: string | null;
   guestPhone: string | null;
+  guestEmail: string | null;
+  guestPetName: string | null;
+  guestPetSpecies: Species | null;
   service: { id: string; slug: string; title: string; durationMinutes: number };
   staff: { id: string; slug: string; fullName: string; title: string } | null;
   pet: { id: string; name: string; species: Species; breed: string | null } | null;
