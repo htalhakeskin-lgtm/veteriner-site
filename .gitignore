@@ -51,3 +51,7 @@ desktop.ini
 
 # React Router uretilen tipler
 apps/web/.react-router/
+
+# Proje ici notlar ve gorseller (repo disinda tutulacak)
+linkedin-paylasim.md
+veteriner-klinigi-gorseller/
