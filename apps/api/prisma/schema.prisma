@@ -7,6 +7,10 @@
 
 generator client {
   provider = "prisma-client-js"
+  // "native": yerel gelistirme (Windows/Mac). "rhel-openssl-3.0.x": Vercel'in
+  // serverless fonksiyon calisma zamani (Amazon Linux, OpenSSL 3.0). Ikisi de
+  // uretilmezse Vercel'de derlenen motor calisma zamaninda eslesmeyebilir.
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {

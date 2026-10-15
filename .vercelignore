@@ -1,0 +1,29 @@
+# Gizli / yerel dosyalar Vercel'e YÜKLENMEMELİ.
+.env*
+!.env.example
+
+node_modules
+dist
+build
+.turbo
+*.tsbuildinfo
+coverage
+.nyc_output
+
+# Docker ile yerelde oluşan veri / yüklenen dosyalar
+apps/api/uploads/*
+!apps/api/uploads/.gitkeep
+
+# Referans / arşiv — dağıtımın parçası değil
+legacy
+veteriner-klinigi-gorseller
+linkedin-paylasim.md
+*.md
+
+# Düzenleyici & işletim sistemi
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+.git

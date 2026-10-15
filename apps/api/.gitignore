@@ -1,0 +1,8 @@
+.vercel
+.env*
+!.env.example
+
+# Neon Vercel entegrasyonu "vercel integration add" calistiginda birakiyor
+.agents/
+.claude/
+skills-lock.json

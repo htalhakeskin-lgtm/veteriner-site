@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "true",
+  "outputDirectory": "public",
+  "regions": ["fra1"],
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api" }
+  ]
+}

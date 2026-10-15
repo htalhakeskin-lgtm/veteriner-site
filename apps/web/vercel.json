@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": ["fra1"],
+  "outputDirectory": "build/client",
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "https://veteriner-site-api.vercel.app/api/$1"
+    },
+    {
+      "src": "/uploads/(.*)",
+      "dest": "https://veteriner-site-api.vercel.app/uploads/$1"
+    },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/api/ssr" }
+  ]
+}

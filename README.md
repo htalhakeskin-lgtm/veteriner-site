@@ -8,6 +8,55 @@ hepsi tek projede.
 
 ---
 
+## 🌐 Canlı demo
+
+**https://veteriner-site-web.vercel.app** — Vercel Hobby (ücretsiz) planda, örnek/tanıtım
+amaçlı. Ticari kullanım değildir.
+
+| Rol | E-posta | Şifre |
+|-----|---------|-------|
+| Yönetici | `admin@demo.com` | `admin123` |
+| Müşteri | `musteri@demo.com` | `123456` |
+
+**Mimari:** iki ayrı Vercel projesi — `veteriner-site-web` (React Router SSR, bkz.
+`apps/web/api/ssr.ts`) ve `veteriner-site-api` (NestJS, bkz. `apps/api/api/index.ts`).
+Web projesi `/api/*` ve `/uploads/*` isteklerini `apps/web/vercel.json` üzerinden API
+projesine proxy'ler — böylece tarayıcı tek bir origin görür ve çerezler (oturum) sorunsuz
+çalışır. Veritabanı [Neon](https://neon.tech) (Vercel Marketplace entegrasyonu, ücretsiz plan).
+
+### Yeniden yayınlama
+
+```bash
+cd apps/api && npx vercel deploy --prod --yes   # backend
+cd apps/web && npx vercel deploy --prod --yes   # frontend
+```
+
+Her iki klasör de `vercel link` ile ilgili projeye bağlı (`.vercel/project.json`, git'te yok).
+Bağlantı koptuysa: `npx vercel link --yes --project veteriner-site-api` (ve `-web`).
+
+### Veritabanını sıfırlama
+
+```bash
+cd apps/api
+npx vercel env pull .env.vercel.production --environment=production --yes
+DB_URL=$(grep '^DATABASE_URL_UNPOOLED=' .env.vercel.production | sed -E 's/^DATABASE_URL_UNPOOLED=//; s/^"//; s/"$//')
+DATABASE_URL="$DB_URL" npx prisma db seed
+```
+
+`DATABASE_URL_UNPOOLED` kullanılır (migration/seed gibi tek seferlik işler için); normal
+istekler `DATABASE_URL`'in **pooled** (PgBouncer uyumlu) bağlantısını kullanır — serverless
+fonksiyonların her soğuk başlangıçta yeni bağlantı açması yüzünden bu ayrım önemlidir.
+
+### Bilinen sınırlar (bu dağıtıma özel)
+
+| Konu | Durum |
+|------|-------|
+| Medya yükleme (`/panel` → görsel yükleme) | **Çalışmıyor.** Vercel serverless fonksiyonlarında dosya sistemi `/tmp` dışında salt okunur ve `/tmp` çağrılar arası paylaşılmaz. Kalıcı depolama için Vercel Blob/S3 gibi bir servis eklenmeli (kapsam dışı tutuldu) |
+| Zamanlanmış görevler (`apps/api/src/jobs/reminders.job.ts`) | **Çalışmıyor.** `@nestjs/schedule`'ın cron kayıtları sürekli çalışan bir süreç gerektirir; serverless fonksiyon yalnızca istek anında ayağa kalkar. Vercel Cron Jobs ile değiştirilebilir (Hobby planda günde 1 çalıştırmayla sınırlı) |
+| Ana sayfada ~4px yatay taşma (390px genişlikte) | Hero bölümündeki dekoratif arka plan efekti (`home.tsx`) yalnızca **üretim derlemesinde** oluşuyor, yerel geliştirmede yok. Görsel olarak fark edilmiyor, kaydırma çubuğu pratikte sürüklenemiyor |
+
+---
+
 ## Hızlı başlangıç
 
 **Gerekenler:** Node 20+, Docker Desktop
